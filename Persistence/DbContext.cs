@@ -1,5 +1,4 @@
-﻿using Domain;
-using MicroOrm.Dapper.Repositories;
+﻿using Persistence.Repository;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,7 +6,7 @@ namespace Persistence
 {
   public interface IDbContext
   {
-    DapperRepository<DaftPhk3> DaftPhk3 { get; }
+    DaftPhk3Repository DaftPhk3 { get; }
     IDbConnection Connection { get; }
   }
 
@@ -21,7 +20,6 @@ namespace Persistence
 
     public IDbConnection Connection { get; }
 
-    public DapperRepository<DaftPhk3> DaftPhk3 => new DapperRepository<DaftPhk3>(Connection);
-
+    public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
   }
 }
