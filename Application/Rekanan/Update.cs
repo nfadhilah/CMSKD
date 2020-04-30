@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Rekanan
 {
-  public class Create
+  public class Update
   {
-
     public class Command : IRequest
     {
       public string Kdp3 { get; set; }
@@ -50,11 +49,18 @@ namespace Application.Rekanan
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+      public async Task<Unit> Handle(
+        Command request, CancellationToken cancellationToken)
       {
-        var added = _mapper.Map<DaftPhk3>(request);
+        var updated =
+          await _context.DaftPhk3.FindByIdAsync(request.Kdp3);
 
-        if (!await _context.DaftPhk3.InsertAsync(added))
+        if (updated == null)
+          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
+
+        _mapper.Map(request, updated);
+
+        if (!_context.DaftPhk3.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;
