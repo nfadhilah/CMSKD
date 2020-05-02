@@ -13,7 +13,9 @@ namespace API.Controllers
         Norcp3 = query.Norcp3,
         Nminst = query.Nminst,
         Nmbank = query.Nmbank,
-        Nmp3 = query.Nmp3
+        Nmp3 = query.Nmp3,
+        PageSize = query.PageSize,
+        CurrentPage = query.CurrentPage
       }));
 
     [HttpGet("{id}")]

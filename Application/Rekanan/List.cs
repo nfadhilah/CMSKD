@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.ResponseWrapper;
+using Domain;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
@@ -12,7 +13,7 @@ namespace Application.Rekanan
 {
   public class List
   {
-    public class Query : IRequest<IEnumerable<DaftPhk3>>
+    public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
       public string Nmp3 { get; set; }
       public string Nminst { get; set; }
@@ -20,7 +21,7 @@ namespace Application.Rekanan
       public string Nmbank { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, IEnumerable<DaftPhk3>>
+    public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
 
@@ -29,7 +30,7 @@ namespace Application.Rekanan
         _context = context;
       }
 
-      public async Task<IEnumerable<DaftPhk3>> Handle(
+      public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
         var parameters = new List<Expression<Func<DaftPhk3, bool>>>();
@@ -48,8 +49,17 @@ namespace Application.Rekanan
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        return await _context.DaftPhk3
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.Kdp3).FindAllAsync(predicate);
+        var result = await _context.DaftPhk3
+          .SetLimit(request.Limit, request.Offset)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.Kdp3)
+          .FindAllAsync(predicate);
+
+        return new PaginationWrapper(result, new Pagination
+        {
+          CurrentPage = request.CurrentPage,
+          PageSize = request.PageSize,
+          TotalItemsCount = _context.DaftPhk3.Count()
+        });
       }
     }
   }

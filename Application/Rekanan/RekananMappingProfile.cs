@@ -3,9 +3,9 @@ using Domain;
 
 namespace Application.Rekanan
 {
-  public class MappingProfile : Profile
+  public class RekananMappingProfile : Profile
   {
-    public MappingProfile()
+    public RekananMappingProfile()
     {
       CreateMap<Create.Command, DaftPhk3>();
       CreateMap<Update.Command, DaftPhk3>();
