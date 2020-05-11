@@ -13,27 +13,27 @@ namespace Application.Rekanan
   {
     public class Command : IRequest
     {
-      public string Kdp3 { get; set; }
-      public string Nmp3 { get; set; }
-      public string Nminst { get; set; }
-      public string Norcp3 { get; set; }
-      public string Nmbank { get; set; }
-      public string Jnsusaha { get; set; }
+      public string KdP3 { get; set; }
+      public string NmP3 { get; set; }
+      public string NmInst { get; set; }
+      public string NoRcP3 { get; set; }
+      public string NmBank { get; set; }
+      public string JnsUsaha { get; set; }
       public string Alamat { get; set; }
       public string Telepon { get; set; }
       public string NPWP { get; set; }
-      public string Unitkey { get; set; }
+      public string UnitKey { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.Kdp3).NotEmpty();
-        RuleFor(d => d.Nmp3).NotEmpty();
-        RuleFor(d => d.Nminst).NotEmpty();
-        RuleFor(d => d.Norcp3).NotEmpty();
-        RuleFor(d => d.Nmbank).NotEmpty();
+        RuleFor(d => d.KdP3).NotEmpty();
+        RuleFor(d => d.NmP3).NotEmpty();
+        RuleFor(d => d.NmInst).NotEmpty();
+        RuleFor(d => d.NoRcP3).NotEmpty();
+        RuleFor(d => d.NmBank).NotEmpty();
         RuleFor(d => d.NPWP).NotEmpty();
       }
     }
@@ -53,7 +53,7 @@ namespace Application.Rekanan
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.DaftPhk3.FindByIdAsync(request.Kdp3);
+          await _context.DaftPhk3.FindByIdAsync(request.KdP3);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

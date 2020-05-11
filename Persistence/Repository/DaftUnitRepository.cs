@@ -1,0 +1,56 @@
+﻿using Dapper;
+using Domain;
+using MicroOrm.Dapper.Repositories;
+using MicroOrm.Dapper.Repositories.SqlGenerator;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
+
+namespace Persistence.Repository
+{
+  public class DaftUnitRepository : DapperRepository<DaftUnit>
+  {
+    public DaftUnitRepository(IDbConnection connection) : base(connection)
+    {
+    }
+
+    public DaftUnitRepository(IDbConnection connection, ISqlGenerator<DaftUnit> sqlGenerator) : base(connection, sqlGenerator)
+    {
+    }
+
+    public async Task<IEnumerable<dynamic>> GetDaftUnitNodes(int? kdLevel, string kdUnit)
+    {
+      var builder = new SqlBuilder();
+
+      var cmd = builder.AddTemplate(@"SELECT d.UNITKEY as Unitkey,
+       d.KDLEVEL as Kdlevel,
+       d.KDUNIT as Kdunit,
+       d.NMUNIT as Nmunit,
+       d.TYPE as Type,
+       CASE
+           WHEN EXISTS
+                (
+                    SELECT TOP (1)
+                           1
+                    FROM dbo.DAFTUNIT d2
+                    WHERE d2.KDUNIT LIKE d.KDUNIT + '%'
+                          AND d2.KDLEVEL = d.KDLEVEL + 1
+                ) THEN
+               0
+           ELSE
+               1
+       END AS IsLeaf
+FROM dbo.DAFTUNIT d
+/**where**/
+ORDER BY d.KDUNIT");
+
+      if (kdLevel.HasValue)
+        builder.Where("d.KDLEVEL = @KdLevel", new { KdLevel = kdLevel });
+
+      if (!string.IsNullOrWhiteSpace(kdUnit))
+        builder.Where("d.KDUNIT LIKE @KdUnit + '%'", new { KdUnit = kdUnit });
+
+      return await Connection.QueryAsync(cmd.RawSql, cmd.Parameters);
+    }
+  }
+}

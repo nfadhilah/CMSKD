@@ -1,13 +1,15 @@
-﻿using Application.ResponseWrapper;
+﻿using Application.Helpers;
 using Domain;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Dtos;
 
 namespace Application.Rekanan
 {
@@ -15,10 +17,10 @@ namespace Application.Rekanan
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string Nmp3 { get; set; }
-      public string Nminst { get; set; }
-      public string Norcp3 { get; set; }
-      public string Nmbank { get; set; }
+      public string NmP3 { get; set; }
+      public string NmInst { get; set; }
+      public string NmBank { get; set; }
+      public string JnsUsaha { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -35,30 +37,32 @@ namespace Application.Rekanan
       {
         var parameters = new List<Expression<Func<DaftPhk3, bool>>>();
 
-        if (!string.IsNullOrWhiteSpace(request.Nmp3))
-          parameters.Add(d => d.Nmp3 == request.Nmp3);
+        if (!string.IsNullOrWhiteSpace(request.NmP3))
+          parameters.Add(d => d.NmP3.Contains(request.NmP3));
 
-        if (!string.IsNullOrWhiteSpace(request.Norcp3))
-          parameters.Add(d => d.Norcp3 == request.Norcp3);
+        if (!string.IsNullOrWhiteSpace(request.NmInst))
+          parameters.Add(d => d.NmInst.Contains(request.NmInst));
 
-        if (!string.IsNullOrWhiteSpace(request.Nminst))
-          parameters.Add(d => d.Nminst == request.Nminst);
+        if (!string.IsNullOrWhiteSpace(request.NmBank))
+          parameters.Add(d => d.NmBank.Contains(request.NmBank));
 
-        if (!string.IsNullOrWhiteSpace(request.Nmbank))
-          parameters.Add(d => d.Nmbank == request.Nmbank);
+        if (!string.IsNullOrWhiteSpace(request.JnsUsaha))
+          parameters.Add(d => d.JnsUsaha == request.JnsUsaha);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
+        var totalItemsCount = _context.DaftPhk3.FindAll(predicate).Count();
+
         var result = await _context.DaftPhk3
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.Kdp3)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.KdP3)
           .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination
         {
           CurrentPage = request.CurrentPage,
           PageSize = request.PageSize,
-          TotalItemsCount = _context.DaftPhk3.Count()
+          TotalItemsCount = totalItemsCount
         });
       }
     }

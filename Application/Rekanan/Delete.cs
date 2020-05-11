@@ -13,7 +13,7 @@ namespace Application.Rekanan
   {
     public class Command : IRequest
     {
-      public string Kdp3 { get; set; }
+      public string KdP3 { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,7 +38,7 @@ namespace Application.Rekanan
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.DaftPhk3.FindByIdAsync(request.Kdp3);
+          await _context.DaftPhk3.FindByIdAsync(request.KdP3);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

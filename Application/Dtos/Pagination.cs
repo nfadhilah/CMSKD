@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Application.ResponseWrapper
+namespace Application.Dtos
 {
   public class Pagination
   {

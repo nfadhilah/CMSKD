@@ -10,31 +10,35 @@ namespace API.Controllers
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(new List.Query
       {
-        Norcp3 = query.Norcp3,
-        Nminst = query.Nminst,
-        Nmbank = query.Nmbank,
-        Nmp3 = query.Nmp3,
+        NmInst = query.NmInst,
+        NmBank = query.NmBank,
+        NmP3 = query.NmP3,
+        JnsUsaha = query.JnsUsaha,
         PageSize = query.PageSize,
         CurrentPage = query.CurrentPage
       }));
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "Detail")]
     public async Task<IActionResult> Get(string id) =>
-      Ok(await Mediator.Send(new Detail.Query { Kdp3 = id }));
+      Ok(await Mediator.Send(new Detail.Query { KdP3 = id }));
 
     [HttpPost]
-    public async Task<IActionResult> Create(Create.Command command) =>
-      Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Create(Create.Command command)
+    {
+      var request = await Mediator.Send(command);
+      return CreatedAtRoute("Detail", new { id = request.KdP3 }, request);
+    }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, Update.Command command)
     {
-      command.Kdp3 = id;
+      command.KdP3 = id;
       return Ok(await Mediator.Send(command));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id) =>
-      Ok(await Mediator.Send(new Delete.Command { Kdp3 = id }));
+      Ok(await Mediator.Send(new Delete.Command { KdP3 = id }));
   }
 }

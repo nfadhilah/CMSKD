@@ -1,4 +1,4 @@
-﻿namespace Application.ResponseWrapper
+﻿namespace Application.Dtos
 {
   public class PaginationWrapper
   {

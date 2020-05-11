@@ -1,0 +1,16 @@
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain
+{
+  [Table("ROLES")]
+  public class Roles
+  {
+    [Key, Identity]
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string NormalizeName { get; set; }
+    public string Description { get; set; }
+  }
+}
