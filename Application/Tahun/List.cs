@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
 using MediatR;
+using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.User
+namespace Application.Tahun
 {
   public class List
   {
-    public class Query : IRequest<IEnumerable<AppUserDto>>
-    {
-    }
+    public class Query : IRequest<IEnumerable<Domain.Tahun>> { }
 
-    public class Handler : IRequestHandler<Query, IEnumerable<AppUserDto>>
+    public class Handler : IRequestHandler<Query, IEnumerable<Domain.Tahun>>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -24,12 +23,11 @@ namespace Application.User
         _mapper = mapper;
       }
 
-      public async Task<IEnumerable<AppUserDto>> Handle(
+      public async Task<IEnumerable<Domain.Tahun>> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.AppUser.FindAllAsync();
-
-        return _mapper.Map<IEnumerable<AppUserDto>>(result);
+        return await _context.Tahun
+          .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.Id).FindAllAsync();
       }
     }
   }

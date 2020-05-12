@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using Domain;
+using AutoWrapper.Wrappers;
 using MediatR;
 using Persistence;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,12 +10,12 @@ namespace Application.User
 {
   public class Detail
   {
-    public class Query : IRequest<WebUser>
+    public class Query : IRequest<AppUserDto>
     {
-      public string UserId { get; set; }
+      public int UserId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, WebUser>
+    public class Handler : IRequestHandler<Query, AppUserDto>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -25,13 +26,17 @@ namespace Application.User
         _mapper = mapper;
       }
 
-      public async Task<WebUser> Handle(
+      public async Task<AppUserDto> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.WebUser.FindAsync<WebGroup>(
-          w => w.UserId == request.UserId, g => g.WebGroup);
+        var result = await _context.AppUser.FindAsync(
+          w => w.Id == request.UserId);
 
-        return result;
+        if (result == null)
+          throw new ApiException("Not found",
+            (int)HttpStatusCode.NotFound);
+
+        return _mapper.Map<AppUserDto>(result);
       }
     }
   }

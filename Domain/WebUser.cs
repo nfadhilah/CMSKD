@@ -9,14 +9,19 @@ namespace Domain
   {
     [Key]
     public string UserId { get; set; }
+
     public int KdTahap { get; set; }
     public string UnitKey { get; set; }
+
     [LeftJoin("DAFTUNIT", "UNITKEY", "UNITKEY")]
     public DaftUnit DaftUnit { get; set; }
+
     public string Nip { get; set; }
     public string GroupId { get; set; }
+
     [LeftJoin("WEBGROUP", "GROUPID", "GROUPID")]
     public WebGroup WebGroup { get; set; }
+
     public string Pwd { get; set; }
     public string Nama { get; set; }
     public int? BlokId { get; set; }

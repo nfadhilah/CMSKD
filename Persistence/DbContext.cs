@@ -11,6 +11,9 @@ namespace Persistence
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
     RolesRepository Roles { get; }
+    TahunRepository Tahun { get; }
+    AppUserRepository AppUser { get; }
+    PermissionRepository Permission { get; }
   }
 
   public class DbContext : IDbContext
@@ -26,5 +29,8 @@ namespace Persistence
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
+    public TahunRepository Tahun => new TahunRepository(Connection);
+    public AppUserRepository AppUser => new AppUserRepository(Connection);
+    public PermissionRepository Permission => new PermissionRepository(Connection);
   }
 }

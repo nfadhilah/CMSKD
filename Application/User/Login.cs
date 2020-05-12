@@ -5,9 +5,8 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +14,9 @@ namespace Application.User
 {
   public class Login
   {
-    public class Query : IRequest<User>
+    public class Query : IRequest<Profile>
     {
-      public string UserId { get; set; }
+      public string UserName { get; set; }
       public string Password { get; set; }
     }
 
@@ -25,71 +24,75 @@ namespace Application.User
     {
       public Validator()
       {
-        RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.UserName).NotEmpty();
         RuleFor(x => x.Password).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Query, User>
+    public class Handler : IRequestHandler<Query, Profile>
     {
       private readonly IDbContext _context;
       private readonly IJwtGenerator _jwtGenerator;
       private readonly IMapper _mapper;
+      private readonly IPasswordHasher _passwordHasher;
 
       public Handler(
-        IDbContext context, IJwtGenerator jwtGenerator, IMapper mapper)
+        IDbContext context, IJwtGenerator jwtGenerator, IMapper mapper,
+        IPasswordHasher passwordHasher)
       {
         _context = context;
         _jwtGenerator = jwtGenerator;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
       }
 
-      public async Task<User> Handle(
+      public async Task<Profile> Handle(
         Query request, CancellationToken cancellationToken)
       {
         var user =
-          await _context.WebUser.FindAsync<WebGroup, DaftUnit>(
-            w => w.UserId == request.UserId, w => w.WebGroup, w => w.DaftUnit);
+          (await _context.AppUser.FindAllAsync<DaftUnit, UserRoles>(
+            x => x.UserName == request.UserName, c => c.DaftUnit,
+            c => c.UserRoles)).FirstOrDefault();
 
         if (user == null)
           throw new ApiException("Bad Username/Password",
             (int)HttpStatusCode.Unauthorized);
 
-        if (user.BlokId.HasValue && user.BlokId.Value > 3)
+        if (user.LockedOut)
           throw new ApiException(
             "User terblokir. Hubungi admin untuk membuka blokir.");
 
-        if (Encode(request.Password) != user.Pwd.Trim())
+        if (!_passwordHasher.Validate(user.Password, request.Password))
         {
-          user.BlokId = ++user.BlokId;
+          user.FalseLoginCount = ++user.FalseLoginCount;
 
-          _context.WebUser.Update(user);
+          if (user.FalseLoginCount >= 3) user.LockedOut = true;
+
+          _context.AppUser.Update(user);
 
           throw new ApiException("Bad Username/Password",
             (int)HttpStatusCode.Unauthorized);
         }
 
-        var token = _jwtGenerator.CreateToken(user);
+        var roleIds = user.UserRoles.Select(s => s.RoleId);
 
-        return new User
+        var roles =
+          _context.Roles.FindAll(
+            r => roleIds.Contains(r.Id));
+
+        var token = _jwtGenerator.CreateToken(user, roles);
+
+        return new Profile
         {
-          DisplayName = user.Nama.Trim(),
+          DisplayName = user.DisplayName,
           Token = token,
           Image = null,
-          UserName = user.UserId.Trim(),
+          UserName = user.UserName,
           KdTahap = user.KdTahap,
           UnitKey = user.UnitKey?.Trim() ?? "",
           KdUnit = user.DaftUnit?.KdUnit.Trim() ?? "",
           NmUnit = user.DaftUnit?.NmUnit.Trim() ?? ""
         };
-      }
-
-      private static string Encode(string str)
-      {
-        var md5 = new MD5CryptoServiceProvider();
-        var encoding = Encoding.GetEncoding("Windows-1252");
-        var result = md5.ComputeHash(encoding.GetBytes(str));
-        return encoding.GetString(result);
       }
     }
   }

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -20,16 +21,15 @@ namespace Infrastructure.Security
         Encoding.UTF8.GetBytes(config["TokenKey"]));
     }
 
-    public string CreateToken(WebUser user)
+    public string CreateToken(AppUser user, IEnumerable<Roles> roles)
     {
+      var roleClaims = roles.Select(x =>
+        new Claim(ClaimTypes.Role, x.NormalizeName));
+
       var claims = new List<Claim>
       {
-        new Claim(JwtRegisteredClaimNames.NameId, user.UserId.Trim()),
-        new Claim(ClaimTypes.Role,
-          user.WebGroup.NmGroup.ToLower().Contains("admin")
-            ? "Administrator"
-            : user.WebGroup.NmGroup.Trim())
-      };
+        new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
+      }.Union(roleClaims);
 
       var creds =
         new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

@@ -5,6 +5,7 @@ using AutoWrapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
+using Infrastructure.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
-using Infrastructure.Helpers;
+using MicroOrm.Dapper.Repositories.SqlGenerator;
 
 
 namespace API
@@ -128,6 +129,12 @@ namespace API
       services.AddAutoMapper(typeof(List.Handler).Assembly);
 
       services.AddScoped<IJwtGenerator, JwtGenerator>();
+
+      services.AddScoped<IUserAccessor, UserAccessor>();
+
+      services.AddSingleton(typeof(ISqlGenerator<>), typeof(SqlGenerator<>));
+
+      services.AddSingleton<IPasswordHasher, PasswordHasher>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

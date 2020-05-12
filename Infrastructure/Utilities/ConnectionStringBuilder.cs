@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 
-namespace Infrastructure.Helpers
+namespace Infrastructure.Utilities
 {
   public static class ConnectionStringBuilder
   {
