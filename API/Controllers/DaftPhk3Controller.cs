@@ -8,15 +8,7 @@ namespace API.Controllers
   {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
-      Ok(await Mediator.Send(new List.Query
-      {
-        NmInst = query.NmInst,
-        NmBank = query.NmBank,
-        NmP3 = query.NmP3,
-        JnsUsaha = query.JnsUsaha,
-        PageSize = query.PageSize,
-        CurrentPage = query.CurrentPage
-      }));
+      Ok(await Mediator.Send(query));
 
     [HttpGet("{id}", Name = "Detail")]
     public async Task<IActionResult> Get(string id) =>

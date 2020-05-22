@@ -12,46 +12,39 @@ using System.Threading.Tasks;
 
 namespace Application.User
 {
-  public class Login
+  public class CurrentUser
   {
-    public class Command : IRequest<Profile>
+    public class Query : IRequest<Profile> { }
+
+    public class Validator : AbstractValidator<Query>
     {
-      public string UserName { get; set; }
-      public string Password { get; set; }
+      public Validator() { }
     }
 
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(x => x.UserName).NotEmpty();
-        RuleFor(x => x.Password).NotEmpty();
-      }
-    }
-
-    public class Handler : IRequestHandler<Command, Profile>
+    public class Handler : IRequestHandler<Query, Profile>
     {
       private readonly IDbContext _context;
-      private readonly IJwtGenerator _jwtGenerator;
       private readonly IMapper _mapper;
-      private readonly IPasswordHasher _passwordHasher;
+      private readonly IUserAccessor _userAccessor;
+      private readonly IJwtGenerator _jwtGenerator;
 
       public Handler(
-        IDbContext context, IJwtGenerator jwtGenerator, IMapper mapper,
-        IPasswordHasher passwordHasher)
+        IDbContext context, IMapper mapper, IUserAccessor userAccessor,
+        IJwtGenerator jwtGenerator
+      )
       {
         _context = context;
-        _jwtGenerator = jwtGenerator;
         _mapper = mapper;
-        _passwordHasher = passwordHasher;
+        _userAccessor = userAccessor;
+        _jwtGenerator = jwtGenerator;
       }
 
       public async Task<Profile> Handle(
-        Command request, CancellationToken cancellationToken)
+        Query request, CancellationToken cancellationToken)
       {
         var user =
           (await _context.AppUser.FindAllAsync<DaftUnit, UserRoles>(
-            x => x.UserName == request.UserName, c => c.DaftUnit,
+            x => x.UserName == _userAccessor.GetCurrentUsername(), c => c.DaftUnit,
             c => c.UserRoles)).FirstOrDefault();
 
         if (user == null)
@@ -61,18 +54,6 @@ namespace Application.User
         if (user.LockedOut)
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
-
-        if (!_passwordHasher.Validate(user.Password, request.Password))
-        {
-          user.FalseLoginCount = ++user.FalseLoginCount;
-
-          if (user.FalseLoginCount >= 3) user.LockedOut = true;
-
-          _context.AppUser.Update(user);
-
-          throw new ApiException("Bad Username/Password",
-            (int)HttpStatusCode.Unauthorized);
-        }
 
         var roleIds = user.UserRoles.Select(s => s.RoleId);
 

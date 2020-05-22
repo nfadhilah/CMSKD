@@ -12,7 +12,8 @@ namespace UnitTest.Repositories
 
     public AppUser()
     {
-      _db = new DbContext("Server=.;User Id=usadi;Password=valid49;Database=V@LID49V6_2020_CASHLESS;Trusted_Connection=False;");
+      _db = new DbContext(
+        "Server=.;User Id=usadi;Password=valid49;Database=V@LID49V6_2020_CASHLESS;Trusted_Connection=False;");
     }
 
     [Fact]
@@ -29,7 +30,6 @@ namespace UnitTest.Repositories
       var user = _db.AppUser
         .FindAll<UserRoles>(x => x.UserName == "admin", q => q.UserRoles)
         .First();
-
       Assert.Equal(2, user.UserRoles.Count);
     }
 

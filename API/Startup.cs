@@ -7,6 +7,7 @@ using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using Infrastructure.Utilities;
 using MediatR;
+using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -23,7 +24,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
-using MicroOrm.Dapper.Repositories.SqlGenerator;
 
 
 namespace API
@@ -46,7 +46,9 @@ namespace API
 
         var year = context?.Request.Headers["x-api-year"];
 
-        return int.TryParse(year, out var dbYear) ? new DbContext(Configuration.SetDbYear(dbYear)) : new DbContext(Configuration.SetDbYear());
+        return int.TryParse(year, out var dbYear)
+          ? new DbContext(Configuration.SetDbYear(dbYear))
+          : new DbContext(Configuration.SetDbYear());
       });
 
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -105,6 +107,7 @@ namespace API
         opt.AddPolicy("CorsPolicy", policy =>
         {
           policy.AllowAnyMethod().AllowAnyHeader()
+            .WithExposedHeaders("WWW-Authenticate")
             .WithOrigins("http://localhost:3000").AllowCredentials();
         });
       });

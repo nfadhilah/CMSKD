@@ -18,8 +18,8 @@ namespace API.Controllers
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Login(Login.Query query) =>
-      Ok(await Mediator.Send(query));
+    public async Task<IActionResult> Login(Login.Command command) =>
+      Ok(await Mediator.Send(command));
 
     [HttpPost]
     public async Task<IActionResult> Register(Register.Command command)
@@ -29,7 +29,10 @@ namespace API.Controllers
       return CreatedAtRoute("GetUser", new { id = result.Id }, result);
     }
 
-    [AllowAnonymous]
+    [HttpGet("current")]
+    public async Task<IActionResult> CurrentUser() =>
+      Ok(await Mediator.Send(new CurrentUser.Query()));
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id) =>
       Ok(await Mediator.Send(new Delete.Command { Id = id }));

@@ -14,6 +14,10 @@ namespace Persistence
     TahunRepository Tahun { get; }
     AppUserRepository AppUser { get; }
     PermissionRepository Permission { get; }
+    MPgrmRepository MPgrm { get; }
+    MKegiatanRepository MKegiatan { get; }
+    PgrmUnitRepository PgrmUnit { get; }
+    KegUnitRepository KegUnit { get; }
   }
 
   public class DbContext : IDbContext
@@ -32,5 +36,9 @@ namespace Persistence
     public TahunRepository Tahun => new TahunRepository(Connection);
     public AppUserRepository AppUser => new AppUserRepository(Connection);
     public PermissionRepository Permission => new PermissionRepository(Connection);
+    public MPgrmRepository MPgrm => new MPgrmRepository(Connection);
+    public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
+    public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
+    public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
   }
 }
