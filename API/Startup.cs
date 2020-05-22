@@ -157,6 +157,10 @@ namespace API
         c.SwaggerEndpoint("../swagger/v1/swagger.json", "SIPKD API V1");
       });
 
+      app.UseStaticFiles();
+
+      app.UseDefaultFiles();
+
       app.UseRouting();
 
       app.UseCors("CorsPolicy");
@@ -173,6 +177,7 @@ namespace API
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
+        endpoints.MapFallbackToController("Index", "Fallback");
       });
     }
   }
