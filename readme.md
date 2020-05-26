@@ -70,7 +70,7 @@ Berikut contoh konfigurasi untuk Postgre SQL.
 
 <https://dapper.phnx47.net/>
 
-4.  MeditR
+4.  MediatR
 
 <https://github.com/jbogard/MediatR/wiki>
 
