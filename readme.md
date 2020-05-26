@@ -54,8 +54,7 @@ Project ini juga mendukung Database selain MSSQL Server.
 
 Berikut contoh konfigurasi untuk Postgre SQL.
 
-![](.//media/image2.png){width="5.598485345581802in"
-height="3.002688101487314in"}
+![](.//media/image2.png)
 
 **Daftar Library**
 
