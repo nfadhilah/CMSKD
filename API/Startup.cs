@@ -150,16 +150,16 @@ namespace API
 
       // app.UseHttpsRedirection();
 
+      app.UseDefaultFiles();
+      
+      app.UseStaticFiles();
+
       app.UseSwagger();
 
       app.UseSwaggerUI(c =>
       {
         c.SwaggerEndpoint("../swagger/v1/swagger.json", "SIPKD API V1");
       });
-
-      app.UseStaticFiles();
-
-      app.UseDefaultFiles();
 
       app.UseRouting();
 
@@ -171,7 +171,8 @@ namespace API
 
       app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
       {
-        IsDebug = env.IsDevelopment()
+        IsDebug = env.IsDevelopment(),
+        IsApiOnly = false
       });
 
       app.UseEndpoints(endpoints =>
