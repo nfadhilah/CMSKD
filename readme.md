@@ -28,11 +28,11 @@
 
 2.  Klik file CMSKD.sln
 
-3.  Start Without Debugging (Ctrl + F5)
-
-4.  Buka Nuget Package Manager Console kemudian ketik command berikut:
+3.  Buka Nuget Package Manager Console kemudian ketik command berikut:
     -   dotnet user-secrets init
     -   dotnet user-secrets set "TokenKey" "super secret key"
+
+4.  Start Without Debugging (Ctrl + F5)
 
 5.  Buka <http://localhost:5000/swagger> di browser 
 
