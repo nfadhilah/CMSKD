@@ -46,8 +46,7 @@ Log disimpan di path "/API/Logs/logs.db " menggunakan serverless No SQL
 Database (LiteDB). File logs.db dapat dibuka dengan menggunakan LiteDB
 Studio.
 
-[https://github.com/mbdavid/LiteDB.Studio/releases![](.//media/image1.png){width="4.780302930883639in"
-height="2.5543318022747155in"}](https://github.com/mbdavid/LiteDB.Studio/releases#)
+[https://github.com/mbdavid/LiteDB.Studio/releases![](.//media/image1.png)](https://github.com/mbdavid/LiteDB.Studio/releases#)
 
 **DB Configuration**
 
