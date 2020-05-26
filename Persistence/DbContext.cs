@@ -1,4 +1,6 @@
-﻿using Persistence.Repository;
+﻿using MicroOrm.Dapper.Repositories.Config;
+using MicroOrm.Dapper.Repositories.SqlGenerator;
+using Persistence.Repository;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -24,6 +26,7 @@ namespace Persistence
   {
     public DbContext(string connectionString)
     {
+      MicroOrmConfig.SqlProvider = SqlProvider.MSSQL;
       Connection = new SqlConnection(connectionString);
       Connection.Open();
     }
