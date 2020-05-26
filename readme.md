@@ -52,7 +52,7 @@ Studio.
 
 Project ini juga mendukung Database selain MSSQL Server.
 
-Berikut contoh konfigurasi untuk Postgre SQL.
+Berikut contoh konfigurasi untuk PostgreSQL.
 
 ![](.//media/image2.png)
 
