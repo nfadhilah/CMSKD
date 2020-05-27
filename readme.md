@@ -20,7 +20,9 @@
 
 2.  Windows Server 2012 R2+ ([klik untuk melihat daftar supported OS](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1-supported-os.md "klik untuk melihat daftar supported OS"))
 
-3.  Visual Studio 2019
+3.  Visual Studio 2019 / VS Code
+
+4.  Support MSSQL Server, PostgreSQL, MySQL
 
 **HOW TO RUN**
 
