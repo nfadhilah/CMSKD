@@ -18,7 +18,7 @@
 
 1.  ASP.NET CORE SDK VERSI 3.1
 
-2.  MSSQL SERVER 2012
+2.  Windows Server 2012 R2+ ([klik untuk melihat daftar supported OS](https://github.com/dotnet/core/blob/master/release-notes/3.1/3.1-supported-os.md "klik untuk melihat daftar supported OS"))
 
 3.  Visual Studio 2019
 
