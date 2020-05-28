@@ -143,9 +143,9 @@ Berikut contoh konfigurasi untuk PostgreSQL.
 
    
 
-5. Buat folder baru sesuai dengan nama fitur di Project Application. Folder ini merupakan container untuk semua operasi CRUD terhadap sebuah fitur. Pada project CMSKD ini kita menggunakan CQRS (Command Query Responsibility Segregation) Pattern dengan bantuan library MediatR.  Untuk operasi read kita gunakan turunan dari class `IRequest<TResult>` dan untuk operasi write kita menggunakan turunan dari class  IRequest.
+5. Buat folder baru sesuai dengan nama fitur di Project Application. Folder ini merupakan container untuk semua operasi CRUD terhadap sebuah fitur. Pada project CMSKD ini kita menggunakan CQRS (Command Query Responsibility Segregation) Pattern dengan bantuan library MediatR.  Untuk operasi read kita gunakan turunan dari class `IRequest<TResult>` dan untuk operasi write kita menggunakan turunan dari class `IRequest`.
 
-   - Contoh berikut kita akan membuat query list dari table DAFTPHK3. Untuk kebutuhan performance, query dengan return result yang sangat besar disarankan untuk dibungkus dengan class PaginationWrapper.
+   - Contoh berikut kita akan membuat query list dari table DAFTPHK3. Untuk kebutuhan performance, query dengan return result yang sangat besar disarankan untuk dibungkus dengan class `PaginationWrapper`.
 
    - Class Query
 
