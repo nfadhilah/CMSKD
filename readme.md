@@ -220,11 +220,11 @@ Berikut contoh konfigurasi untuk PostgreSQL.
    `Api/Controllers/DaftPhk3Controller.cs`
 
    ```c#
-   public class DaftUnitController : BaseController
+   public class DaftPhk3Controller : BaseController
    {
        [HttpGet]
-       public async Task<IActionResult> Get() =>
-           Ok(await Mediator.Send(new List.Query()));
+       public async Task<IActionResult> Get([FromQuery] List.Query query) =>
+        Ok(await Mediator.Send(query));
    }
    ```
 
