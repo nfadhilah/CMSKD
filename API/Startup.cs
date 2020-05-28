@@ -151,7 +151,7 @@ namespace API
       // app.UseHttpsRedirection();
 
       app.UseDefaultFiles();
-      
+
       app.UseStaticFiles();
 
       app.UseSwagger();

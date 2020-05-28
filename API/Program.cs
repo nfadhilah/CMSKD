@@ -1,4 +1,6 @@
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
@@ -36,6 +38,9 @@ namespace API
         .ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.UseStartup<Startup>();
+        }).ConfigureServices(services =>
+        {
+          services.AddHostedService<LicenseService>();
         });
   }
 }
