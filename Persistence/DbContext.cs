@@ -9,6 +9,7 @@ namespace Persistence
   public interface IDbContext
   {
     IDbConnection Connection { get; }
+    BendRepository Bend { get; }
     DaftPhk3Repository DaftPhk3 { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
@@ -33,6 +34,7 @@ namespace Persistence
 
     public IDbConnection Connection { get; }
     public DaftUnitRepository DaftUnit => new DaftUnitRepository(Connection);
+    public BendRepository Bend => new BendRepository(Connection);
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
