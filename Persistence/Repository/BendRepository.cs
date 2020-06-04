@@ -24,12 +24,27 @@ namespace Persistence.Repository
     {
       var builder = new SqlBuilder();
 
-      var cmd = builder.AddTemplate(@"SELECT TOP (1)
+      var cmd = builder.AddTemplate(@"SELECT d.UNITKEY as UnitKey,
+       d.STAKTIF as StAktif,
+       d.KDBANK as KdBank,
+       d.NIP as NIP,
+       d.REKBEND as RekBend,
+       CASE
+           WHEN EXISTS
+                (
+                    SELECT TOP (1)
                            1
                     FROM dbo.BEND d2
                     WHERE d2.KDBANK LIKE d.KDBANK + '%'
                           AND d2.STAKTIF = d.STAKTIF
-                ");
+                ) THEN
+               0
+           ELSE
+               1
+       END AS IsLeaf
+FROM dbo.BEND d
+/**where**/
+ORDER BY d.KDBANK");
 
       if (stAktif.HasValue)
         builder.Where("d.STAKTIF = @StAktif", new { StAktif = stAktif });
