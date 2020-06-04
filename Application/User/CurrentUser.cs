@@ -70,7 +70,7 @@ namespace Application.User
           Image = null,
           UserName = user.UserName,
           KdTahap = user.KdTahap,
-          UnitKey = user.UnitKey?.Trim() ?? "",
+          UnitId = user.UnitId?.ToString().Trim() ?? "",
           KdUnit = user.DaftUnit?.KdUnit.Trim() ?? "",
           NmUnit = user.DaftUnit?.NmUnit.Trim() ?? ""
         };

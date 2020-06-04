@@ -15,9 +15,9 @@ namespace Domain
     public string UserName { get; set; }
     public string DisplayName { get; set; }
     public int KdTahap { get; set; }
-    public string UnitKey { get; set; }
+    public long? UnitId { get; set; }
 
-    [LeftJoin("DAFTUNIT", "UnitKey", "UnitKey")]
+    [LeftJoin("DAFTUNIT", "UNITID", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }
 
     public string NIP { get; set; }
