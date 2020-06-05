@@ -11,6 +11,7 @@ namespace Persistence
     IDbConnection Connection { get; }
     BendRepository Bend { get; }
     DaftPhk3Repository DaftPhk3 { get; }
+    JBankRepository JBank { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
     RolesRepository Roles { get; }
@@ -36,6 +37,7 @@ namespace Persistence
     public DaftUnitRepository DaftUnit => new DaftUnitRepository(Connection);
     public BendRepository Bend => new BendRepository(Connection);
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
+    public JBankRepository JBank => new JBankRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
