@@ -1,9 +1,11 @@
 ﻿using Application.Rekanan;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+  [AllowAnonymous]
   public class DaftPhk3Controller : BaseController
   {
     [HttpGet]
@@ -18,9 +20,8 @@ namespace API.Controllers
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("Detail", new { id = request.KdP3 }, request);
+      return CreatedAtRoute("Detail", new { id = request.IdPhk3 }, request);
     }
-
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, Update.Command command)

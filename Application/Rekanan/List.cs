@@ -19,8 +19,7 @@ namespace Application.Rekanan
     {
       public string NmP3 { get; set; }
       public string NmInst { get; set; }
-      public string NmBank { get; set; }
-      public string JnsUsaha { get; set; }
+      public int? IdJUsaha { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -38,16 +37,13 @@ namespace Application.Rekanan
         var parameters = new List<Expression<Func<DaftPhk3, bool>>>();
 
         if (!string.IsNullOrWhiteSpace(request.NmP3))
-          parameters.Add(d => d.NmP3.Contains(request.NmP3));
+          parameters.Add(d => d.NmPhk3.Contains(request.NmP3));
 
         if (!string.IsNullOrWhiteSpace(request.NmInst))
           parameters.Add(d => d.NmInst.Contains(request.NmInst));
 
-        if (!string.IsNullOrWhiteSpace(request.NmBank))
-          parameters.Add(d => d.NmBank.Contains(request.NmBank));
-
-        if (!string.IsNullOrWhiteSpace(request.JnsUsaha))
-          parameters.Add(d => d.JnsUsaha == request.JnsUsaha);
+        if (request.IdJUsaha.HasValue)
+          parameters.Add(d => d.IdJUsaha == request.IdJUsaha);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
@@ -55,7 +51,7 @@ namespace Application.Rekanan
 
         var result = await _context.DaftPhk3
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.KdP3)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPhk3)
           .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination
