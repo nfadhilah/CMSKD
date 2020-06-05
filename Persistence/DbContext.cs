@@ -12,6 +12,7 @@ namespace Persistence
     BendRepository Bend { get; }
     DaftPhk3Repository DaftPhk3 { get; }
     JBankRepository JBank { get; }
+    PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
     RolesRepository Roles { get; }
@@ -38,6 +39,7 @@ namespace Persistence
     public BendRepository Bend => new BendRepository(Connection);
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
     public JBankRepository JBank => new JBankRepository(Connection);
+    public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
