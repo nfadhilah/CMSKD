@@ -3,22 +3,21 @@ using AutoWrapper.Wrappers;
 using Domain;
 using MediatR;
 using Persistence;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Bendahara
+namespace Application.KodeBank
 {
   public class Detail
   {
 
-    public class Query : IRequest<Bend>
+    public class Query : IRequest<JBank>
     {
-      public string IdBend { get; set; }
+      public long IdJBank { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, Bend>
+    public class Handler : IRequestHandler<Query, JBank>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,14 +28,11 @@ namespace Application.Bendahara
         _mapper = mapper;
       }
 
-      public async Task<Bend> Handle(
+      public async Task<JBank> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        // var result =
-        //   await _context.Bend.FindByIdAsync(request.IdBend);
-            var result=
-          (await _context.Bend.FindAllAsync<Pegawai>(
-            x => x.IdBend == request.IdBend, c => c.Pegawai)).First();
+        var result =
+          await _context.JBank.FindByIdAsync(request.IdJBank);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

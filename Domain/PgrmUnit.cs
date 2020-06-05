@@ -10,7 +10,7 @@ namespace Domain
     public int KdTahap { get; set; }
 
     [Key]
-    public string UnitKey { get; set; }
+    public string IdUnit { get; set; }
 
     [Key]
     public string IdPrgrm { get; set; }

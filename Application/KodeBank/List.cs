@@ -11,16 +11,16 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Bendahara
+namespace Application.KodeBank
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string IdPeg { get; set; }
-      public string Jns_Bend { get; set; }
-      public string RekBend { get; set; }
-      public string IdBank { get; set; }
+      public string KdBank { get; set; }
+      public string NmBank { get; set; }
+      public string Uraian { get; set; }
+      public string Akronim { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -35,28 +35,28 @@ namespace Application.Bendahara
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<Bend, bool>>>();
+        var parameters = new List<Expression<Func<JBank, bool>>>();
 
-        if (!string.IsNullOrWhiteSpace(request.IdPeg))
-          parameters.Add(d => d.IdPeg.Contains(request.IdPeg));
+        if (!string.IsNullOrWhiteSpace(request.KdBank))
+          parameters.Add(d => d.KdBank.Contains(request.KdBank));
 
-        if (!string.IsNullOrWhiteSpace(request.Jns_Bend))
-          parameters.Add(d => d.Jns_Bend.Contains(request.Jns_Bend));
+        if (!string.IsNullOrWhiteSpace(request.NmBank))
+          parameters.Add(d => d.NmBank.Contains(request.NmBank));
 
-        if (!string.IsNullOrWhiteSpace(request.RekBend))
-          parameters.Add(d => d.RekBend.Contains(request.RekBend));
+        if (!string.IsNullOrWhiteSpace(request.Uraian))
+          parameters.Add(d => d.Uraian.Contains(request.Uraian));
 
-        if (!string.IsNullOrWhiteSpace(request.IdBank))
-          parameters.Add(d => d.IdBank == request.IdBank);
+        if (!string.IsNullOrWhiteSpace(request.Akronim))
+          parameters.Add(d => d.Akronim == request.Akronim);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.Bend.FindAll(predicate).Count();
+        var totalItemsCount = _context.JBank.FindAll(predicate).Count();
 
-        var result = await _context.Bend
+        var result = await _context.JBank
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdBend)
-          .FindAllAsync<Pegawai>(predicate, c => c.Pegawai);
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdJBank)
+          .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination
         {

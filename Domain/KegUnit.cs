@@ -11,7 +11,7 @@ namespace Domain
     public int KdTahap { get; set; }
 
     [Key]
-    public string UnitKey { get; set; }
+    public string IdUnit { get; set; }
 
     [Key]
     public string KdKegUnit { get; set; }
@@ -21,7 +21,7 @@ namespace Domain
 
     public string NoPrior { get; set; }
     public string KdSifat { get; set; }
-    public string NIP { get; set; }
+    public string IdPeg { get; set; }
     public DateTime? TglAwal { get; set; }
     public DateTime? TglAkhir { get; set; }
     public decimal TargetP { get; set; }

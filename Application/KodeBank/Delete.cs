@@ -7,13 +7,13 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Bendahara
+namespace Application.KodeBank
 {
   public class Delete
   {
     public class Command : IRequest
     {
-      public string IdBend { get; set; }
+      public long IdJBank { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,12 +38,12 @@ namespace Application.Bendahara
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.Bend.FindByIdAsync(request.IdBend);
+          await _context.JBank.FindByIdAsync(request.IdJBank);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.Bend.Delete(deleted))
+        if (!_context.JBank.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

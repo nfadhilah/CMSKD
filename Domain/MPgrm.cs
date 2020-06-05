@@ -10,9 +10,9 @@ namespace Domain
     [Key]
     public string IdPrgrm { get; set; }
 
-    public string UnitKey { get; set; }
+    public string IdUnit { get; set; }
 
-    [LeftJoin("DAFTUNIT", "UnitKey", "UnitKey")]
+    [LeftJoin("DAFTUNIT", "IdUnit", "IdUnit")]
     public DaftUnit Urusan { get; set; }
 
     public string NmPrgrm { get; set; }
