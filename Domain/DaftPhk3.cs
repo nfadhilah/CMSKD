@@ -16,6 +16,6 @@ namespace Domain
     public string Alamat { get; set; }
     public string Telepon { get; set; }
     public string NPWP { get; set; }
-    public string UnitKey { get; set; }
+    public string IdUnit { get; set; }
   }
 }

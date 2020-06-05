@@ -20,14 +20,14 @@ namespace Persistence.Repository
     {
     }
 
-    public async Task<IEnumerable<dynamic>> GetBendNodes(int? stAktif, string kdBank)
+    public async Task<IEnumerable<dynamic>> GetBendNodes(int? stAktif, string IdBank)
     {
       var builder = new SqlBuilder();
 
-      var cmd = builder.AddTemplate(@"SELECT d.UNITKEY as UnitKey,
+      var cmd = builder.AddTemplate(@"SELECT d.IDUNIT as IdUnit,
        d.STAKTIF as StAktif,
-       d.KDBANK as KdBank,
-       d.NIP as NIP,
+       d.IDBANK as IdBank,
+       d.IDPEG as IdPeg,
        d.REKBEND as RekBend,
        CASE
            WHEN EXISTS
@@ -35,7 +35,7 @@ namespace Persistence.Repository
                     SELECT TOP (1)
                            1
                     FROM dbo.BEND d2
-                    WHERE d2.KDBANK LIKE d.KDBANK + '%'
+                    WHERE d2.IDBANK = d.IDBANK
                           AND d2.STAKTIF = d.STAKTIF
                 ) THEN
                0
@@ -44,13 +44,13 @@ namespace Persistence.Repository
        END AS IsLeaf
 FROM dbo.BEND d
 /**where**/
-ORDER BY d.KDBANK");
+ORDER BY d.IDBANK");
 
       if (stAktif.HasValue)
         builder.Where("d.STAKTIF = @StAktif", new { StAktif = stAktif });
 
-      if (!string.IsNullOrWhiteSpace(kdBank))
-        builder.Where("d.KDBANK LIKE @KdBank + '%'", new { KdBank = kdBank });
+      if (!string.IsNullOrWhiteSpace(IdBank))
+        builder.Where("d.IDBANK = @IdBank", new { IdBank = IdBank });
 
       return await Connection.QueryAsync(cmd.RawSql, cmd.Parameters);
     }

@@ -22,7 +22,7 @@ namespace Persistence.Repository
     {
       var builder = new SqlBuilder();
 
-      var cmd = builder.AddTemplate(@"SELECT d.UNITKEY as UnitKey,
+      var cmd = builder.AddTemplate(@"SELECT d.IDUNIT as IdUnit,
        d.KDLEVEL as KdLevel,
        d.KDUNIT as KdUnit,
        d.NMUNIT as NmUnit,

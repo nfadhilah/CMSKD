@@ -13,7 +13,7 @@ namespace Application.Bendahara
     public class Query : IRequest<IEnumerable<Bend>>
     {
       public int? StAktif { get; set; }
-      public string KdBank { get; set; }
+      public string IdBank { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, IEnumerable<Bend>>
@@ -34,7 +34,7 @@ namespace Application.Bendahara
 
         return _mapper.Map<IEnumerable<Bend>>(
           await _context.Bend.GetBendNodes(request.StAktif,
-            request.KdBank));
+            request.IdBank));
       }
     }
   }
