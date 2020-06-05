@@ -3,7 +3,6 @@ using AutoWrapper.Wrappers;
 using Domain;
 using FluentValidation;
 using MediatR;
-using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,17 +53,6 @@ namespace Application.Rekanan
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DaftPhk3>(request);
-
-        var lastObject = await _context.DaftPhk3
-          .SetOrderBy(OrderInfo.SortDirection.DESC, d => d.KdP3).FindAsync();
-
-        if (string.IsNullOrEmpty(lastObject.KdP3))
-          added.KdP3 = 1.ToString().PadLeft(10, '0');
-        else
-        {
-          int.TryParse(lastObject.KdP3, out var id);
-          added.KdP3 = (id + 1).ToString().PadLeft(10, '0');
-        }
 
         if (!await _context.DaftPhk3.InsertAsync(added))
           throw new ApiException("Problem saving changes");
