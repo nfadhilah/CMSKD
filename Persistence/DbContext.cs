@@ -42,6 +42,10 @@ namespace Persistence
     public BendRepository Bend => new BendRepository(Connection);
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
     public JBankRepository JBank => new JBankRepository(Connection);
+    public JBendRepository JBend => new JBendRepository(Connection);
+    public JDanaRepository JDana => new JDanaRepository(Connection);
+    public JBKasRepository JBKas => new JBKasRepository(Connection);
+    public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
