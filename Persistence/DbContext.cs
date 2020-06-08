@@ -13,6 +13,7 @@ namespace Persistence
     DaftPhk3Repository DaftPhk3 { get; }
     JBankRepository JBank { get; }
     JBendRepository JBend { get; }
+    JDanaRepository JDana { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
@@ -41,6 +42,7 @@ namespace Persistence
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
     public JBankRepository JBank => new JBankRepository(Connection);
     public JBendRepository JBend => new JBendRepository(Connection);
+    public JDanaRepository JDana => new JDanaRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
