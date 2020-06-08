@@ -11,15 +11,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisDana
+namespace Application.JenisBuktiKas
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string KdDana { get; set; }
-      public string NmDana { get; set; }
-      public string Ket { get; set; }
+      public string KdBKas { get; set; }
+      public string NmBKas { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -34,24 +33,21 @@ namespace Application.JenisDana
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<JDana, bool>>>();
+        var parameters = new List<Expression<Func<JBKas, bool>>>();
 
-        if (!string.IsNullOrWhiteSpace(request.KdDana))
-          parameters.Add(d => d.KdDana.Contains(request.KdDana));
+        if (!string.IsNullOrWhiteSpace(request.KdBKas))
+          parameters.Add(d => d.KdBKas.Contains(request.KdBKas));
 
-        if (!string.IsNullOrWhiteSpace(request.NmDana))
-          parameters.Add(d => d.NmDana.Contains(request.NmDana));
-
-        if (!string.IsNullOrWhiteSpace(request.Ket))
-          parameters.Add(d => d.Ket.Contains(request.Ket));
+        if (!string.IsNullOrWhiteSpace(request.NmBKas))
+          parameters.Add(d => d.NmBKas.Contains(request.NmBKas));
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.JDana.FindAll(predicate).Count();
+        var totalItemsCount = _context.JBKas.FindAll(predicate).Count();
 
-        var result = await _context.JDana
+        var result = await _context.JBKas
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdJDana)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdBKas)
           .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination

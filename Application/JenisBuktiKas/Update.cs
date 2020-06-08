@@ -8,28 +8,24 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisDana
+namespace Application.JenisBuktiKas
 {
   public class Update
   {
     public class Command : IRequest
     {
-      public long IdJDana { get; set; }
-      public string KdDana { get; set; }
-      public string NmDana { get; set; }
-      public string Ket { get; set; }
-      public DateTime? DateCreate { get; set; }
+      public long IdBKas { get; set; }
+      public string KdBKas { get; set; }
+      public string NmBKas { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.IdJDana).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
-        RuleFor(d => d.NmDana).NotEmpty();
-        RuleFor(d => d.Ket).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
+        RuleFor(d => d.IdBKas).NotEmpty();
+        RuleFor(d => d.KdBKas).NotEmpty();
+        RuleFor(d => d.NmBKas).NotEmpty();
       }
     }
 
@@ -48,14 +44,14 @@ namespace Application.JenisDana
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JDana.FindByIdAsync(request.IdJDana);
+          await _context.JBKas.FindByIdAsync(request.IdBKas);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.JDana.Update(updated))
+        if (!_context.JBKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

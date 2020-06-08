@@ -8,32 +8,28 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisDana
+namespace Application.JenisBuktiKas
 {
   public class Create
   {
-    public class Command : IRequest<JDana>
+    public class Command : IRequest<JBKas>
     {
-      // public long IdJDana { get; set; }
-      public string KdDana { get; set; }
-      public string NmDana { get; set; }
-      public string Ket { get; set; }
-      public DateTime? DateCreate { get; set; }
+      // public long IdBKas { get; set; }
+      public string KdBKas { get; set; }
+      public string NmBKas { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJDana).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
-        RuleFor(d => d.NmDana).NotEmpty();
-        RuleFor(d => d.Ket).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
+        // RuleFor(d => d.IdBKas).NotEmpty();
+        RuleFor(d => d.KdBKas).NotEmpty();
+        RuleFor(d => d.NmBKas).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, JDana>
+    public class Handler : IRequestHandler<Command, JBKas>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,12 +40,12 @@ namespace Application.JenisDana
         _mapper = mapper;
       }
 
-      public async Task<JDana> Handle(
+      public async Task<JBKas> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var added = _mapper.Map<JDana>(request);
+        var added = _mapper.Map<JBKas>(request);
 
-        if (!await _context.JDana.InsertAsync(added))
+        if (!await _context.JBKas.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
         return added;

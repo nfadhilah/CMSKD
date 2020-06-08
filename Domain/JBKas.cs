@@ -5,14 +5,12 @@ using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain
 {
-  [Table("JBEND")]
-  public class JBend
+  [Table("JBKAS")]
+  public class JBKas
   {
     [Key, Identity]
-    public long IdJBend { get; set; }
-    [Key]
-    public string Jns_Bend { get; set; }
-    public long IdRek { get; set; }
-    public string Urai_Bend { get; set; }
+    public long IdBKas { get; set; }
+    public string KdBKas { get; set; }
+    public string NmBKas { get; set; }
   }
 }
