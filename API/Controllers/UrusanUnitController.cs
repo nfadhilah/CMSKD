@@ -1,13 +1,11 @@
 ﻿using Application.Dtos;
 using Application.Urusan;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
   [Route("api/unit/{idUnit}/urusan")]
-  [AllowAnonymous]
   public class UrusanUnitController : BaseController
   {
     [HttpGet]
