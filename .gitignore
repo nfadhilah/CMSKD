@@ -341,3 +341,4 @@ ASALocalRun/
 healthchecksdb
 /API/wwwroot
 /API/Logs/logs.db
+/API/appsettings.Development.json

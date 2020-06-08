@@ -14,12 +14,12 @@ namespace Application.Bendahara
   {
     public class Command : IRequest
     {
-    public string KeyBend { get; set; }
-    public string UnitKey { get; set; }
-    public string NIP { get; set; }
+    public string IdBend { get; set; }
+    public string IdUnit { get; set; }
+    public string IdPeg { get; set; }
     public string Jns_Bend { get; set; }
     public int StAktif { get; set; }
-    public string KdBank { get; set; }
+    public string IdBank { get; set; }
     public string Jab_Bend { get; set; }
     public string RekBend { get; set; }
     public string NPWPBend { get; set; }
@@ -27,18 +27,17 @@ namespace Application.Bendahara
     public Decimal? SaldoBendT { get; set; }
     public DateTime? TglStopBend { get; set; }
     public DateTime? DateCreate { get; set; }
-    public DateTime? DateUpdate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.KeyBend).NotEmpty();
-        RuleFor(d => d.NIP).NotEmpty();
+        RuleFor(d => d.IdBend).NotEmpty();
+        RuleFor(d => d.IdPeg).NotEmpty();
         RuleFor(d => d.Jns_Bend).NotEmpty();
         RuleFor(d => d.RekBend).NotEmpty();
-        RuleFor(d => d.KdBank).NotEmpty();
+        RuleFor(d => d.IdBank).NotEmpty();
         RuleFor(d => d.Jab_Bend).NotEmpty();
       }
     }
@@ -58,7 +57,7 @@ namespace Application.Bendahara
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.Bend.FindByIdAsync(request.KeyBend);
+          await _context.Bend.FindByIdAsync(request.IdBend);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
