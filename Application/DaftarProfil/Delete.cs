@@ -3,33 +3,23 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisPembayaran
+namespace Application.DaftarProfil
 {
-  public class Update
+  public class Delete
   {
     public class Command : IRequest
     {
-      public long IdJBayar { get; set; }
-      public int KdBayar { get; set; }
-      public string UraianBayar { get; set; }
-      public DateTime? DateCreate { get; set; }
-      public DateTime? DateUpdate { get; set; }
+      public long IdProfil { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.IdJBayar).NotEmpty();
-        RuleFor(d => d.KdBayar).NotEmpty();
-        RuleFor(d => d.UraianBayar).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
-        RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 
@@ -47,15 +37,13 @@ namespace Application.JenisPembayaran
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var updated =
-          await _context.JBayar.FindAsync(x => x.IdJBayar == request.IdJBayar);
+        var deleted =
+          await _context.Profil.FindAsync(x => x.IdProfil == request.IdProfil);
 
-        if (updated == null)
+        if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        _mapper.Map(request, updated);
-
-        if (!_context.JBayar.Update(updated))
+        if (!_context.Profil.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

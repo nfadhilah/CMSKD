@@ -48,7 +48,7 @@ namespace Application.JenisDana
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JDana.FindByIdAsync(request.IdJDana);
+          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

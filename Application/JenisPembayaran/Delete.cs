@@ -38,7 +38,7 @@ namespace Application.JenisPembayaran
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JBayar.FindByIdAsync(request.IdJBayar);
+          await _context.JBayar.FindAsync(x => x.IdJBayar == request.IdJBayar);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

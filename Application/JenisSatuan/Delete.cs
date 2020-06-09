@@ -38,7 +38,7 @@ namespace Application.JenisSatuan
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JSatuan.FindByIdAsync(request.IdSatuan);
+          await _context.JSatuan.FindAsync(x => x.IdSatuan == request.IdSatuan);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

@@ -8,15 +8,15 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisPembayaran
+namespace Application.DaftarProfil
 {
   public class Update
   {
     public class Command : IRequest
     {
-      public long IdJBayar { get; set; }
-      public int KdBayar { get; set; }
-      public string UraianBayar { get; set; }
+      public long IdProfil { get; set; }
+      public string KdProfil { get; set; }
+      public string NmProfil { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
     }
@@ -25,9 +25,9 @@ namespace Application.JenisPembayaran
     {
       public Validator()
       {
-        RuleFor(d => d.IdJBayar).NotEmpty();
-        RuleFor(d => d.KdBayar).NotEmpty();
-        RuleFor(d => d.UraianBayar).NotEmpty();
+        RuleFor(d => d.IdProfil).NotEmpty();
+        RuleFor(d => d.KdProfil).NotEmpty();
+        RuleFor(d => d.NmProfil).NotEmpty();
         RuleFor(d => d.DateCreate).NotEmpty();
         RuleFor(d => d.DateUpdate).NotEmpty();
       }
@@ -48,14 +48,14 @@ namespace Application.JenisPembayaran
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JBayar.FindAsync(x => x.IdJBayar == request.IdJBayar);
+          await _context.Profil.FindAsync(x => x.IdProfil == request.IdProfil);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.JBayar.Update(updated))
+        if (!_context.Profil.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

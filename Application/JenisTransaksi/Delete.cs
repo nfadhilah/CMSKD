@@ -38,7 +38,7 @@ namespace Application.JenisTransaksi
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JTrans.FindByIdAsync(request.IdJTrans);
+          await _context.JTrans.FindAsync(x => x.IdJTrans == request.IdJTrans);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

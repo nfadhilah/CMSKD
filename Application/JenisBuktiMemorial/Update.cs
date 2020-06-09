@@ -44,7 +44,7 @@ namespace Application.JenisBuktiMemorial
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JBM.FindByIdAsync(request.IdJBM);
+          await _context.JBM.FindAsync(x => x.IdJBM == request.IdJBM);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

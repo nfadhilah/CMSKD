@@ -1,22 +1,22 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisPembayaran
+namespace Application.DaftarProfil
 {
-  public class Update
+  public class Create
   {
-    public class Command : IRequest
+    public class Command : IRequest<Profil>
     {
-      public long IdJBayar { get; set; }
-      public int KdBayar { get; set; }
-      public string UraianBayar { get; set; }
+      // public long IdProfil { get; set; }
+      public string KdProfil { get; set; }
+      public string NmProfil { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
     }
@@ -25,15 +25,15 @@ namespace Application.JenisPembayaran
     {
       public Validator()
       {
-        RuleFor(d => d.IdJBayar).NotEmpty();
-        RuleFor(d => d.KdBayar).NotEmpty();
-        RuleFor(d => d.UraianBayar).NotEmpty();
+        // RuleFor(d => d.IdProfil).NotEmpty();
+        RuleFor(d => d.KdProfil).NotEmpty();
+        RuleFor(d => d.NmProfil).NotEmpty();
         RuleFor(d => d.DateCreate).NotEmpty();
         RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, Profil>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,21 +44,15 @@ namespace Application.JenisPembayaran
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<Profil> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var updated =
-          await _context.JBayar.FindAsync(x => x.IdJBayar == request.IdJBayar);
+        var added = _mapper.Map<Profil>(request);
 
-        if (updated == null)
-          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
-
-        _mapper.Map(request, updated);
-
-        if (!_context.JBayar.Update(updated))
+        if (!await _context.Profil.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return added;
       }
     }
   }

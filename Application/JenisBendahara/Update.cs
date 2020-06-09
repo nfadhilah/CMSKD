@@ -46,7 +46,8 @@ namespace Application.JenisBendahara
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JBend.FindByIdAsync(request.IdJBend);
+          // await _context.JBend.FindByIdAsync(request.IdJBend);
+          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
