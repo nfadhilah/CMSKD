@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 
 namespace Application.UnitOrganisasi
 {
@@ -6,6 +7,8 @@ namespace Application.UnitOrganisasi
   {
     public MappingProfile()
     {
+      CreateMap<Create.Command, DaftUnit>();
+      CreateMap<Update.Command, DaftUnit>();
     }
   }
 }

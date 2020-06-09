@@ -8,8 +8,8 @@ namespace Domain
   [Table("DAFTUNIT")]
   public class DaftUnit
   {
-    [Key]
-    public string IdUnit { get; set; }
+    [Key, Identity]
+    public int IdUnit { get; set; }
     public string KdUnit { get; set; }
     public string NmUnit { get; set; }
     public int KdLevel { get; set; }
