@@ -32,7 +32,7 @@ namespace Application.JenisBuktiMemorial
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JBM.FindByIdAsync(request.IdJBM);
+          await _context.JBM.FindAsync(x => x.IdJBM == request.IdJBM);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

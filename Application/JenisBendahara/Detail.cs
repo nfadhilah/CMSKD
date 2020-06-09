@@ -32,7 +32,7 @@ namespace Application.JenisBendahara
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JBend.FindByIdAsync(request.IdJBend);
+          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

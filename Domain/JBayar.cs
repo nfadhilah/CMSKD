@@ -10,7 +10,7 @@ namespace Domain
   {
     [Key, Identity]
     public long IdJBayar { get; set; }
-    // [Key]
+    [Key]
     public int KdBayar { get; set; }
     public string UraianBayar { get; set; }
     public DateTime? DateCreate { get; set; }

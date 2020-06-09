@@ -32,7 +32,7 @@ namespace Application.JenisTransaksi
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JTrans.FindByIdAsync(request.IdJTrans);
+          await _context.JTrans.FindAsync(x => x.IdJTrans == request.IdJTrans);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

@@ -32,7 +32,7 @@ namespace Application.JenisSatuan
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JSatuan.FindByIdAsync(request.IdSatuan);
+          await _context.JSatuan.FindAsync(x => x.IdSatuan == request.IdSatuan);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

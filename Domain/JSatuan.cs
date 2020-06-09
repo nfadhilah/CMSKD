@@ -10,7 +10,7 @@ namespace Domain
   {
     [Key, Identity]
     public long IdSatuan { get; set; }
-    // [Key]
+    [Key]
     public string KdSatuan { get; set; }
     public string UraiSatuan { get; set; }
     public string Ket { get; set; }

@@ -10,7 +10,7 @@ namespace Domain
   {
     [Key, Identity]
     public long IdJTrans { get; set; }
-    // [Key]
+    [Key]
     public string IdTrans { get; set; }
     public string NmTrans { get; set; }
   }
