@@ -17,6 +17,7 @@ namespace Persistence
     JBKasRepository JBKas { get; }
     JBMRepository JBM { get; }
     JTransRepository JTrans { get; }
+    JAKasRepository JAKas { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
@@ -49,6 +50,7 @@ namespace Persistence
     public JBKasRepository JBKas => new JBKasRepository(Connection);
     public JBMRepository JBM => new JBMRepository(Connection);
     public JTransRepository JTrans => new JTransRepository(Connection);
+    public JAKasRepository JAKas => new JAKasRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);

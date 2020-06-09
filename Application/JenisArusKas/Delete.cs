@@ -1,35 +1,29 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisTransaksi
+namespace Application.JenisArusKas
 {
-  public class Create
+  public class Delete
   {
-    public class Command : IRequest<JTrans>
+    public class Command : IRequest
     {
-      // public long IdJTrans { get; set; }
-      public string IdTrans { get; set; }
-      public string NmTrans { get; set; }
+      public long IdKas { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJTrans).NotEmpty();
-        RuleFor(d => d.IdTrans).NotEmpty();
-        RuleFor(d => d.NmTrans).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, JTrans>
+    public class Handler : IRequestHandler<Command>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -40,15 +34,19 @@ namespace Application.JenisTransaksi
         _mapper = mapper;
       }
 
-      public async Task<JTrans> Handle(
+      public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var added = _mapper.Map<JTrans>(request);
+        var deleted =
+          await _context.JAKas.FindByIdAsync(request.IdKas);
 
-        if (!await _context.JTrans.InsertAsync(added))
+        if (deleted == null)
+          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
+
+        if (!_context.JAKas.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return Unit.Value;
       }
     }
   }
