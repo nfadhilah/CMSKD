@@ -38,7 +38,8 @@ namespace Application.JenisGolongan
               Command request, CancellationToken cancellationToken)
             {
                 var deleted =
-                  await _context.Golongan.FindByIdAsync(request.IdGol);
+                  /*await _context.Golongan.FindByIdAsync(request.IdGol);*/
+                  await _context.Golongan.FindAsync(x => x.IdGol == request.IdGol);
 
                 if (deleted == null)
                     throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
