@@ -13,7 +13,7 @@ namespace UnitTest.Repositories
     public AppUser()
     {
       _db = new DbContext(
-        "Server=.;User Id=usadi;Password=valid49;Database=V@LID49V6_2020_CASHLESS;Trusted_Connection=False;");
+        "Server=.;User Id=usadi;Password=valid49;Database=V@LID49V7_2020;Trusted_Connection=False;");
     }
 
     [Fact]
