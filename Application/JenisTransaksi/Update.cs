@@ -3,23 +3,29 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisTransaksi
 {
-  public class Delete
+  public class Update
   {
     public class Command : IRequest
     {
-      public long IdJBend { get; set; }
+      public long IdJTrans { get; set; }
+      public string IdTrans { get; set; }
+      public string NmTrans { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        RuleFor(d => d.IdJTrans).NotEmpty();
+        RuleFor(d => d.IdTrans).NotEmpty();
+        RuleFor(d => d.NmTrans).NotEmpty();
       }
     }
 
@@ -37,13 +43,15 @@ namespace Application.JenisBendahara
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+        var updated =
+          await _context.JTrans.FindAsync(x => x.IdJTrans == request.IdJTrans);
 
-        if (deleted == null)
+        if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBend.Delete(deleted))
+        _mapper.Map(request, updated);
+
+        if (!_context.JTrans.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

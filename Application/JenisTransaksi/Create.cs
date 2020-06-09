@@ -1,29 +1,35 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System.Net;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisTransaksi
 {
-  public class Delete
+  public class Create
   {
-    public class Command : IRequest
+    public class Command : IRequest<JTrans>
     {
-      public long IdJBend { get; set; }
+      // public long IdJTrans { get; set; }
+      public string IdTrans { get; set; }
+      public string NmTrans { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        // RuleFor(d => d.IdJTrans).NotEmpty();
+        RuleFor(d => d.IdTrans).NotEmpty();
+        RuleFor(d => d.NmTrans).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JTrans>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -34,19 +40,15 @@ namespace Application.JenisBendahara
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JTrans> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+        var added = _mapper.Map<JTrans>(request);
 
-        if (deleted == null)
-          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
-
-        if (!_context.JBend.Delete(deleted))
+        if (!await _context.JTrans.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return added;
       }
     }
   }

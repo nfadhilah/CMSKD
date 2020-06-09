@@ -8,34 +8,32 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.DaftarProfil
 {
   public class Create
   {
-    public class Command : IRequest<JBank>
+    public class Command : IRequest<Profil>
     {
-      // public long IdJBank { get; set; }
-      public string KdBank { get; set; }
-      public string NmBank { get; set; }
-      public string Uraian { get; set; }
-      public string Akronim { get; set; }
+      // public long IdProfil { get; set; }
+      public string KdProfil { get; set; }
+      public string NmProfil { get; set; }
       public DateTime? DateCreate { get; set; }
+      public DateTime? DateUpdate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJBank).NotEmpty();
-        RuleFor(d => d.KdBank).NotEmpty();
-        RuleFor(d => d.NmBank).NotEmpty();
-        RuleFor(d => d.Uraian).NotEmpty();
-        RuleFor(d => d.Akronim).NotEmpty();
+        // RuleFor(d => d.IdProfil).NotEmpty();
+        RuleFor(d => d.KdProfil).NotEmpty();
+        RuleFor(d => d.NmProfil).NotEmpty();
         RuleFor(d => d.DateCreate).NotEmpty();
+        RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, JBank>
+    public class Handler : IRequestHandler<Command, Profil>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -46,12 +44,12 @@ namespace Application.KodeBank
         _mapper = mapper;
       }
 
-      public async Task<JBank> Handle(
+      public async Task<Profil> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var added = _mapper.Map<JBank>(request);
+        var added = _mapper.Map<Profil>(request);
 
-        if (!await _context.JBank.InsertAsync(added))
+        if (!await _context.Profil.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
         return added;

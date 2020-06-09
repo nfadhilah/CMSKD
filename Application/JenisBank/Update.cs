@@ -3,23 +3,35 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisBank
 {
-  public class Delete
+  public class Update
   {
     public class Command : IRequest
     {
-      public long IdJBend { get; set; }
+      public long IdJBank { get; set; }
+      public string KdBank { get; set; }
+      public string NmBank { get; set; }
+      public string Uraian { get; set; }
+      public string Akronim { get; set; }
+      public DateTime? DateCreate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        RuleFor(d => d.IdJBank).NotEmpty();
+        RuleFor(d => d.KdBank).NotEmpty();
+        RuleFor(d => d.NmBank).NotEmpty();
+        RuleFor(d => d.Uraian).NotEmpty();
+        RuleFor(d => d.Akronim).NotEmpty();
+        RuleFor(d => d.DateCreate).NotEmpty();
       }
     }
 
@@ -37,13 +49,15 @@ namespace Application.JenisBendahara
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+        var updated =
+          await _context.JBank.FindByIdAsync(request.IdJBank);
 
-        if (deleted == null)
+        if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBend.Delete(deleted))
+        _mapper.Map(request, updated);
+
+        if (!_context.JBank.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

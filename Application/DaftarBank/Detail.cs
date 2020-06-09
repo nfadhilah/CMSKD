@@ -7,17 +7,17 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisDana
+namespace Application.DaftarBank
 {
   public class Detail
   {
 
-    public class Query : IRequest<JDana>
+    public class Query : IRequest<DaftBank>
     {
-      public long IdJDana { get; set; }
+      public long IdBank { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, JDana>
+    public class Handler : IRequestHandler<Query, DaftBank>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -28,11 +28,11 @@ namespace Application.JenisDana
         _mapper = mapper;
       }
 
-      public async Task<JDana> Handle(
+      public async Task<DaftBank> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
+          await _context.DaftBank.FindAsync(x => x.IdBank == request.IdBank);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

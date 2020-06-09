@@ -7,13 +7,13 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisBuktiMemorial
 {
   public class Delete
   {
     public class Command : IRequest
     {
-      public long IdJBend { get; set; }
+      public long IdJBM { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,12 +38,12 @@ namespace Application.JenisBendahara
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+          await _context.JBM.FindAsync(x => x.IdJBM == request.IdJBM);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBend.Delete(deleted))
+        if (!_context.JBM.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

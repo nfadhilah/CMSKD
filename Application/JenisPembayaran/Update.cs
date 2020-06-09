@@ -3,23 +3,33 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.JenisPembayaran
 {
-  public class Delete
+  public class Update
   {
     public class Command : IRequest
     {
-      public long IdJBank { get; set; }
+      public long IdJBayar { get; set; }
+      public int KdBayar { get; set; }
+      public string UraianBayar { get; set; }
+      public DateTime? DateCreate { get; set; }
+      public DateTime? DateUpdate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        RuleFor(d => d.IdJBayar).NotEmpty();
+        RuleFor(d => d.KdBayar).NotEmpty();
+        RuleFor(d => d.UraianBayar).NotEmpty();
+        RuleFor(d => d.DateCreate).NotEmpty();
+        RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 
@@ -37,13 +47,15 @@ namespace Application.KodeBank
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBank.FindByIdAsync(request.IdJBank);
+        var updated =
+          await _context.JBayar.FindAsync(x => x.IdJBayar == request.IdJBayar);
 
-        if (deleted == null)
+        if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBank.Delete(deleted))
+        _mapper.Map(request, updated);
+
+        if (!_context.JBayar.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

@@ -1,29 +1,35 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System.Net;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisBuktiMemorial
 {
-  public class Delete
+  public class Create
   {
-    public class Command : IRequest
+    public class Command : IRequest<JBM>
     {
-      public long IdJBend { get; set; }
+      // public long IdJBM { get; set; }
+      public string KdBM { get; set; }
+      public string NmBM { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        // RuleFor(d => d.IdJBM).NotEmpty();
+        RuleFor(d => d.KdBM).NotEmpty();
+        RuleFor(d => d.NmBM).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JBM>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -34,19 +40,15 @@ namespace Application.JenisBendahara
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JBM> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+        var added = _mapper.Map<JBM>(request);
 
-        if (deleted == null)
-          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
-
-        if (!_context.JBend.Delete(deleted))
+        if (!await _context.JBM.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return added;
       }
     }
   }

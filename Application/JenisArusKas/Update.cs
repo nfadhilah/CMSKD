@@ -3,23 +3,31 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisArusKas
 {
-  public class Delete
+  public class Update
   {
     public class Command : IRequest
     {
-      public long IdJBend { get; set; }
+      public long IdKas { get; set; }
+      public string KdAKas { get; set; }
+      public string NmAKas { get; set; }
+      public string LabelKas { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
+        RuleFor(d => d.IdKas).NotEmpty();
+        RuleFor(d => d.KdAKas).NotEmpty();
+        RuleFor(d => d.NmAKas).NotEmpty();
+        RuleFor(d => d.LabelKas).NotEmpty();
       }
     }
 
@@ -37,13 +45,15 @@ namespace Application.JenisBendahara
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+        var updated =
+          await _context.JAKas.FindByIdAsync(request.IdKas);
 
-        if (deleted == null)
+        if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBend.Delete(deleted))
+        _mapper.Map(request, updated);
+
+        if (!_context.JAKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

@@ -7,13 +7,13 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.JenisBendahara
+namespace Application.JenisTransaksi
 {
   public class Delete
   {
     public class Command : IRequest
     {
-      public long IdJBend { get; set; }
+      public long IdJTrans { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,12 +38,12 @@ namespace Application.JenisBendahara
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JBend.FindAsync(x => x.IdJBend == request.IdJBend);
+          await _context.JTrans.FindAsync(x => x.IdJTrans == request.IdJTrans);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.JBend.Delete(deleted))
+        if (!_context.JTrans.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

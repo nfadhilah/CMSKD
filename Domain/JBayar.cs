@@ -5,15 +5,15 @@ using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain
 {
-  [Table("JDANA")]
-  public class JDana
+  [Table("JBAYAR")]
+  public class JBayar
   {
     [Key, Identity]
-    public long IdJDana { get; set; }
+    public long IdJBayar { get; set; }
     [Key]
-    public string KdDana { get; set; }
-    public string NmDana { get; set; }
-    public string Ket { get; set; }
+    public int KdBayar { get; set; }
+    public string UraianBayar { get; set; }
     public DateTime? DateCreate { get; set; }
+    public DateTime? DateUpdate { get; set; }
   }
 }
