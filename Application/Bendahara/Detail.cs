@@ -15,7 +15,7 @@ namespace Application.Bendahara
 
     public class Query : IRequest<Bend>
     {
-      public string KeyBend { get; set; }
+      public string IdBend { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Bend>
@@ -33,10 +33,10 @@ namespace Application.Bendahara
       Query request, CancellationToken cancellationToken)
       {
         // var result =
-        //   await _context.Bend.FindByIdAsync(request.KeyBend);
+        //   await _context.Bend.FindByIdAsync(request.IdBend);
             var result=
           (await _context.Bend.FindAllAsync<Pegawai>(
-            x => x.KeyBend == request.KeyBend, c => c.Pegawai)).First();
+            x => x.IdBend == request.IdBend, c => c.Pegawai)).First();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

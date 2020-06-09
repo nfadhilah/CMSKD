@@ -17,10 +17,10 @@ namespace Application.Bendahara
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string NIP { get; set; }
+      public string IdPeg { get; set; }
       public string Jns_Bend { get; set; }
       public string RekBend { get; set; }
-      public string KdBank { get; set; }
+      public string IdBank { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -37,8 +37,8 @@ namespace Application.Bendahara
       {
         var parameters = new List<Expression<Func<Bend, bool>>>();
 
-        if (!string.IsNullOrWhiteSpace(request.NIP))
-          parameters.Add(d => d.NIP.Contains(request.NIP));
+        if (!string.IsNullOrWhiteSpace(request.IdPeg))
+          parameters.Add(d => d.IdPeg.Contains(request.IdPeg));
 
         if (!string.IsNullOrWhiteSpace(request.Jns_Bend))
           parameters.Add(d => d.Jns_Bend.Contains(request.Jns_Bend));
@@ -46,8 +46,8 @@ namespace Application.Bendahara
         if (!string.IsNullOrWhiteSpace(request.RekBend))
           parameters.Add(d => d.RekBend.Contains(request.RekBend));
 
-        if (!string.IsNullOrWhiteSpace(request.KdBank))
-          parameters.Add(d => d.KdBank == request.KdBank);
+        if (!string.IsNullOrWhiteSpace(request.IdBank))
+          parameters.Add(d => d.IdBank == request.IdBank);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
@@ -55,7 +55,7 @@ namespace Application.Bendahara
 
         var result = await _context.Bend
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.KeyBend)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdBend)
           .FindAllAsync<Pegawai>(predicate, c => c.Pegawai);
 
         return new PaginationWrapper(result, new Pagination

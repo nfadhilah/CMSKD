@@ -14,7 +14,7 @@ namespace Application.Rekanan
 
     public class Query : IRequest<DaftPhk3>
     {
-      public string KdP3 { get; set; }
+      public int IdPhk3 { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, DaftPhk3>
@@ -32,7 +32,7 @@ namespace Application.Rekanan
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.DaftPhk3.FindByIdAsync(request.KdP3);
+          await _context.DaftPhk3.FindByIdAsync(request.IdPhk3);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

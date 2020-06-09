@@ -13,6 +13,7 @@ namespace Application.Rekanan
   {
     public class Command : IRequest
     {
+      public int IdPhk3 { get; set; }
       public string KdP3 { get; set; }
       public string NmP3 { get; set; }
       public string NmInst { get; set; }
@@ -22,7 +23,7 @@ namespace Application.Rekanan
       public string Alamat { get; set; }
       public string Telepon { get; set; }
       public string NPWP { get; set; }
-      public string UnitKey { get; set; }
+      public string IdUnit { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>

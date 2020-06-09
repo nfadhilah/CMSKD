@@ -2,7 +2,7 @@
 {
   public class DaftUnitNode
   {
-    public string UnitKey { get; set; }
+    public string IdUnit { get; set; }
     public int KdLevel { get; set; }
     public string KdUnit { get; set; }
     public string NmUnit { get; set; }

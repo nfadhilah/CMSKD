@@ -13,7 +13,7 @@ namespace Application.Bendahara
   {
     public class Command : IRequest
     {
-      public string KeyBend { get; set; }
+      public string IdBend { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,7 +38,7 @@ namespace Application.Bendahara
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.Bend.FindByIdAsync(request.KeyBend);
+          await _context.Bend.FindByIdAsync(request.IdBend);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

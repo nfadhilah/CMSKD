@@ -11,6 +11,11 @@ namespace Persistence
     IDbConnection Connection { get; }
     BendRepository Bend { get; }
     DaftPhk3Repository DaftPhk3 { get; }
+    JBankRepository JBank { get; }
+    JBendRepository JBend { get; }
+    JDanaRepository JDana { get; }
+    JBKasRepository JBKas { get; }
+    PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
     WebUserRepository WebUser { get; }
     RolesRepository Roles { get; }
@@ -21,6 +26,7 @@ namespace Persistence
     MKegiatanRepository MKegiatan { get; }
     PgrmUnitRepository PgrmUnit { get; }
     KegUnitRepository KegUnit { get; }
+    UrusanUnitRepository UrusanUnit { get; }
   }
 
   public class DbContext : IDbContext
@@ -36,6 +42,11 @@ namespace Persistence
     public DaftUnitRepository DaftUnit => new DaftUnitRepository(Connection);
     public BendRepository Bend => new BendRepository(Connection);
     public DaftPhk3Repository DaftPhk3 => new DaftPhk3Repository(Connection);
+    public JBankRepository JBank => new JBankRepository(Connection);
+    public JBendRepository JBend => new JBendRepository(Connection);
+    public JDanaRepository JDana => new JDanaRepository(Connection);
+    public JBKasRepository JBKas => new JBKasRepository(Connection);
+    public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public RolesRepository Roles => new RolesRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
@@ -45,5 +56,6 @@ namespace Persistence
     public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
     public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
     public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
+    public UrusanUnitRepository UrusanUnit => new UrusanUnitRepository(Connection);
   }
 }
