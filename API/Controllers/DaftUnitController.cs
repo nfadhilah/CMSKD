@@ -1,11 +1,9 @@
 ﻿using Application.UnitOrganisasi;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-  [AllowAnonymous]
   public class DaftUnitController : BaseController
   {
     [HttpGet]
