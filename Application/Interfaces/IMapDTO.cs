@@ -1,7 +1,7 @@
 ﻿namespace Application.Interfaces
 {
-  public interface IMapDTO<in T, TOut>
+  public interface IMapDTO<TMap>
   {
-    TOut MapDTO(T dto, TOut destination);
+    TMap MapDTO(TMap destination);
   }
 }

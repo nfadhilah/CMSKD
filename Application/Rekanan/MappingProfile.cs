@@ -8,7 +8,6 @@ namespace Application.Rekanan
     public MappingProfile()
     {
       CreateMap<Create.Command, DaftPhk3>();
-      CreateMap<Update.DTO, Update.Command>();
       CreateMap<Update.Command, DaftPhk3>();
     }
   }
