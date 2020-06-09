@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -11,6 +12,32 @@ namespace Application.Rekanan
 {
   public class Update
   {
+    public class DTO : IMapDTO<DTO, Command>
+    {
+      private readonly IMapper _mapper;
+
+      public string KdP3 { get; set; }
+      public string NmP3 { get; set; }
+      public string NmInst { get; set; }
+      public string NoRcP3 { get; set; }
+      public string NmBank { get; set; }
+      public string JnsUsaha { get; set; }
+      public string Alamat { get; set; }
+      public string Telepon { get; set; }
+      public string NPWP { get; set; }
+      public string IdUnit { get; set; }
+
+      public DTO(IMapper mapper)
+      {
+        _mapper = mapper;
+      }
+
+      public Command MapDTO(DTO dto, Command command)
+      {
+        return _mapper.Map<Command>(dto);
+      }
+    }
+
     public class Command : IRequest
     {
       public int IdPhk3 { get; set; }
