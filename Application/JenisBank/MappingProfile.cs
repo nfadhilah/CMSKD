@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain;
 
-namespace Application.KodeBank
+namespace Application.JenisBank
 {
   public class MappingProfile : Profile
   {

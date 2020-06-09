@@ -11,16 +11,17 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.DaftarBank
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
       public string KdBank { get; set; }
-      public string NmBank { get; set; }
-      public string Uraian { get; set; }
-      public string Akronim { get; set; }
+      public string AkBank { get; set; }
+      public string Alamat { get; set; }
+      public string Telepon { get; set; }
+      public string Cabang { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -35,27 +36,30 @@ namespace Application.KodeBank
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<JBank, bool>>>();
+        var parameters = new List<Expression<Func<DaftBank, bool>>>();
 
         if (!string.IsNullOrWhiteSpace(request.KdBank))
           parameters.Add(d => d.KdBank.Contains(request.KdBank));
 
-        if (!string.IsNullOrWhiteSpace(request.NmBank))
-          parameters.Add(d => d.NmBank.Contains(request.NmBank));
+        if (!string.IsNullOrWhiteSpace(request.AkBank))
+          parameters.Add(d => d.AkBank.Contains(request.AkBank));
 
-        if (!string.IsNullOrWhiteSpace(request.Uraian))
-          parameters.Add(d => d.Uraian.Contains(request.Uraian));
+        if (!string.IsNullOrWhiteSpace(request.Alamat))
+          parameters.Add(d => d.Alamat.Contains(request.Alamat));
 
-        if (!string.IsNullOrWhiteSpace(request.Akronim))
-          parameters.Add(d => d.Akronim == request.Akronim);
+        if (!string.IsNullOrWhiteSpace(request.Telepon))
+          parameters.Add(d => d.Telepon.Contains(request.Telepon));
+
+        if (!string.IsNullOrWhiteSpace(request.Cabang))
+          parameters.Add(d => d.Cabang.Contains(request.Cabang));
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.JBank.FindAll(predicate).Count();
+        var totalItemsCount = _context.DaftBank.FindAll(predicate).Count();
 
-        var result = await _context.JBank
+        var result = await _context.DaftBank
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdJBank)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdBank)
           .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination

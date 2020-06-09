@@ -8,17 +8,18 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.DaftarBank
 {
   public class Create
   {
-    public class Command : IRequest<JBank>
+    public class Command : IRequest<DaftBank>
     {
-      // public long IdJBank { get; set; }
+      // public long IdBank { get; set; }
       public string KdBank { get; set; }
-      public string NmBank { get; set; }
-      public string Uraian { get; set; }
-      public string Akronim { get; set; }
+      public string AkBank { get; set; }
+      public string Alamat { get; set; }
+      public string Telepon { get; set; }
+      public string Cabang { get; set; }
       public DateTime? DateCreate { get; set; }
     }
 
@@ -26,16 +27,17 @@ namespace Application.KodeBank
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJBank).NotEmpty();
+        // RuleFor(d => d.IdBank).NotEmpty();
         RuleFor(d => d.KdBank).NotEmpty();
-        RuleFor(d => d.NmBank).NotEmpty();
-        RuleFor(d => d.Uraian).NotEmpty();
-        RuleFor(d => d.Akronim).NotEmpty();
+        RuleFor(d => d.AkBank).NotEmpty();
+        RuleFor(d => d.Alamat).NotEmpty();
+        RuleFor(d => d.Telepon).NotEmpty();
+        RuleFor(d => d.Cabang).NotEmpty();
         RuleFor(d => d.DateCreate).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, JBank>
+    public class Handler : IRequestHandler<Command, DaftBank>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -46,12 +48,12 @@ namespace Application.KodeBank
         _mapper = mapper;
       }
 
-      public async Task<JBank> Handle(
+      public async Task<DaftBank> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var added = _mapper.Map<JBank>(request);
+        var added = _mapper.Map<DaftBank>(request);
 
-        if (!await _context.JBank.InsertAsync(added))
+        if (!await _context.DaftBank.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
         return added;

@@ -3,35 +3,23 @@ using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.DaftarBank
 {
-  public class Update
+  public class Delete
   {
     public class Command : IRequest
     {
-      public long IdJBank { get; set; }
-      public string KdBank { get; set; }
-      public string NmBank { get; set; }
-      public string Uraian { get; set; }
-      public string Akronim { get; set; }
-      public DateTime? DateCreate { get; set; }
+      public long IdBank { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.IdJBank).NotEmpty();
-        RuleFor(d => d.KdBank).NotEmpty();
-        RuleFor(d => d.NmBank).NotEmpty();
-        RuleFor(d => d.Uraian).NotEmpty();
-        RuleFor(d => d.Akronim).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
       }
     }
 
@@ -49,15 +37,13 @@ namespace Application.KodeBank
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var updated =
-          await _context.JBank.FindByIdAsync(request.IdJBank);
+        var deleted =
+          await _context.DaftBank.FindAsync(x => x.IdBank == request.IdBank);
 
-        if (updated == null)
+        if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        _mapper.Map(request, updated);
-
-        if (!_context.JBank.Update(updated))
+        if (!_context.DaftBank.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

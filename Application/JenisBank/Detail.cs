@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.JenisBank
 {
   public class Detail
   {
