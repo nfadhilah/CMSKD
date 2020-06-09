@@ -27,7 +27,8 @@ namespace Persistence
     PgrmUnitRepository PgrmUnit { get; }
     KegUnitRepository KegUnit { get; }
     UrusanUnitRepository UrusanUnit { get; }
-  }
+    GolonganRepository Golongan { get; }
+    }
 
   public class DbContext : IDbContext
   {
@@ -57,5 +58,6 @@ namespace Persistence
     public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
     public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
     public UrusanUnitRepository UrusanUnit => new UrusanUnitRepository(Connection);
-  }
+    public GolonganRepository Golongan => new GolonganRepository(Connection);
+    }
 }
