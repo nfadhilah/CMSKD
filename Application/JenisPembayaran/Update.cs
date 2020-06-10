@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -12,6 +13,42 @@ namespace Application.JenisPembayaran
 {
   public class Update
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public int KdBayar { get; set; }
+      public string UraianBayar { get; set; }
+      public DateTime? DateCreate { get; set; }
+      public DateTime? DateUpdate { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.KdBayar).NotEmpty();
+        RuleFor(d => d.UraianBayar).NotEmpty();
+        RuleFor(d => d.DateCreate).NotEmpty();
+        RuleFor(d => d.DateUpdate).NotEmpty();
+      }
+    }
+
     public class Command : IRequest
     {
       public long IdJBayar { get; set; }
@@ -19,18 +56,6 @@ namespace Application.JenisPembayaran
       public string UraianBayar { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(d => d.IdJBayar).NotEmpty();
-        RuleFor(d => d.KdBayar).NotEmpty();
-        RuleFor(d => d.UraianBayar).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
-        RuleFor(d => d.DateUpdate).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command>

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -12,23 +13,46 @@ namespace Application.JenisArusKas
 {
   public class Update
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public string KdAKas { get; set; }
+      public string NmAKas { get; set; }
+      public string LabelKas { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.KdAKas).NotEmpty();
+        RuleFor(d => d.NmAKas).NotEmpty();
+        RuleFor(d => d.LabelKas).NotEmpty();
+      }
+    }
+
     public class Command : IRequest
     {
       public long IdKas { get; set; }
       public string KdAKas { get; set; }
       public string NmAKas { get; set; }
       public string LabelKas { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(d => d.IdKas).NotEmpty();
-        RuleFor(d => d.KdAKas).NotEmpty();
-        RuleFor(d => d.NmAKas).NotEmpty();
-        RuleFor(d => d.LabelKas).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command>

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -12,21 +13,43 @@ namespace Application.JenisBuktiKas
 {
   public class Update
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public string KdBKas { get; set; }
+      public string NmBKas { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.KdBKas).NotEmpty();
+        RuleFor(d => d.NmBKas).NotEmpty();
+      }
+    }
+
     public class Command : IRequest
     {
       public long IdBKas { get; set; }
       public string KdBKas { get; set; }
       public string NmBKas { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(d => d.IdBKas).NotEmpty();
-        RuleFor(d => d.KdBKas).NotEmpty();
-        RuleFor(d => d.NmBKas).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command>

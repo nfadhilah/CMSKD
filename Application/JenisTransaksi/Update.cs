@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -12,21 +13,43 @@ namespace Application.JenisTransaksi
 {
   public class Update
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public string IdTrans { get; set; }
+      public string NmTrans { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.IdTrans).NotEmpty();
+        RuleFor(d => d.NmTrans).NotEmpty();
+      }
+    }
+
     public class Command : IRequest
     {
       public long IdJTrans { get; set; }
       public string IdTrans { get; set; }
       public string NmTrans { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(d => d.IdJTrans).NotEmpty();
-        RuleFor(d => d.IdTrans).NotEmpty();
-        RuleFor(d => d.NmTrans).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command>
