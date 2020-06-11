@@ -4,6 +4,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,25 +14,29 @@ namespace Application.Rekanan
   {
     public class Command : IRequest<DaftPhk3>
     {
-      public string NmP3 { get; set; }
+      public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
-      public string NoRcP3 { get; set; }
-      public string NmBank { get; set; }
-      public string JnsUsaha { get; set; }
+      public int IdBank { get; set; }
+      public string CabangBank { get; set; }
+      public string AlamatBank { get; set; }
+      public string NoRekBank { get; set; }
+      public int IdJUsaha { get; set; }
       public string Alamat { get; set; }
       public string Telepon { get; set; }
       public string NPWP { get; set; }
-      public string IdUnit { get; set; }
+      public int StValid { get; set; }
+      public DateTime? DateCreate { get; set; }
+      public DateTime? DateUpdate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(d => d.NmP3).NotEmpty();
+        RuleFor(d => d.NmPhk3).NotEmpty();
         RuleFor(d => d.NmInst).NotEmpty();
-        RuleFor(d => d.NoRcP3).NotEmpty();
-        RuleFor(d => d.NmBank).NotEmpty();
+        RuleFor(d => d.NoRekBank).NotEmpty();
+        RuleFor(d => d.IdBank).NotEmpty();
         RuleFor(d => d.NPWP).NotEmpty();
       }
     }

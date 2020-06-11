@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +8,7 @@ namespace Domain
   [Table("DAFTPHK3")]
   public class DaftPhk3
   {
-    [Key]
+    [Key, Identity]
     public int IdPhk3 { get; set; }
     public string NmPhk3 { get; set; }
     public string NmInst { get; set; }
@@ -20,7 +21,7 @@ namespace Domain
     public string Telepon { get; set; }
     public string NPWP { get; set; }
     public int StValid { get; set; }
-    public DateTime DateCreate { get; set; }
-    public DateTime DateUpdate { get; set; }
+    public DateTime? DateCreate { get; set; }
+    public DateTime? DateUpdate { get; set; }
   }
 }

@@ -10,7 +10,7 @@ namespace API.Controllers
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(query));
 
-    [HttpGet("{id}", Name = "GetDafPhk3")]
+    [HttpGet("{id}", Name = "GetDaftPhk3")]
     public async Task<IActionResult> Get(int id) =>
       Ok(await Mediator.Send(new Detail.Query { IdPhk3 = id }));
 
