@@ -32,7 +32,7 @@ namespace Application.JenisDana
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JDana.FindByIdAsync(request.IdJDana);
+          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

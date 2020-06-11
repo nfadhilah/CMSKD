@@ -1,4 +1,4 @@
-﻿using Application.KodeBank;
+﻿using Application.JenisBank;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -23,8 +23,9 @@ namespace API.Controllers
 
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(long id, Update.Command command)
+    public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
+      var command = dto.MapDTO(new Update.Command());
       command.IdJBank = id;
       return Ok(await Mediator.Send(command));
     }

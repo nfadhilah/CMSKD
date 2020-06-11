@@ -22,8 +22,9 @@ namespace API.Controllers
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Update.Command command)
+    public async Task<IActionResult> Update(int id, Update.DTO dto)
     {
+      var command = dto.MapDTO(new Update.Command());
       command.IdPhk3 = id;
       return Ok(await Mediator.Send(command));
     }

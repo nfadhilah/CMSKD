@@ -7,17 +7,17 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.KodeBank
+namespace Application.JenisArusKas
 {
   public class Detail
   {
 
-    public class Query : IRequest<JBank>
+    public class Query : IRequest<JAKas>
     {
-      public long IdJBank { get; set; }
+      public long IdKas { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, JBank>
+    public class Handler : IRequestHandler<Query, JAKas>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -28,11 +28,11 @@ namespace Application.KodeBank
         _mapper = mapper;
       }
 
-      public async Task<JBank> Handle(
+      public async Task<JAKas> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JBank.FindByIdAsync(request.IdJBank);
+          await _context.JAKas.FindByIdAsync(request.IdKas);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

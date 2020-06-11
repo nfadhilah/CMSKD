@@ -1,8 +1,10 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,32 +13,71 @@ namespace Application.Rekanan
 {
   public class Update
   {
-    public class Command : IRequest
+    public class DTO : IMapDTO<Command>
     {
-      public int IdPhk3 { get; set; }
-      public string KdP3 { get; set; }
-      public string NmP3 { get; set; }
+      private readonly IMapper _mapper;
+
+      public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
-      public string NoRcP3 { get; set; }
-      public string NmBank { get; set; }
-      public string JnsUsaha { get; set; }
+      public int IdBank { get; set; }
+      public string CabangBank { get; set; }
+      public string AlamatBank { get; set; }
+      public string NoRekBank { get; set; }
+      public int IdJUsaha { get; set; }
       public string Alamat { get; set; }
       public string Telepon { get; set; }
       public string NPWP { get; set; }
-      public string IdUnit { get; set; }
+      public int StValid { get; set; }
+      public DateTime DateCreate { get; set; }
+      public DateTime DateUpdate { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
     }
 
-    public class Validator : AbstractValidator<Command>
+    public class Validator : AbstractValidator<DTO>
     {
       public Validator()
       {
-        RuleFor(d => d.KdP3).NotEmpty();
-        RuleFor(d => d.NmP3).NotEmpty();
+        RuleFor(d => d.NmPhk3).NotEmpty();
         RuleFor(d => d.NmInst).NotEmpty();
-        RuleFor(d => d.NoRcP3).NotEmpty();
-        RuleFor(d => d.NmBank).NotEmpty();
+        RuleFor(d => d.IdBank).NotEmpty();
+        RuleFor(d => d.CabangBank).NotEmpty();
+        RuleFor(d => d.AlamatBank).NotEmpty();
+        RuleFor(d => d.NoRekBank).NotEmpty();
+        RuleFor(d => d.IdJUsaha).NotEmpty();
         RuleFor(d => d.NPWP).NotEmpty();
       }
+    }
+
+    public class Command : IRequest
+    {
+      public int IdPhk3 { get; set; }
+      public string NmPhk3 { get; set; }
+      public string NmInst { get; set; }
+      public int IdBank { get; set; }
+      public string CabangBank { get; set; }
+      public string AlamatBank { get; set; }
+      public string NoRekBank { get; set; }
+      public int IdJUsaha { get; set; }
+      public string Alamat { get; set; }
+      public string Telepon { get; set; }
+      public string NPWP { get; set; }
+      public int StValid { get; set; }
+      public DateTime DateCreate { get; set; }
+      public DateTime DateUpdate { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -54,7 +95,7 @@ namespace Application.Rekanan
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.DaftPhk3.FindByIdAsync(request.KdP3);
+          await _context.DaftPhk3.FindByIdAsync(request.IdPhk3);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

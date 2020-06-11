@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
@@ -12,6 +13,42 @@ namespace Application.JenisDana
 {
   public class Update
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public string KdDana { get; set; }
+      public string NmDana { get; set; }
+      public string Ket { get; set; }
+      public DateTime? DateCreate { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.NmDana).NotEmpty();
+        RuleFor(d => d.Ket).NotEmpty();
+        RuleFor(d => d.DateCreate).NotEmpty();
+      }
+    }
+
     public class Command : IRequest
     {
       public long IdJDana { get; set; }
@@ -19,18 +56,6 @@ namespace Application.JenisDana
       public string NmDana { get; set; }
       public string Ket { get; set; }
       public DateTime? DateCreate { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        RuleFor(d => d.IdJDana).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
-        RuleFor(d => d.NmDana).NotEmpty();
-        RuleFor(d => d.Ket).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -48,7 +73,7 @@ namespace Application.JenisDana
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JDana.FindByIdAsync(request.IdJDana);
+          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

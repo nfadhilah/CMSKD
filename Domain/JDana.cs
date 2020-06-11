@@ -10,6 +10,7 @@ namespace Domain
   {
     [Key, Identity]
     public long IdJDana { get; set; }
+    [Key]
     public string KdDana { get; set; }
     public string NmDana { get; set; }
     public string Ket { get; set; }

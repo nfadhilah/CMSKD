@@ -13,7 +13,6 @@ namespace Application.Rekanan
   {
     public class Command : IRequest<DaftPhk3>
     {
-      // public string Kdp3 { get; set; }
       public string NmP3 { get; set; }
       public string NmInst { get; set; }
       public string NoRcP3 { get; set; }
@@ -29,7 +28,6 @@ namespace Application.Rekanan
     {
       public Validator()
       {
-        // RuleFor(d => d.Kdp3).NotEmpty();
         RuleFor(d => d.NmP3).NotEmpty();
         RuleFor(d => d.NmInst).NotEmpty();
         RuleFor(d => d.NoRcP3).NotEmpty();
