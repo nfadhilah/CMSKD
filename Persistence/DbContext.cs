@@ -36,6 +36,7 @@ namespace Persistence
     KegUnitRepository KegUnit { get; }
     UrusanUnitRepository UrusanUnit { get; }
     GolonganRepository Golongan { get; }
+    SifatKegRepository SifatKeg { get; }
     }
 
   public class DbContext : IDbContext
@@ -75,5 +76,6 @@ namespace Persistence
     public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
     public UrusanUnitRepository UrusanUnit => new UrusanUnitRepository(Connection);
     public GolonganRepository Golongan => new GolonganRepository(Connection);
+    public SifatKegRepository SifatKeg => new SifatKegRepository(Connection);
     }
 }
