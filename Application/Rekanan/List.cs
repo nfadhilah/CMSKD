@@ -17,7 +17,7 @@ namespace Application.Rekanan
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string NmP3 { get; set; }
+      public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
       public int? IdJUsaha { get; set; }
     }
@@ -36,8 +36,8 @@ namespace Application.Rekanan
       {
         var parameters = new List<Expression<Func<DaftPhk3, bool>>>();
 
-        if (!string.IsNullOrWhiteSpace(request.NmP3))
-          parameters.Add(d => d.NmPhk3.Contains(request.NmP3));
+        if (!string.IsNullOrWhiteSpace(request.NmPhk3))
+          parameters.Add(d => d.NmPhk3.Contains(request.NmPhk3));
 
         if (!string.IsNullOrWhiteSpace(request.NmInst))
           parameters.Add(d => d.NmInst.Contains(request.NmInst));
