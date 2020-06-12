@@ -38,7 +38,8 @@ namespace Persistence
     GolonganRepository Golongan { get; }
     SifatKegRepository SifatKeg { get; }
     StruRekRepository StruRek { get; }
-    }
+    DaftRekeningRepository DaftRekening { get; }
+  }
 
   public class DbContext : IDbContext
   {
@@ -79,5 +80,6 @@ namespace Persistence
     public GolonganRepository Golongan => new GolonganRepository(Connection);
     public SifatKegRepository SifatKeg => new SifatKegRepository(Connection);
     public StruRekRepository StruRek => new StruRekRepository(Connection);
-    }
+    public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
+  }
 }
