@@ -18,7 +18,7 @@ namespace API.Controllers
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("Detail", new { id = request.IdProfil }, request);
+      return CreatedAtRoute("DetailDaftarProfil", new { id = request.IdProfil }, request);
     }
 
 
