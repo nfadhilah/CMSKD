@@ -16,7 +16,7 @@ namespace Application.Urusan
     public class Query : IRequest<UrusanUnit>
     {
       public long IdUnit { get; set; }
-      public long IdUrusanUnit { get; set; }
+      public long UrusKey { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, UrusanUnit>
@@ -35,7 +35,7 @@ namespace Application.Urusan
       {
         var query = await _context.UrusanUnit
           .FindAllAsync<DaftUnit, DaftUnit>(
-            u => u.IdUnit == request.IdUnit && u.IdUrusanUnit == request.IdUrusanUnit,
+            u => u.IdUnit == request.IdUnit && u.UrusKey == request.UrusKey,
             u => u.DaftUnit, u => u.Urusan);
 
         var result = query.SingleOrDefault();

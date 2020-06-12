@@ -18,39 +18,38 @@ namespace API.Controllers
         IdUnit = idUnit
       }));
 
-    [HttpGet("{idUrusanUnit}", Name = "GetUrusanUnit")]
+    [HttpGet("{urusKey}", Name = "GetUrusanUnit")]
     public async Task<IActionResult> Get(
-      long idUnit, long idUrusanUnit) => Ok(await Mediator.Send(new Detail.Query
+      long idUnit, long urusKey) => Ok(await Mediator.Send(new Detail.Query
       {
         IdUnit = idUnit,
-        IdUrusanUnit = idUrusanUnit
+        UrusKey = urusKey
       }));
 
     [HttpPost]
-    public async Task<IActionResult> Post(long idUnit, Create.Command command)
+    public async Task<IActionResult> Post(long idUnit, [FromBody] Create.DTO dto)
     {
-      command.IdUnit = idUnit;
+      var command = dto.MapDTO(new Create.Command { IdUnit = idUnit });
       var request = await Mediator.Send(command);
-
-      return CreatedAtRoute("GetUrusanUnit", new { idUnit = request.IdUnit, idUrusanUnit = request.IdUrusanUnit },
+      return CreatedAtRoute("GetUrusanUnit", new { idUnit = request.IdUnit, urusKey = request.UrusKey },
         request);
     }
 
-    [HttpPut("{idUrusanUnit}")]
+    [HttpPut("{urusKey}")]
     public async Task<IActionResult> Update(
-      long idUnit, long idUrusanUnit, Update.Command command)
+      long idUnit, long urusKey, [FromBody] Update.DTO dto)
     {
-      command.IdUnit = idUnit;
-      command.IdUrusanUnit = idUrusanUnit;
+      var command = dto.MapDTO(new Update.Command
+      { IdUnit = idUnit, UrusKey = urusKey });
       return Ok(await Mediator.Send(command));
     }
 
-    [HttpDelete("{idUrusanUnit}")]
-    public async Task<IActionResult> Delete(long idUnit, long idUrusanUnit)
+    [HttpDelete("{urusKey}")]
+    public async Task<IActionResult> Delete(long idUnit, long urusKey)
     {
       return
         Ok(await Mediator.Send(new Delete.Command
-        { IdUnit = idUnit, IdUrusanUnit = idUrusanUnit }));
+        { IdUnit = idUnit, UrusKey = urusKey }));
     }
   }
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -14,15 +13,15 @@ namespace Application.Urusan
   {
     public class Command : IRequest
     {
-      public long IdUrusanUnit { get; set; }
+      public long UrusKey { get; set; }
       public long IdUnit { get; set; }
     }
 
-    public class Validator : AbstractValidator<UrusanUnit>
+    public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(x => x.IdUrusanUnit).NotEmpty();
+        RuleFor(x => x.UrusKey).NotEmpty();
         RuleFor(x => x.IdUnit).NotEmpty();
       }
     }
@@ -42,7 +41,7 @@ namespace Application.Urusan
         Command request, CancellationToken cancellationToken)
       {
         var deleted = await _context.UrusanUnit.FindAsync(x =>
-          x.IdUnit == request.IdUnit && x.IdUrusanUnit == request.IdUrusanUnit);
+          x.IdUnit == request.IdUnit && x.UrusKey == request.UrusKey);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

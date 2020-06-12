@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain;
 using FluentValidation;
@@ -12,20 +13,38 @@ namespace Application.Urusan
 {
   public class Create
   {
+    public class DTO : IMapDTO<Command>
+    {
+      private readonly IMapper _mapper;
+
+      public long UrusKey { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination) =>
+        _mapper.Map(this, destination);
+    }
+
+    public class Validator : AbstractValidator<DTO>
+    {
+      public Validator()
+      {
+        RuleFor(x => x.UrusKey).NotEmpty();
+      }
+    }
 
     public class Command : IRequest<UrusanUnit>
     {
       public long IdUnit { get; set; }
       public long UrusKey { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-        // RuleFor(x => x.IdUnit).NotEmpty();
-        RuleFor(x => x.UrusKey).NotEmpty();
-      }
     }
 
     public class Handler : IRequestHandler<Command, UrusanUnit>

@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -12,20 +12,39 @@ namespace Application.Urusan
 {
   public class Update
   {
-    public class Command : IRequest
+    public class DTO : IMapDTO<Command>
     {
-      public long IdUrusanUnit { get; set; }
-      public long IdUnit { get; set; }
-      public long UrusKey { get; set; }
+      private readonly IMapper _mapper;
+
+      public long NewUrusKey { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>()
+            .ForMember(d => d.UrusKey, o => o.MapFrom(s => s.NewUrusKey));
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination) =>
+        _mapper.Map(this, destination);
     }
 
-    public class Validator : AbstractValidator<UrusanUnit>
+    public class Validator : AbstractValidator<DTO>
     {
       public Validator()
       {
-        RuleFor(x => x.IdUnit).NotEmpty();
-        RuleFor(x => x.UrusKey).NotEmpty();
+        RuleFor(x => x.NewUrusKey).NotEmpty();
       }
+    }
+
+    public class Command : IRequest
+    {
+      public long UrusKey { get; set; }
+      public long IdUnit { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -43,7 +62,7 @@ namespace Application.Urusan
         Command request, CancellationToken cancellationToken)
       {
         var updated = await _context.UrusanUnit.FindAsync(x =>
-          x.IdUnit == request.IdUnit && x.IdUrusanUnit == request.IdUrusanUnit);
+          x.IdUnit == request.IdUnit && x.UrusKey == request.UrusKey);
 
         if (updated == null) throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
