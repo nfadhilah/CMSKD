@@ -1,37 +1,36 @@
-﻿using Application.JenisSatuan;
+﻿using Application.RekeningKas;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-  public class JSatuanController : BaseController
+  public class BkBKasController : BaseController
   {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(query));
 
-    [HttpGet("{id}", Name = "DetailJenisSatuan")]
+    [HttpGet("{id}", Name = "GetBkBKas")]
     public async Task<IActionResult> Get(long id) =>
-      Ok(await Mediator.Send(new Detail.Query { IdSatuan = id }));
+      Ok(await Mediator.Send(new Detail.Query { IdKas = id }));
 
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("DetailJenisSatuan", new { id = request.IdSatuan }, request);
+      return CreatedAtRoute("GetBkBKas", new { id = request.IdKas }, request);
     }
-
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
       var command = dto.MapDTO(new Update.Command());
-      command.IdSatuan = id;
+      command.IdKas = id;
       return Ok(await Mediator.Send(command));
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
-      Ok(await Mediator.Send(new Delete.Command { IdSatuan = id }));
+      Ok(await Mediator.Send(new Delete.Command { IdKas = id }));
   }
 }

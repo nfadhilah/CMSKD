@@ -18,7 +18,7 @@ namespace API.Controllers
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("Detail", new { id = request.IdJBank }, request);
+      return CreatedAtRoute("DetailKodeBank", new { id = request.IdJBank }, request);
     }
 
 
