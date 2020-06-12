@@ -1,26 +1,18 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using FluentValidation;
 using MediatR;
 using Persistence;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Rekanan
+namespace Application.Kegiatan
 {
   public class Delete
   {
     public class Command : IRequest
     {
-      public int IdPhk3 { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-      }
+      public long IdKeg { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -38,12 +30,12 @@ namespace Application.Rekanan
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.DaftPhk3.FindByIdAsync(request.IdPhk3);
+          await _context.MKegiatan.FindByIdAsync(request.IdKeg);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.DaftPhk3.Delete(deleted))
+        if (!_context.MKegiatan.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;
