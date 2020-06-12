@@ -39,6 +39,7 @@ namespace Persistence
     SifatKegRepository SifatKeg { get; }
     StruRekRepository StruRek { get; }
     StruUnitRepository StruUnit { get; }
+    StatTrsRepository StatTrs { get; }
     }
 
   public class DbContext : IDbContext
@@ -81,5 +82,6 @@ namespace Persistence
     public SifatKegRepository SifatKeg => new SifatKegRepository(Connection);
     public StruRekRepository StruRek => new StruRekRepository(Connection);
     public StruUnitRepository StruUnit => new StruUnitRepository(Connection);
+    public StatTrsRepository StatTrs => new StatTrsRepository(Connection);
     }
 }
