@@ -14,7 +14,6 @@ namespace Domain
     public long IdUnit { get; set; }
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }
-    [Key]
     public long IdRek { get; set; }
     [LeftJoin("DAFTREKENING", "IDREK", "IDREK")]
     public DaftRekening DaftRekening { get; set; }

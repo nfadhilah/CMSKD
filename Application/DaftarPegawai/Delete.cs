@@ -7,13 +7,13 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.RekeningKas
+namespace Application.DaftarPegawai
 {
   public class Delete
   {
     public class Command : IRequest
     {
-      public long IdKas { get; set; }
+      public long IdPeg { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -38,13 +38,12 @@ namespace Application.RekeningKas
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.BkBKas.FindByIdAsync(request.IdKas);
-          // await _context.BkBKas.FindAsync(x => x.IdKas == request.IdKas);
+          await _context.Pegawai.FindAsync(x => x.IdPeg == request.IdPeg);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        if (!_context.BkBKas.Delete(deleted))
+        if (!_context.Pegawai.Delete(deleted))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

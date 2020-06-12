@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.RekeningKas
+namespace Application.DaftarPegawai
 {
   public class Update
   {
@@ -17,12 +17,16 @@ namespace Application.RekeningKas
     {
       private readonly IMapper _mapper;
 
+      public long NIP { get; set; }
       public long IdUnit { get; set; }
-      public long IdRek { get; set; }
-      public long IdBank { get; set; }
-      public string NmBKas { get; set; }
-      public string NoRek { get; set; }
-      public Decimal? Saldo { get; set; }
+      public string KdGol { get; set; }
+      public string Nama { get; set; }
+      public string Alamat { get; set; }
+      public string Jabatan { get; set; }
+      public string PDDK { get; set; }
+      public string NPWP { get; set; }
+      public int StAktif { get; set; }
+      public DateTime? DateCreate { get; set; }
 
       public DTO()
       {
@@ -44,24 +48,32 @@ namespace Application.RekeningKas
     {
       public Validator()
       {
+        RuleFor(d => d.NIP).NotEmpty();
         RuleFor(d => d.IdUnit).NotEmpty();
-        RuleFor(d => d.IdRek).NotEmpty();
-        RuleFor(d => d.IdBank).NotEmpty();
-        RuleFor(d => d.NmBKas).NotEmpty();
-        RuleFor(d => d.NoRek).NotEmpty();
-        RuleFor(d => d.Saldo).NotEmpty();
+        RuleFor(d => d.KdGol).NotEmpty();
+        RuleFor(d => d.Nama).NotEmpty();
+        RuleFor(d => d.Alamat).NotEmpty();
+        RuleFor(d => d.Jabatan).NotEmpty();
+        RuleFor(d => d.PDDK).NotEmpty();
+        RuleFor(d => d.NPWP).NotEmpty();
+        RuleFor(d => d.StAktif).NotEmpty();
+        RuleFor(d => d.DateCreate).NotEmpty();
       }
     }
     
     public class Command : IRequest
     {
-      public long IdKas { get; set; }
+      public long IdPeg { get; set; }
+      public long NIP { get; set; }
       public long IdUnit { get; set; }
-      public long IdRek { get; set; }
-      public long IdBank { get; set; }
-      public string NmBKas { get; set; }
-      public string NoRek { get; set; }
-      public Decimal? Saldo { get; set; }
+      public string KdGol { get; set; }
+      public string Nama { get; set; }
+      public string Alamat { get; set; }
+      public string Jabatan { get; set; }
+      public string PDDK { get; set; }
+      public string NPWP { get; set; }
+      public int StAktif { get; set; }
+      public DateTime? DateCreate { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -79,15 +91,14 @@ namespace Application.RekeningKas
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.BkBKas.FindByIdAsync(request.IdKas);
-          // await _context.BkBKas.FindAsync(x => x.IdKas == request.IdKas);
+          await _context.Pegawai.FindAsync(x => x.IdPeg == request.IdPeg);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.BkBKas.Update(updated))
+        if (!_context.Pegawai.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;
