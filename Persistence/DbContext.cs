@@ -44,6 +44,7 @@ namespace Persistence
     StruRekRepository StruRek { get; }
     StruUnitRepository StruUnit { get; }
     KPARepository KPA { get; }
+    BendKPARepository BendKPA { get; }
   }
 
   public class DbContext : IDbContext
@@ -91,5 +92,6 @@ namespace Persistence
     public StruRekRepository StruRek => new StruRekRepository(Connection);
     public StruUnitRepository StruUnit => new StruUnitRepository(Connection);
     public KPARepository KPA => new KPARepository(Connection);
+    public BendKPARepository BendKPA => new BendKPARepository(Connection);
   }
 }
