@@ -7,16 +7,16 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Rekanan
+namespace Application.PenggunaAnggaran
 {
   public class Detail
   {
-    public class Query : IRequest<DaftPhk3>
+    public class Query : IRequest<PA>
     {
-      public int IdPhk3 { get; set; }
+      public long IdPA { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DaftPhk3>
+    public class Handler : IRequestHandler<Query, PA>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,11 +27,11 @@ namespace Application.Rekanan
         _mapper = mapper;
       }
 
-      public async Task<DaftPhk3> Handle(
+      public async Task<PA> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.DaftPhk3.FindByIdAsync(request.IdPhk3);
+          await _context.PA.FindByIdAsync(request.IdPA);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

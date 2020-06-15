@@ -48,6 +48,7 @@ namespace Persistence
     NrcBendRepository NrcBend { get; }
     JabTtdRepository JabTtd { get; }
     StatTrsRepository StatTrs { get; }
+    PARepository PA { get; }
   }
 
   public class DbContext : IDbContext
@@ -99,5 +100,6 @@ namespace Persistence
     public NrcBendRepository NrcBend => new NrcBendRepository(Connection);
     public StatTrsRepository StatTrs => new StatTrsRepository(Connection);
     public JabTtdRepository JabTtd => new JabTtdRepository(Connection);
+    public PARepository PA => new PARepository(Connection);
   }
 }
