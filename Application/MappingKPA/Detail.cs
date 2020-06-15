@@ -8,17 +8,17 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Urusan
+namespace Application.MappingKPA
 {
   public class Detail
   {
-    public class Query : IRequest<UrusanUnit>
+    public class Query : IRequest<KPA>
     {
       public long IdUnit { get; set; }
-      public long UrusKey { get; set; }
+      public long IdPeg { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, UrusanUnit>
+    public class Handler : IRequestHandler<Query, KPA>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,13 +29,13 @@ namespace Application.Urusan
         _mapper = mapper;
       }
 
-      public async Task<UrusanUnit> Handle(
+      public async Task<KPA> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var query = await _context.UrusanUnit
-          .FindAllAsync<DaftUnit, DaftUnit>(
-            u => u.IdUnit == request.IdUnit && u.UrusKey == request.UrusKey,
-            u => u.DaftUnit, u => u.Urusan);
+        var query = await _context.KPA
+          .FindAllAsync<DaftUnit, Pegawai>(
+            u => u.IdUnit == request.IdUnit && u.IdPeg == request.IdPeg,
+            u => u.DaftUnit, u => u.Pegawai);
 
         var result = query.SingleOrDefault();
 

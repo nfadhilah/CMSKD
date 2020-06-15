@@ -1,13 +1,17 @@
-﻿using Application.Dtos;
-using AutoMapper;
-using Domain;
-using MediatR;
-using Persistence;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Dtos;
+using Application.Helpers;
+using Domain;
+using MediatR;
+using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
+using Persistence;
 
-namespace Application.Urusan
+namespace Application.MappingKPA
 {
   public class List
   {
@@ -19,26 +23,25 @@ namespace Application.Urusan
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
-      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context, IMapper mapper)
+      public Handler(IDbContext context)
       {
         _context = context;
-        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var totalItemsCount = _context.KPA.FindAll(
-            u => u.IdUnit == request.IdUnit)
-          .Count();
+        var parameters = new List<Expression<Func<Domain.KPA, bool>>>();
+
+        var predicate = PredicateBuilder.ComposeWithAnd(parameters);
+
+        var totalItemsCount = _context.KPA.FindAll(predicate).Count();
 
         var result = await _context.KPA
           .SetLimit(request.Limit, request.Offset)
-          .FindAllAsync<DaftUnit, Pegawai>(
-            u => u.IdUnit == request.IdUnit,
-            u => u.DaftUnit, u => u.Pegawai);
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdKPA)
+          .FindAllAsync<DaftUnit, Pegawai>(predicate, d => d.DaftUnit, x => x.Pegawai);
 
         return new PaginationWrapper(result, new Pagination
         {

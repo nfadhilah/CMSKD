@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain
 {
@@ -11,7 +11,6 @@ namespace Domain
   {
     [Key, Identity]
     public long IdPeg { get; set; }
-    [Key]
     public long NIP { get; set; }
     public long IdUnit { get; set; }
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
@@ -23,8 +22,8 @@ namespace Domain
     public string Alamat { get; set; }
     public string Jabatan { get; set; }
     public string PDDK { get; set; }
-    public string NPWP { get; set; }    
+    public string NPWP { get; set; }
     public int StAktif { get; set; }
-    public DateTime? DateCreate { get; set; }    
+    public DateTime? DateCreate { get; set; }
   }
 }

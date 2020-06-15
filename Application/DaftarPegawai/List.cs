@@ -76,7 +76,7 @@ namespace Application.DaftarPegawai
         var result = await _context.Pegawai
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPeg)
-          .FindAllAsync<DaftUnit, Golongan>(predicate, c => c.DaftUnit, c=> c.Golongan);
+          .FindAllAsync<DaftUnit, Golongan>(predicate, c => c.DaftUnit, c => c.Golongan);
 
         return new PaginationWrapper(result, new Pagination
         {
