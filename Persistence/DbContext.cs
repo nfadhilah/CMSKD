@@ -46,6 +46,7 @@ namespace Persistence
     KPARepository KPA { get; }
     BendKPARepository BendKPA { get; }
     NrcBendRepository NrcBend { get; }
+    JabTtdRepository JabTtd { get; }
   }
 
   public class DbContext : IDbContext
@@ -95,5 +96,6 @@ namespace Persistence
     public KPARepository KPA => new KPARepository(Connection);
     public BendKPARepository BendKPA => new BendKPARepository(Connection);
     public NrcBendRepository NrcBend => new NrcBendRepository(Connection);
+    public JabTtdRepository JabTtd => new JabTtdRepository(Connection);
   }
 }
