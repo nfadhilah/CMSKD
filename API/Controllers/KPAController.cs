@@ -1,11 +1,9 @@
 ﻿using Application.MappingKPA;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-  [AllowAnonymous]
   [Route("api/unit/{idUnit}/pegawai")]
   public class KPAController : BaseController
   {
