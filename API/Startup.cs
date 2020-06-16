@@ -1,5 +1,4 @@
 using Application.Interfaces;
-using Application.Rekanan;
 using AutoMapper;
 using AutoWrapper;
 using FluentValidation;
@@ -24,6 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
+using Application.DM.Rekanan;
 
 
 namespace API

@@ -2,6 +2,7 @@ using Domain;
 using Persistence;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.DM;
 using Xunit;
 
 namespace UnitTest.Repositories

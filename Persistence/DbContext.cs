@@ -3,6 +3,8 @@ using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Persistence.Repository;
 using System.Data;
 using System.Data.SqlClient;
+using Persistence.Repository.Auth;
+using Persistence.Repository.DM;
 
 namespace Persistence
 {

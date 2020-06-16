@@ -1,0 +1,20 @@
+﻿using System.Data;
+using Domain.DM;
+using MicroOrm.Dapper.Repositories;
+using MicroOrm.Dapper.Repositories.SqlGenerator;
+
+namespace Persistence.Repository.DM
+{
+  public class ProfilRepository : DapperRepository<Profil>
+  {
+    public ProfilRepository(IDbConnection connection) : base(connection)
+    {
+    }
+
+    public ProfilRepository(
+      IDbConnection connection, ISqlGenerator<Profil> sqlGenerator) : base(
+      connection, sqlGenerator)
+    {
+    }
+  }
+}

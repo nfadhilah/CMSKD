@@ -1,5 +1,7 @@
 ﻿using Domain;
 using System.Collections.Generic;
+using Domain.Auth;
+using Domain.DM;
 
 namespace Application.Interfaces
 {
