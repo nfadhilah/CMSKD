@@ -26,6 +26,7 @@ namespace Persistence
     DaftBankRepository DaftBank { get; }
     BkBKasRepository BkBKas { get; }
     PegawaiRepository Pegawai { get; }
+    PPKRepository PPK { get; }
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
@@ -73,6 +74,7 @@ namespace Persistence
     public DaftFungsiRepository DaftFungsi => new DaftFungsiRepository(Connection);
     public BkBKasRepository BkBKas => new BkBKasRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
+    public PPKRepository PPK => new PPKRepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
