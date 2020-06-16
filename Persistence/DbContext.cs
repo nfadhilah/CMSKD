@@ -1,10 +1,9 @@
 ﻿using MicroOrm.Dapper.Repositories.Config;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
-using Persistence.Repository;
-using System.Data;
-using System.Data.SqlClient;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Persistence
 {
@@ -32,11 +31,7 @@ namespace Persistence
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
-    WebUserRepository WebUser { get; }
-    RolesRepository Roles { get; }
     TahunRepository Tahun { get; }
-    AppUserRepository AppUser { get; }
-    PermissionRepository Permission { get; }
     MPgrmRepository MPgrm { get; }
     MKegiatanRepository MKegiatan { get; }
     PgrmUnitRepository PgrmUnit { get; }
@@ -52,6 +47,10 @@ namespace Persistence
     JabTtdRepository JabTtd { get; }
     StatTrsRepository StatTrs { get; }
     PARepository PA { get; }
+    WebUserRepository WebUser { get; }
+    WebAppRepository WebAbb { get; }
+    WebRoleRepository WebRole { get; }
+    WebGroupRepository WebGroup { get; }
   }
 
   public class DbContext : IDbContext
@@ -85,11 +84,7 @@ namespace Persistence
     public PPKRepository PPK => new PPKRepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
-    public WebUserRepository WebUser => new WebUserRepository(Connection);
-    public RolesRepository Roles => new RolesRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
-    public AppUserRepository AppUser => new AppUserRepository(Connection);
-    public PermissionRepository Permission => new PermissionRepository(Connection);
     public MPgrmRepository MPgrm => new MPgrmRepository(Connection);
     public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
     public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
@@ -105,5 +100,9 @@ namespace Persistence
     public StatTrsRepository StatTrs => new StatTrsRepository(Connection);
     public JabTtdRepository JabTtd => new JabTtdRepository(Connection);
     public PARepository PA => new PARepository(Connection);
+    public WebUserRepository WebUser => new WebUserRepository(Connection);
+    public WebAppRepository WebAbb => new WebAppRepository(Connection);
+    public WebRoleRepository WebRole => new WebRoleRepository(Connection);
+    public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
   }
 }

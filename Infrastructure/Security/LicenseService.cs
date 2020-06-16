@@ -22,7 +22,7 @@ namespace Infrastructure.Security
 
     public Task StartAsync(CancellationToken stoppingToken)
     {
-      if (!_env.IsProduction()) return Task.CompletedTask;
+      // if (!_env.IsProduction()) return Task.CompletedTask;
 
       _logger.LogInformation($"License Service running on HW ID: {UUID}");
 
@@ -53,7 +53,6 @@ namespace Infrastructure.Security
       get
       {
         var uuid = string.Empty;
-
         var mc = new ManagementClass("Win32_ComputerSystemProduct");
         var moc = mc.GetInstances();
 

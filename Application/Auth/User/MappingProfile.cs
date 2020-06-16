@@ -6,9 +6,9 @@ namespace Application.Auth.User
   {
     public MappingProfile()
     {
-      CreateMap<AppUser, AppUserDto>();
-      CreateMap<Register.Command, AppUser>()
-        .ForMember(d => d.Password, opt => opt.Ignore());
+      CreateMap<WebUser, WebUserDto>();
+      CreateMap<Register.Command, WebUser>()
+        .ForMember(d => d.Pwd, opt => opt.Ignore());
     }
   }
 }

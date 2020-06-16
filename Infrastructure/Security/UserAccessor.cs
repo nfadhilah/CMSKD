@@ -24,10 +24,20 @@ namespace Infrastructure.Security
 
     public string GetCurrentUserRoles()
     {
-      var roles = _httpContextAccessor.HttpContext.User?.Claims
+      var role = _httpContextAccessor.HttpContext.User?.Claims
         ?.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
 
-      return roles;
+      return role;
+    }
+
+    public long GetCurrentAppId()
+    {
+      var appIdClaim = _httpContextAccessor.HttpContext.User?.Claims
+        ?.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid)?.Value;
+
+      long.TryParse(appIdClaim, out var appId);
+
+      return appId;
     }
   }
 }

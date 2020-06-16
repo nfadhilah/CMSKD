@@ -1,21 +1,21 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.User
 {
   public class Detail
   {
-    public class Query : IRequest<AppUserDto>
+    public class Query : IRequest<WebUserDto>
     {
-      public int UserId { get; set; }
+      public string UserId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, AppUserDto>
+    public class Handler : IRequestHandler<Query, WebUserDto>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -26,17 +26,17 @@ namespace Application.Auth.User
         _mapper = mapper;
       }
 
-      public async Task<AppUserDto> Handle(
+      public async Task<WebUserDto> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.AppUser.FindAsync(
-          w => w.Id == request.UserId);
+        var result = await _context.WebUser.FindAsync(
+          w => w.UserId == request.UserId);
 
         if (result == null)
           throw new ApiException("Not found",
             (int)HttpStatusCode.NotFound);
 
-        return _mapper.Map<AppUserDto>(result);
+        return _mapper.Map<WebUserDto>(result);
       }
     }
   }

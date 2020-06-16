@@ -13,7 +13,7 @@ namespace API.Controllers.Auth
 
 
     [HttpGet("{id}", Name = "GetUser")]
-    public async Task<IActionResult> Detail(int id) =>
+    public async Task<IActionResult> Detail(string id) =>
       Ok(await Mediator.Send(new Detail.Query { UserId = id }));
 
     [AllowAnonymous]
@@ -26,7 +26,7 @@ namespace API.Controllers.Auth
     {
       var result = await Mediator.Send(command);
 
-      return CreatedAtRoute("GetUser", new { id = result.Id }, result);
+      return CreatedAtRoute("GetUser", new { id = result.UserId }, result);
     }
 
     [HttpGet("current")]
@@ -34,7 +34,7 @@ namespace API.Controllers.Auth
       Ok(await Mediator.Send(new CurrentUser.Query()));
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id) =>
-      Ok(await Mediator.Send(new Delete.Command { Id = id }));
+    public async Task<IActionResult> Delete(string id) =>
+      Ok(await Mediator.Send(new Delete.Command { UserId = id }));
   }
 }

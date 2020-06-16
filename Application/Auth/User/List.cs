@@ -1,19 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Persistence;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.User
 {
   public class List
   {
-    public class Query : IRequest<IEnumerable<AppUserDto>>
+    public class Query : IRequest<IEnumerable<WebUserDto>>
     {
     }
 
-    public class Handler : IRequestHandler<Query, IEnumerable<AppUserDto>>
+    public class Handler : IRequestHandler<Query, IEnumerable<WebUserDto>>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -24,12 +24,12 @@ namespace Application.Auth.User
         _mapper = mapper;
       }
 
-      public async Task<IEnumerable<AppUserDto>> Handle(
+      public async Task<IEnumerable<WebUserDto>> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.AppUser.FindAllAsync();
+        var result = await _context.WebUser.FindAllAsync();
 
-        return _mapper.Map<IEnumerable<AppUserDto>>(result);
+        return _mapper.Map<IEnumerable<WebUserDto>>(result);
       }
     }
   }

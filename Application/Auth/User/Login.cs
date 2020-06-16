@@ -1,14 +1,12 @@
-﻿using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.User
 {
@@ -18,6 +16,7 @@ namespace Application.Auth.User
     {
       public string UserName { get; set; }
       public string Password { get; set; }
+      public long AppId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -26,6 +25,7 @@ namespace Application.Auth.User
       {
         RuleFor(x => x.UserName).NotEmpty();
         RuleFor(x => x.Password).NotEmpty();
+        RuleFor(x => x.AppId).NotEmpty();
       }
     }
 
@@ -50,46 +50,36 @@ namespace Application.Auth.User
         Command request, CancellationToken cancellationToken)
       {
         var user =
-          (await _context.AppUser.FindAllAsync<DaftUnit, UserRoles>(
-            x => x.UserName == request.UserName, c => c.DaftUnit,
-            c => c.UserRoles)).FirstOrDefault();
+          await _context.WebUser.GetUserWithRoleAsync(request.UserName, request.AppId);
 
         if (user == null)
           throw new ApiException("Login gagal. Harap cek username dan password anda.",
             (int)HttpStatusCode.Unauthorized);
 
-        if (user.LockedOut)
+        if (user.BlokId > 3)
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
-        if (!_passwordHasher.Validate(user.Password, request.Password))
+        if (!_passwordHasher.Validate(user.Pwd, request.Password))
         {
-          user.FalseLoginCount = ++user.FalseLoginCount;
+          user.BlokId = ++user.BlokId;
 
-          if (user.FalseLoginCount >= 3) user.LockedOut = true;
-
-          _context.AppUser.Update(user);
+          _context.WebUser.Update(user);
 
           throw new ApiException("Bad Username/Password",
             (int)HttpStatusCode.Unauthorized);
         }
 
-        var roleIds = user.UserRoles.Select(s => s.RoleId);
-
-        var roles =
-          _context.Roles.FindAll(
-            r => roleIds.Contains(r.Id));
-
-        var token = _jwtGenerator.CreateToken(user, roles);
+        var token = _jwtGenerator.CreateToken(user, request.AppId);
 
         return new Profile
         {
-          DisplayName = user.DisplayName,
+          UserName = user.UserId.Trim(),
+          DisplayName = user.Nama.Trim(),
           Token = token,
           Image = null,
-          UserName = user.UserName,
           KdTahap = user.KdTahap,
-          UnitId = user.UnitId?.ToString() ?? "",
+          UnitId = user.IdUnit?.ToString() ?? "",
           KdUnit = user.DaftUnit?.KdUnit.Trim() ?? "",
           NmUnit = user.DaftUnit?.NmUnit.Trim() ?? ""
         };

@@ -1,15 +1,12 @@
 ﻿using Application.Interfaces;
-using Domain;
+using Domain.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using Domain.Auth;
-using Domain.DM;
 
 namespace Infrastructure.Security
 {
@@ -23,15 +20,14 @@ namespace Infrastructure.Security
         Encoding.UTF8.GetBytes(config["TokenKey"]));
     }
 
-    public string CreateToken(AppUser user, IEnumerable<Roles> roles)
+    public string CreateToken(WebUser user, long appId)
     {
-      var roleClaims = roles.Select(x =>
-        new Claim(ClaimTypes.Role, x.NormalizeName));
-
       var claims = new List<Claim>
       {
-        new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
-      }.Union(roleClaims);
+        new Claim(JwtRegisteredClaimNames.NameId, user.UserId.Trim()),
+        new Claim(ClaimTypes.Role, user.WebGroup.NmGroup.ToUpper().Trim()),
+        new Claim(ClaimTypes.PrimarySid, appId.ToString()),
+      };
 
       var creds =
         new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

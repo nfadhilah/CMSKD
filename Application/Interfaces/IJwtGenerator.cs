@@ -1,12 +1,9 @@
-﻿using Domain;
-using System.Collections.Generic;
-using Domain.Auth;
-using Domain.DM;
+﻿using Domain.Auth;
 
 namespace Application.Interfaces
 {
   public interface IJwtGenerator
   {
-    string CreateToken(AppUser user, IEnumerable<Roles> roles);
+    string CreateToken(WebUser user, long appId);
   }
 }

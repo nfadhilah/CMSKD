@@ -1,11 +1,11 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.User
 {
@@ -14,14 +14,14 @@ namespace Application.Auth.User
 
     public class Command : IRequest
     {
-      public int Id { get; set; }
+      public string UserId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
-        RuleFor(x => x.Id).NotNull();
+        RuleFor(x => x.UserId).NotNull();
       }
     }
 
@@ -38,13 +38,13 @@ namespace Application.Auth.User
 
       public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
       {
-        var model = await _context.AppUser.FindByIdAsync(request.Id);
+        var model = await _context.WebUser.FindByIdAsync(request.UserId);
 
         if (model == null)
           throw new ApiException("Not found",
             (int)HttpStatusCode.NotFound);
 
-        _context.AppUser.Delete(model);
+        _context.WebUser.Delete(model);
 
         return Unit.Value;
       }

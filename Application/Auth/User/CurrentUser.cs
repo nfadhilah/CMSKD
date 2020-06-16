@@ -1,14 +1,12 @@
-﻿using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.User
 {
@@ -43,34 +41,28 @@ namespace Application.Auth.User
         Query request, CancellationToken cancellationToken)
       {
         var user =
-          (await _context.AppUser.FindAllAsync<DaftUnit, UserRoles>(
-            x => x.UserName == _userAccessor.GetCurrentUsername(), c => c.DaftUnit,
-            c => c.UserRoles)).FirstOrDefault();
+          await _context.WebUser.GetUserWithRoleAsync(
+            _userAccessor.GetCurrentUsername(),
+            _userAccessor.GetCurrentAppId());
 
         if (user == null)
           throw new ApiException("Login gagal. Harap cek username dan password anda.",
             (int)HttpStatusCode.Unauthorized);
 
-        if (user.LockedOut)
+        if (user.BlokId > 3)
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
-        var roleIds = user.UserRoles.Select(s => s.RoleId);
-
-        var roles =
-          _context.Roles.FindAll(
-            r => roleIds.Contains(r.Id));
-
-        var token = _jwtGenerator.CreateToken(user, roles);
+        var token = _jwtGenerator.CreateToken(user, _userAccessor.GetCurrentAppId());
 
         return new Profile
         {
-          DisplayName = user.DisplayName,
+          UserName = user.UserId.Trim(),
+          DisplayName = user.Nama.Trim(),
           Token = token,
           Image = null,
-          UserName = user.UserName,
           KdTahap = user.KdTahap,
-          UnitId = user.UnitId?.ToString().Trim() ?? "",
+          UnitId = user.IdUnit?.ToString() ?? "",
           KdUnit = user.DaftUnit?.KdUnit.Trim() ?? "",
           NmUnit = user.DaftUnit?.NmUnit.Trim() ?? ""
         };

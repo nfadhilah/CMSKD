@@ -1,8 +1,5 @@
-using Domain;
 using Persistence;
-using System.Collections.Generic;
 using System.Linq;
-using Domain.DM;
 using Xunit;
 
 namespace UnitTest.Repositories
@@ -20,27 +17,9 @@ namespace UnitTest.Repositories
     [Fact]
     public void FindAllUsers()
     {
-      var user = _db.AppUser.FindAll().ToList();
+      var user = _db.WebUser.FindAll().ToList();
       Assert.NotEmpty(user);
       Assert.Equal(2, user.Count);
-    }
-
-    [Fact]
-    public void FindAllUsersJoinWithUserRoles()
-    {
-      var user = _db.AppUser
-        .FindAll<UserRoles>(x => x.UserName == "admin", q => q.UserRoles)
-        .First();
-      Assert.Equal(2, user.UserRoles.Count);
-    }
-
-    [Fact]
-    public void FindAllByListOfName()
-    {
-      var names = new List<string> { "admin", "op" };
-      var user = _db.AppUser.FindAll(u => names.Contains(u.UserName)).ToArray();
-      Assert.Equal("admin", user[0].UserName);
-      Assert.Equal("op", user[1].UserName);
     }
   }
 }

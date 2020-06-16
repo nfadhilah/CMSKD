@@ -4,5 +4,6 @@
   {
     string GetCurrentUsername();
     string GetCurrentUserRoles();
+    long GetCurrentAppId();
   }
 }
