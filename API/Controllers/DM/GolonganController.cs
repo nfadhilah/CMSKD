@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisGolongan;
+using Application.DM.GolonganCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

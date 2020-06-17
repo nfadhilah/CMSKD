@@ -22,7 +22,7 @@ namespace Infrastructure.Security
       return username;
     }
 
-    public string GetCurrentUserRoles()
+    public string GetCurrentUserRole()
     {
       var role = _httpContextAccessor.HttpContext.User?.Claims
         ?.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
@@ -30,10 +30,20 @@ namespace Infrastructure.Security
       return role;
     }
 
+    public long GetCurrentRoleId()
+    {
+      var roleIdClaim = _httpContextAccessor.HttpContext.User?.Claims
+        ?.FirstOrDefault(x => x.Type == "roleId")?.Value;
+
+      long.TryParse(roleIdClaim, out var roleId);
+
+      return roleId;
+    }
+
     public long GetCurrentAppId()
     {
       var appIdClaim = _httpContextAccessor.HttpContext.User?.Claims
-        ?.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid)?.Value;
+        ?.FirstOrDefault(x => x.Type == "appId")?.Value;
 
       long.TryParse(appIdClaim, out var appId);
 

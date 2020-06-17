@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisArusKas;
+using Application.DM.JAKasCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

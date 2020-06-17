@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.Rekanan;
+using Application.DM.DaftPhk3CQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

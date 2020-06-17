@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.DM.RekeningKas;
+﻿using Application.DM.BKBKasCQ;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.DM
 {
@@ -11,26 +11,26 @@ namespace API.Controllers.DM
       Ok(await Mediator.Send(query));
 
     [HttpGet("{id}", Name = "GetBkBKas")]
-    public async Task<IActionResult> Get(long id) =>
-      Ok(await Mediator.Send(new Detail.Query { IdKas = id }));
+    public async Task<IActionResult> Get(string id) =>
+      Ok(await Mediator.Send(new Detail.Query { NoBBantu = id }));
 
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("GetBkBKas", new { id = request.IdKas }, request);
+      return CreatedAtRoute("GetBkBKas", new { id = request.NoBBantu }, request);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(long id, Update.DTO dto)
+    public async Task<IActionResult> Update(string id, Update.DTO dto)
     {
       var command = dto.MapDTO(new Update.Command());
-      command.IdKas = id;
+      command.NoBBantu = id;
       return Ok(await Mediator.Send(command));
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(long id) =>
-      Ok(await Mediator.Send(new Delete.Command { IdKas = id }));
+    public async Task<IActionResult> Delete(string id) =>
+      Ok(await Mediator.Send(new Delete.Command { NoBBantu = id }));
   }
 }

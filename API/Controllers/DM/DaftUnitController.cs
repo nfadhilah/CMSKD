@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.UnitOrganisasi;
+using Application.DM.DaftUnitCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

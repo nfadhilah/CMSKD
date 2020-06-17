@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisBank;
+using Application.DM.JBankCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM
@@ -18,7 +18,7 @@ namespace API.Controllers.DM
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("DetailKodeBank", new { id = request.IdJBank }, request);
+      return CreatedAtRoute("DetailKodeBank", new { id = request.IdBank }, request);
     }
 
 

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.BendaharaKPA;
+using Application.DM.BendKPACQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

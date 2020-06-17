@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.Kegiatan;
+using Application.DM.MKegiatanCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

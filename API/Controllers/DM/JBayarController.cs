@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisPembayaran;
+using Application.DM.JBayarCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

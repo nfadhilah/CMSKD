@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.StrukturRekening;
+using Application.DM.StruRekCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

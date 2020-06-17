@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JabTandaTangan;
+using Application.DM.JabTtdCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

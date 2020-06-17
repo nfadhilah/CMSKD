@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain.DM
 {
@@ -11,14 +11,19 @@ namespace Domain.DM
   {
     [Key, Identity]
     public long IdPrgrm { get; set; }
-    public long IdUnit { get; set; }
-    [LeftJoin("DAFTUNIT", "IdUnit", "IdUnit")]
+    public long IdUrus { get; set; }
+    [LeftJoin("DAFTUNIT", "IDURUS", "IDUNIT")]
     public DaftUnit Urusan { get; set; }
     public string NmPrgrm { get; set; }
     public string NuPrgrm { get; set; }
     public string IdPrioda { get; set; }
     public string IdPrioProv { get; set; }
     public string IdPrioNas { get; set; }
+    public int? IdxKode { get; set; }
+    public bool? StAktif { get; set; }
+    public bool? StValid { get; set; }
+    [UpdatedAt]
+    public DateTime? DateUpdate { get; set; }
     [UpdatedAt]
     public DateTime? DateCreate { get; set; }
   }

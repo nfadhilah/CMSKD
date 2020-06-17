@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.DM
 {
   [Table("JBM")]
   public class JBM
   {
-    [Key, Identity]
+    [Identity]
     public long IdJBM { get; set; }
     [Key]
     public string KdBM { get; set; }

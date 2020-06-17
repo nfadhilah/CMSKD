@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain.DM
 {
@@ -11,9 +11,6 @@ namespace Domain.DM
   {
     [Key, Identity]
     public long IdBendKPA { get; set; }
-    public long IdUnit { get; set; }
-    [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
-    public DaftUnit DaftUnit { get; set; }
     public long IdBend { get; set; }
     [LeftJoin("BEND", "IDBEND", "IDBEND")]
     public Bend Bend { get; set; }

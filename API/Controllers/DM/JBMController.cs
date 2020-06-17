@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisBuktiMemorial;
+using Application.DM.JBMCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

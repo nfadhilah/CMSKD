@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.DM
 {
   [Table("DAFTBANK")]
   public class DaftBank
   {
-    [Key, Identity]
-    public long IdBank { get; set; }
     [Key]
     public string KdBank { get; set; }
     public string AkBank { get; set; }

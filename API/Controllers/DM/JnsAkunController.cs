@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.DM.JenisAkun;
+﻿using Application.DM.JnsAkunCQ;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.DM
 {

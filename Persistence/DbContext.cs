@@ -46,11 +46,11 @@ namespace Persistence
     NrcBendRepository NrcBend { get; }
     JabTtdRepository JabTtd { get; }
     StatTrsRepository StatTrs { get; }
-    PARepository PA { get; }
     WebUserRepository WebUser { get; }
     WebAppRepository WebAbb { get; }
     WebRoleRepository WebRole { get; }
     WebGroupRepository WebGroup { get; }
+    WebOtorRepository WebOtor { get; }
   }
 
   public class DbContext : IDbContext
@@ -99,10 +99,10 @@ namespace Persistence
     public NrcBendRepository NrcBend => new NrcBendRepository(Connection);
     public StatTrsRepository StatTrs => new StatTrsRepository(Connection);
     public JabTtdRepository JabTtd => new JabTtdRepository(Connection);
-    public PARepository PA => new PARepository(Connection);
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public WebAppRepository WebAbb => new WebAppRepository(Connection);
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
+    public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
   }
 }

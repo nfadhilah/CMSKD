@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.DaftarFungsi;
+using Application.DM.DaftFungsiCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

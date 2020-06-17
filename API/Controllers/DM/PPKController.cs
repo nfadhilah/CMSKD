@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.PPKSKPD;
+using Application.DM.PPKCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

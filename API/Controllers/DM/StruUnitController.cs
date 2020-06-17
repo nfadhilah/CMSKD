@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.StrukturUnit;
+using Application.DM.StruUnitCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

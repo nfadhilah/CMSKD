@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.Program;
+using Application.DM.MPgrmCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

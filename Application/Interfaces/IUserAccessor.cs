@@ -3,7 +3,8 @@
   public interface IUserAccessor
   {
     string GetCurrentUsername();
-    string GetCurrentUserRoles();
+    string GetCurrentUserRole();
+    long GetCurrentRoleId();
     long GetCurrentAppId();
   }
 }

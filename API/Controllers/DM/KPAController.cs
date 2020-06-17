@@ -1,48 +1,46 @@
-﻿using System.Threading.Tasks;
-using Application.DM.MappingKPA;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Application.DM.KPACQ;
 
 namespace API.Controllers.DM
 {
-  [Route("api/unit/{idUnit}/pegawai")]
   public class KPAController : BaseController
   {
     [HttpGet]
-    public async Task<IActionResult> Get(long idUnit) =>
-      Ok(await Mediator.Send(new List.Query { IdUnit = idUnit }));
+    public async Task<IActionResult> Get([FromQuery] List.Query query) =>
+      Ok(await Mediator.Send(query));
 
-    [HttpGet("{idPeg}", Name = "GetKPA")]
+    [HttpGet("{id}", Name = "GetKPA")]
     public async Task<IActionResult> Get(
-      long idUnit, long idPeg) => Ok(await Mediator.Send(new Detail.Query
+      long id) => Ok(await Mediator.Send(new Detail.Query
       {
-        IdUnit = idUnit,
-        IdPeg = idPeg
+        IdKPA = id
       }));
 
     [HttpPost]
-    public async Task<IActionResult> Post(long idUnit, [FromBody] Create.DTO dto)
+    public async Task<IActionResult> Post([FromBody] Create.DTO dto)
     {
-      var command = dto.MapDTO(new Create.Command { IdUnit = idUnit });
+      var command = dto.MapDTO(new Create.Command());
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("GetKPA", new { idUnit = request.IdUnit, idPeg = request.IdPeg },
+      return CreatedAtRoute("GetKPA", new { id = request.IdKPA },
         request);
     }
 
-    [HttpPut("{idPeg}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(
-      long idUnit, long idPeg, [FromBody] Update.DTO dto)
+      long id, [FromBody] Update.DTO dto)
     {
       var command = dto.MapDTO(new Update.Command
-      { IdUnit = idUnit, IdPeg = idPeg });
+      { IdKPA = id });
       return Ok(await Mediator.Send(command));
     }
 
-    [HttpDelete("{idPeg}")]
-    public async Task<IActionResult> Delete(long idUnit, long idPeg)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(long id)
     {
       return
         Ok(await Mediator.Send(new Delete.Command
-        { IdUnit = idUnit, IdPeg = idPeg }));
+        { IdKPA = id }));
     }
   }
 }

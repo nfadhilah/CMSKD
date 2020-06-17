@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.Tahun;
+using Application.DM.TahunCQ;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

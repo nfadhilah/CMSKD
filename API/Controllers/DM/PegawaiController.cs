@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.DaftarPegawai;
+using Application.DM.PegawaiCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

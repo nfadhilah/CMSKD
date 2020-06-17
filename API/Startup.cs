@@ -23,7 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
-using Application.DM.Rekanan;
+using Application.DM.DaftPhk3CQ;
 
 
 namespace API

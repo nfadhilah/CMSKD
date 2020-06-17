@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain.DM
 {
@@ -9,20 +10,22 @@ namespace Domain.DM
   public class Bend
   {
     [Key]
-    public string IdBend { get; set; }
-    public string IdUnit { get; set; }
-    public string Jns_Bend { get; set; }
+    public long IdBend { get; set; }
+    public string JnsBend { get; set; }
     public string IdPeg { get; set; }
     [LeftJoin("PEGAWAI", "IDPEG", "IDPEG")]
     public Pegawai Pegawai { get; set; }
     public string IdBank { get; set; }
+    public string NmCabBank { get; set; }
     public string RekBend { get; set; }
     public string NPWPBend { get; set; }
-    public string Jab_Bend { get; set; }
+    public string JabBend { get; set; }
     public Decimal? SaldoBend { get; set; }
     public Decimal? SaldoBendT { get; set; }
     public DateTime? TglStopBend { get; set; }
-    public int StAktif { get; set; }
+    public string WargaNegara { get; set; }
+    public int? StAktif { get; set; }
+    [UpdatedAt]
     public DateTime? DateCreate { get; set; }
   }
 }

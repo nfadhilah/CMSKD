@@ -26,7 +26,8 @@ namespace Infrastructure.Security
       {
         new Claim(JwtRegisteredClaimNames.NameId, user.UserId.Trim()),
         new Claim(ClaimTypes.Role, user.WebGroup.NmGroup.ToUpper().Trim()),
-        new Claim(ClaimTypes.PrimarySid, appId.ToString()),
+        new Claim("appId", appId.ToString()),
+        new Claim("roleId", user.GroupId.ToString())
       };
 
       var creds =

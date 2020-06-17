@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.JenisSatuan;
+using Application.DM.JSatuanCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

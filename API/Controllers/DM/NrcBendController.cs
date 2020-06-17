@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DM.NeracaBendahara;
+using Application.DM.NRCBendCQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.DM

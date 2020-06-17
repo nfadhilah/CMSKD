@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.DM.DaftarProfil;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Application.DM.ProfilCQ;
 
 namespace API.Controllers.DM
 {
@@ -20,7 +20,6 @@ namespace API.Controllers.DM
       var request = await Mediator.Send(command);
       return CreatedAtRoute("DetailDaftarProfil", new { id = request.IdProfil }, request);
     }
-
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
