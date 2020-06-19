@@ -42,7 +42,7 @@ namespace Application.MA.DPABCQ
         var parameters = new List<Expression<Func<DPAB, bool>>>();
 
         if (request.IdDPA.HasValue)
-          parameters.Add(d => d.IdDPA == request.IdDPA.Value);
+          parameters.Add(d => d.IdDPA == request.IdDPA);
         if (request.IdXKode.HasValue)
           parameters.Add(d => d.IdXKode == request.IdXKode);
         if (!string.IsNullOrWhiteSpace(request.KdTahap))

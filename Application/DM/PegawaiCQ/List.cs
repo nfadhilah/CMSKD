@@ -43,10 +43,10 @@ namespace Application.DM.PegawaiCQ
         var parameters = new List<Expression<Func<Pegawai, bool>>>();
 
         if (request.NIP.HasValue)
-          parameters.Add(d => d.NIP == request.NIP.Value);
+          parameters.Add(d => d.NIP == request.NIP);
 
         if (request.IdUnit.HasValue)
-          parameters.Add(d => d.IdUnit == request.IdUnit.Value);
+          parameters.Add(d => d.IdUnit == request.IdUnit);
 
         if (!string.IsNullOrWhiteSpace(request.KdGol))
           parameters.Add(d => d.KdGol == request.KdGol);
@@ -67,7 +67,7 @@ namespace Application.DM.PegawaiCQ
           parameters.Add(d => d.NPWP == request.NPWP);
 
         if (request.StAktif.HasValue)
-          parameters.Add(d => d.StAktif == request.StAktif.Value);
+          parameters.Add(d => d.StAktif == request.StAktif);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

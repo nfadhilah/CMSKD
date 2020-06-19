@@ -39,13 +39,13 @@ namespace Application.DM.BKBKasCQ
         var parameters = new List<Expression<Func<BkBKas, bool>>>();
 
         if (request.IdUnit.HasValue)
-          parameters.Add(d => d.IdUnit == request.IdUnit.Value);
+          parameters.Add(d => d.IdUnit == request.IdUnit);
 
         if (request.IdRek.HasValue)
-          parameters.Add(d => d.IdRek == request.IdRek.Value);
+          parameters.Add(d => d.IdRek == request.IdRek);
 
         if (request.IdBank.HasValue)
-          parameters.Add(d => d.IdBank == request.IdBank.Value);
+          parameters.Add(d => d.IdBank == request.IdBank);
 
         if (!string.IsNullOrWhiteSpace(request.NmBKas))
           parameters.Add(d => d.NmBKas == request.NmBKas);

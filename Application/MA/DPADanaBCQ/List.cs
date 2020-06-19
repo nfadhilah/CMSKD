@@ -39,11 +39,11 @@ namespace Application.MA.DPADanaBCQ
         var parameters = new List<Expression<Func<DPADanaB, bool>>>();
 
         if (request.IdDPAB.HasValue)
-          parameters.Add(d => d.IdDPAB == request.IdDPAB.Value);
+          parameters.Add(d => d.IdDPAB == request.IdDPAB);
         if (!string.IsNullOrWhiteSpace(request.KdDana))
           parameters.Add(d => d.KdDana == request.KdDana);
         if (request.Nilai.HasValue)
-          parameters.Add(d => d.Nilai == request.Nilai.Value);
+          parameters.Add(d => d.Nilai == request.Nilai);
         if (request.DateCreate.HasValue)
           parameters.Add(d => d.DateCreate == request.DateCreate);
         if (request.DateUpdate.HasValue)

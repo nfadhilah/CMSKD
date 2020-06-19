@@ -64,13 +64,13 @@ namespace Application.DM.MPgrmCQ
           parameters.Add(p => p.IdPrioNas.Contains(request.IdPrioNas));
 
         if (request.IdxKode.HasValue)
-          parameters.Add(p => p.IdxKode == request.IdxKode.Value);
+          parameters.Add(p => p.IdxKode == request.IdxKode);
 
         if (request.StAktif.HasValue)
-          parameters.Add(p => p.StAktif == request.StAktif.Value);
+          parameters.Add(p => p.StAktif == request.StAktif);
 
         if (request.StValid.HasValue)
-          parameters.Add(p => p.StValid == request.StValid.Value);
+          parameters.Add(p => p.StValid == request.StValid);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

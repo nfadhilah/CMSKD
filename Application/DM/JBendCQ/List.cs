@@ -40,7 +40,7 @@ namespace Application.DM.JBendCQ
           parameters.Add(d => d.JnsBend.Contains(request.JnsBend));
 
         if (request.IdRek.HasValue)
-          parameters.Add(d => d.IdRek == request.IdRek.Value);
+          parameters.Add(d => d.IdRek == request.IdRek);
 
         if (!string.IsNullOrWhiteSpace(request.UraiBend))
           parameters.Add(d => d.UraiBend.Contains(request.UraiBend));

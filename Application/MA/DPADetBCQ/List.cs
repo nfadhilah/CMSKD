@@ -48,7 +48,7 @@ namespace Application.MA.DPADetBCQ
         var parameters = new List<Expression<Func<DPADetB, bool>>>();
 
         if (request.IdDPAB.HasValue)
-          parameters.Add(d => d.IdDPAB == request.IdDPAB.Value);
+          parameters.Add(d => d.IdDPAB == request.IdDPAB);
         if (!string.IsNullOrWhiteSpace(request.KdNilai))
           parameters.Add(d => d.KdNilai == request.KdNilai);
         if (!string.IsNullOrWhiteSpace(request.KdJabar))
@@ -56,17 +56,17 @@ namespace Application.MA.DPADetBCQ
         if (!string.IsNullOrWhiteSpace(request.Uraian))
           parameters.Add(d => d.Uraian == request.Uraian);
         if (request.JumBYek.HasValue)
-          parameters.Add(d => d.JumBYek == request.JumBYek.Value);
+          parameters.Add(d => d.JumBYek == request.JumBYek);
         if (!string.IsNullOrWhiteSpace(request.Satuan))
           parameters.Add(d => d.Satuan == request.Satuan);
         if (request.Tarif.HasValue)
-          parameters.Add(d => d.Tarif == request.Tarif.Value);
+          parameters.Add(d => d.Tarif == request.Tarif);
         if (request.SubTotal.HasValue)
-          parameters.Add(d => d.SubTotal == request.SubTotal.Value);
+          parameters.Add(d => d.SubTotal == request.SubTotal);
         if (!string.IsNullOrWhiteSpace(request.Ekspresi))
           parameters.Add(d => d.Ekspresi == request.Ekspresi);
         if (request.InclSubtotal.HasValue)
-          parameters.Add(d => d.InclSubtotal == request.InclSubtotal.Value);
+          parameters.Add(d => d.InclSubtotal == request.InclSubtotal);
         if (!string.IsNullOrWhiteSpace(request.Type))
           parameters.Add(d => d.Type == request.Type);
         if (!string.IsNullOrWhiteSpace(request.IdStdHarga))
