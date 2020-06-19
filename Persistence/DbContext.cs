@@ -2,6 +2,7 @@
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
+using Persistence.Repository.MA;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -28,6 +29,7 @@ namespace Persistence
     BkBKasRepository BkBKas { get; }
     PegawaiRepository Pegawai { get; }
     PPKRepository PPK { get; }
+    DPARepository DPA { get; }
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
@@ -82,6 +84,7 @@ namespace Persistence
     public BkBKasRepository BkBKas => new BkBKasRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
     public PPKRepository PPK => new PPKRepository(Connection);
+    public DPARepository DPA => new DPARepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
