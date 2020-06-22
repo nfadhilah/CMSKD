@@ -1,11 +1,11 @@
-﻿using System.Threading.Tasks;
-using Application.DM.TahunCQ;
+﻿using Application.DM.JTahunCQ;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.DM
 {
-  public class TahunController : BaseController
+  public class JTahunController : BaseController
   {
     [AllowAnonymous]
     [HttpGet]

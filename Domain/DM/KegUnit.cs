@@ -19,6 +19,7 @@ namespace Domain.DM
     [Key]
     public string IdPrgrm { get; set; }
 
+
     public string NoPrior { get; set; }
     public string KdSifat { get; set; }
     public string IdPeg { get; set; }

@@ -33,7 +33,7 @@ namespace Persistence
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
-    TahunRepository Tahun { get; }
+    JTahunRepository JTahun { get; }
     MPgrmRepository MPgrm { get; }
     MKegiatanRepository MKegiatan { get; }
     PgrmUnitRepository PgrmUnit { get; }
@@ -87,7 +87,7 @@ namespace Persistence
     public DPARepository DPA => new DPARepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
-    public TahunRepository Tahun => new TahunRepository(Connection);
+    public JTahunRepository JTahun => new JTahunRepository(Connection);
     public MPgrmRepository MPgrm => new MPgrmRepository(Connection);
     public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
     public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
