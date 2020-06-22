@@ -37,6 +37,7 @@ namespace Persistence
     DPARRepository DPAR { get; }
     DPADetRRepository DPADetR { get; }
     DPADanaRRepository DPADanaR { get; }
+    DPABlnRRepository DPABlnR { get; }
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
@@ -99,6 +100,7 @@ namespace Persistence
     public DPARRepository DPAR => new DPARRepository(Connection);
     public DPADetRRepository DPADetR => new DPADetRRepository(Connection);
     public DPADanaRRepository DPADanaR => new DPADanaRRepository(Connection);
+    public DPABlnRRepository DPABlnR => new DPABlnRRepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
