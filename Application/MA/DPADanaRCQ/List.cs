@@ -1,6 +1,5 @@
 ﻿using Application.Dtos;
 using Application.Helpers;
-using Domain.DM;
 using Domain.MA;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -12,18 +11,15 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.MA.DPACQ
+namespace Application.MA.DPADanaRCQ
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public long? IdUnit { get; set; }
-      public string NoDPA { get; set; }
-      public DateTime? TglDPA { get; set; }
-      public string NoSah { get; set; }
-      public string Keterangan { get; set; }
-      public DateTime? TglValid { get; set; }
+      public long? IdDPAR { get; set; }
+      public string KdDana { get; set; }
+      public Decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
     }
@@ -40,20 +36,14 @@ namespace Application.MA.DPACQ
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<DPA, bool>>>();
+        var parameters = new List<Expression<Func<DPADanaR, bool>>>();
 
-        if (request.IdUnit.HasValue)
-          parameters.Add(d => d.IdUnit == request.IdUnit);
-        if (!string.IsNullOrWhiteSpace(request.NoDPA))
-          parameters.Add(d => d.NoDPA == request.NoDPA);
-        if (request.TglDPA.HasValue)
-          parameters.Add(x => x.TglDPA == request.TglDPA);
-        if (!string.IsNullOrWhiteSpace(request.NoSah))
-          parameters.Add(d => d.NoSah == request.NoSah);
-        if (!string.IsNullOrWhiteSpace(request.Keterangan))
-          parameters.Add(d => d.Keterangan == request.Keterangan);
-        if (request.TglValid.HasValue)
-          parameters.Add(d => d.TglValid == request.TglValid);
+        if (request.IdDPAR.HasValue)
+          parameters.Add(d => d.IdDPAR == request.IdDPAR);
+        if (!string.IsNullOrWhiteSpace(request.KdDana))
+          parameters.Add(d => d.KdDana == request.KdDana);
+        if (request.Nilai.HasValue)
+          parameters.Add(d => d.Nilai == request.Nilai);
         if (request.DateCreate.HasValue)
           parameters.Add(d => d.DateCreate == request.DateCreate);
         if (request.DateUpdate.HasValue)
@@ -61,12 +51,12 @@ namespace Application.MA.DPACQ
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.DPA.FindAll(predicate).Count();
+        var totalItemsCount = _context.DPADanaR.FindAll(predicate).Count();
 
-        var result = await _context.DPA
+        var result = await _context.DPADanaR
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPA)
-          .FindAllAsync<DaftUnit>(predicate, c => c.DaftUnit);
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPADanaR)
+          .FindAllAsync<DPAR>(predicate, c => c.DPAR);
 
         return new PaginationWrapper(result, new Pagination
         {

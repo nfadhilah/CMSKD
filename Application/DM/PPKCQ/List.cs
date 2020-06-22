@@ -35,7 +35,7 @@ namespace Application.DM.PPKCQ
         var parameters = new List<Expression<Func<PPK, bool>>>();
 
         if (request.IdPeg.HasValue)
-          parameters.Add(d => d.IdPeg == request.IdPeg.Value);
+          parameters.Add(d => d.IdPeg == request.IdPeg);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

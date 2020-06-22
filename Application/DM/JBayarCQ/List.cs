@@ -35,7 +35,7 @@ namespace Application.DM.JBayarCQ
         var parameters = new List<Expression<Func<Domain.DM.JBayar, bool>>>();
 
         if (request.KdBayar.HasValue)
-          parameters.Add(d => d.KdBayar == request.KdBayar.Value);
+          parameters.Add(d => d.KdBayar == request.KdBayar);
 
         if (!string.IsNullOrWhiteSpace(request.UraianBayar))
           parameters.Add(d => d.UraianBayar.Contains(request.UraianBayar));

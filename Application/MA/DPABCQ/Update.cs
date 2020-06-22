@@ -10,7 +10,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.MA.DPACQ
+namespace Application.MA.DPABCQ
 {
   public class Update
   {
@@ -18,12 +18,11 @@ namespace Application.MA.DPACQ
     {
       private readonly IMapper _mapper;
 
-      public long IdUnit { get; set; }
-      public string NoDPA { get; set; }
-      public DateTime? TglDPA { get; set; }
-      public string NoSah { get; set; }
-      public string Keterangan { get; set; }
-      public DateTime? TglValid { get; set; }
+      public long IdDPA { get; set; }
+      public int? IdXKode { get; set; }
+      public string KdTahap { get; set; }
+      public long IdRek { get; set; }
+      public Decimal? Nilai { get; set; }
 
       public DTO()
       {
@@ -45,12 +44,12 @@ namespace Application.MA.DPACQ
     {
       public Validator()
       {
-        RuleFor(d => d.IdUnit).NotEmpty();
-        RuleFor(d => d.NoDPA).NotEmpty();
+        RuleFor(d => d.IdDPA).NotEmpty();
+        RuleFor(d => d.IdRek).NotEmpty();
       }
     }
 
-    public class Command : DPA, IRequest
+    public class Command : DPAB, IRequest
     {
     }
 
@@ -69,14 +68,14 @@ namespace Application.MA.DPACQ
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.DPA.FindByIdAsync(request.IdDPA);
+          await _context.DPAB.FindByIdAsync(request.IdDPAB);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.DPA.Update(updated))
+        if (!_context.DPAB.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

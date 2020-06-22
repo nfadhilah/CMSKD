@@ -1,9 +1,9 @@
 ﻿using System.Data;
-using Domain.DM;
+using Domain.MA;
 using MicroOrm.Dapper.Repositories;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 
-namespace Persistence.Repository.DM
+namespace Persistence.Repository.MA
 {
   public class KegUnitRepository : DapperRepository<KegUnit>
   {

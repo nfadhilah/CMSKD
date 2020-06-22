@@ -10,7 +10,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.MA.DPACQ
+namespace Application.MA.DPADetBCQ
 {
   public class Update
   {
@@ -18,12 +18,18 @@ namespace Application.MA.DPACQ
     {
       private readonly IMapper _mapper;
 
-      public long IdUnit { get; set; }
-      public string NoDPA { get; set; }
-      public DateTime? TglDPA { get; set; }
-      public string NoSah { get; set; }
-      public string Keterangan { get; set; }
-      public DateTime? TglValid { get; set; }
+      public long IdDPAB { get; set; }
+      public string KdNilai { get; set; }
+      public string KdJabar { get; set; }
+      public string Uraian { get; set; }
+      public Decimal? JumBYek { get; set; }
+      public string Satuan { get; set; }
+      public Decimal? Tarif { get; set; }
+      public Decimal? SubTotal { get; set; }
+      public string Ekspresi { get; set; }
+      public byte InclSubtotal { get; set; }
+      public string Type { get; set; }
+      public string IdStdHarga { get; set; }
 
       public DTO()
       {
@@ -45,12 +51,12 @@ namespace Application.MA.DPACQ
     {
       public Validator()
       {
-        RuleFor(d => d.IdUnit).NotEmpty();
-        RuleFor(d => d.NoDPA).NotEmpty();
+        RuleFor(d => d.IdDPAB).NotEmpty();
+        RuleFor(d => d.KdNilai).NotEmpty();
       }
     }
 
-    public class Command : DPA, IRequest
+    public class Command : DPADetB, IRequest
     {
     }
 
@@ -69,14 +75,14 @@ namespace Application.MA.DPACQ
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.DPA.FindByIdAsync(request.IdDPA);
+          await _context.DPADetB.FindByIdAsync(request.IdDPADetB);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.DPA.Update(updated))
+        if (!_context.DPADetB.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

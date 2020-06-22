@@ -10,7 +10,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Application.MA.DPACQ
+namespace Application.MA.DPABlnRCQ
 {
   public class Update
   {
@@ -18,12 +18,11 @@ namespace Application.MA.DPACQ
     {
       private readonly IMapper _mapper;
 
-      public long IdUnit { get; set; }
-      public string NoDPA { get; set; }
-      public DateTime? TglDPA { get; set; }
-      public string NoSah { get; set; }
-      public string Keterangan { get; set; }
-      public DateTime? TglValid { get; set; }
+      public long IdDPAR { get; set; }
+      public long IdBulan { get; set; }
+      public Decimal? Nilai { get; set; }
+      public DateTime? DateCreate { get; set; }
+      public DateTime? DateUpdate { get; set; }
 
       public DTO()
       {
@@ -45,12 +44,12 @@ namespace Application.MA.DPACQ
     {
       public Validator()
       {
-        RuleFor(d => d.IdUnit).NotEmpty();
-        RuleFor(d => d.NoDPA).NotEmpty();
+        RuleFor(d => d.IdDPAR).NotEmpty();
+        RuleFor(d => d.IdBulan).NotEmpty();
       }
     }
 
-    public class Command : DPA, IRequest
+    public class Command : DPABlnR, IRequest
     {
     }
 
@@ -69,14 +68,14 @@ namespace Application.MA.DPACQ
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.DPA.FindByIdAsync(request.IdDPA);
+          await _context.DPABlnR.FindByIdAsync(request.IdDPABlnR);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.DPA.Update(updated))
+        if (!_context.DPABlnR.Update(updated))
           throw new ApiException("Problem saving changes");
 
         return Unit.Value;

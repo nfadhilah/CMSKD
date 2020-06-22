@@ -30,13 +30,21 @@ namespace Persistence
     PegawaiRepository Pegawai { get; }
     PPKRepository PPK { get; }
     DPARepository DPA { get; }
+    DPABRepository DPAB { get; }
+    DPADetBRepository DPADetB { get; }
+    DPADanaBRepository DPADanaB { get; }
+    DPABlnBRepository DPABlnB { get; }
+    DPARRepository DPAR { get; }
+    DPADetRRepository DPADetR { get; }
+    DPADanaRRepository DPADanaR { get; }
+    DPABlnRRepository DPABlnR { get; }
+    PgrmUnitRepository PgrmUnit { get; }
     DaftRekeningRepository DaftRekening { get; }
     PajakRepository Pajak { get; }
     DaftUnitRepository DaftUnit { get; }
     JTahunRepository JTahun { get; }
     MPgrmRepository MPgrm { get; }
     MKegiatanRepository MKegiatan { get; }
-    PgrmUnitRepository PgrmUnit { get; }
     KegUnitRepository KegUnit { get; }
     UrusanUnitRepository UrusanUnit { get; }
     GolonganRepository Golongan { get; }
@@ -85,12 +93,20 @@ namespace Persistence
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
     public PPKRepository PPK => new PPKRepository(Connection);
     public DPARepository DPA => new DPARepository(Connection);
+    public DPABRepository DPAB => new DPABRepository(Connection);
+    public DPADetBRepository DPADetB => new DPADetBRepository(Connection);
+    public DPADanaBRepository DPADanaB => new DPADanaBRepository(Connection);
+    public DPABlnBRepository DPABlnB => new DPABlnBRepository(Connection);
+    public DPARRepository DPAR => new DPARRepository(Connection);
+    public DPADetRRepository DPADetR => new DPADetRRepository(Connection);
+    public DPADanaRRepository DPADanaR => new DPADanaRRepository(Connection);
+    public DPABlnRRepository DPABlnR => new DPABlnRRepository(Connection);
+    public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
     public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
     public PajakRepository Pajak => new PajakRepository(Connection);
     public JTahunRepository JTahun => new JTahunRepository(Connection);
     public MPgrmRepository MPgrm => new MPgrmRepository(Connection);
     public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
-    public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
     public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
     public UrusanUnitRepository UrusanUnit => new UrusanUnitRepository(Connection);
     public GolonganRepository Golongan => new GolonganRepository(Connection);
