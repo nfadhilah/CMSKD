@@ -18,6 +18,8 @@ namespace Domain.MA
     public string KdTahap { get; set; }
     public int? IdXKode { get; set; }
     public long IdKeg { get; set; }
+    [LeftJoin("KEGUNIT", "IDKEG", "IDKEG")]
+    public KegUnit KegUnit { get; set; }
     public long IdRek { get; set; }
     [LeftJoin("DAFTREKENING", "IDREK", "IDREK")]
     public DaftRekening DaftRekening { get; set; }

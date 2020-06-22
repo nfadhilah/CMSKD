@@ -9,17 +9,17 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.MA.DPARCQ
+namespace Application.MA.KegUnitCQ
 {
   public class Detail
   {
 
-    public class Query : IRequest<DPAR>
+    public class Query : IRequest<KegUnit>
     {
-      public long IdDPAR { get; set; }
+      public long IdKegUnit { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPAR>
+    public class Handler : IRequestHandler<Query, KegUnit>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,11 +30,11 @@ namespace Application.MA.DPARCQ
         _mapper = mapper;
       }
 
-      public async Task<DPAR> Handle(
+      public async Task<KegUnit> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.DPAR.FindAllAsync<DPA, DaftRekening, KegUnit>(x => x.IdDPAR == request.IdDPAR, c => c.DPA, c => c.DaftRekening, c => c.KegUnit)).First();
+          (await _context.KegUnit.FindAllAsync<MPgrm, MKegiatan>(x => x.IdKegUnit == request.IdKegUnit, c => c.MPgrm, c => c.MKegiatan)).First();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

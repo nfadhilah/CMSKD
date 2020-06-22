@@ -66,7 +66,7 @@ namespace Application.MA.DPARCQ
         var result = await _context.DPAR
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPAR)
-          .FindAllAsync<DPA, DaftRekening>(predicate, c => c.DPA, c => c.DaftRekening);
+          .FindAllAsync<DPA, DaftRekening, KegUnit>(predicate, c => c.DPA, c => c.DaftRekening, c => c.KegUnit);
 
         return new PaginationWrapper(result, new Pagination
         {
