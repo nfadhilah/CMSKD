@@ -1,0 +1,61 @@
+﻿using AutoMapper;
+using AutoWrapper.Wrappers;
+using Domain.TUBEND;
+using FluentValidation;
+using MediatR;
+using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Application.TUBEND.BkPajakDetStrCQ
+{
+  public class Create
+  {
+    public class Command : IRequest<BkPajakDetStr>
+    {
+      public long IdBkPajakStr { get; set; }
+      public long? IdPajak { get; set; }
+      public long IdBkPajak { get; set; }
+      public string IdBilling { get; set; }
+      public DateTime? TglIdBilling { get; set; }
+      public DateTime? TglExpire { get; set; }
+      public string NTPN { get; set; }
+      public string NTB { get; set; }
+      public DateTime? DateCreate { get; set; }
+    }
+
+    public class Validator : AbstractValidator<Command>
+    {
+      public Validator()
+      {
+        RuleFor(d => d.IdBkPajakStr).NotEmpty();
+        RuleFor(d => d.IdPajak).NotEmpty();
+        RuleFor(d => d.IdBkPajak).NotEmpty();
+      }
+    }
+
+    public class Handler : IRequestHandler<Command, BkPajakDetStr>
+    {
+      private readonly IDbContext _context;
+      private readonly IMapper _mapper;
+
+      public Handler(IDbContext context, IMapper mapper)
+      {
+        _context = context;
+        _mapper = mapper;
+      }
+
+      public async Task<BkPajakDetStr> Handle(
+        Command request, CancellationToken cancellationToken)
+      {
+        var added = _mapper.Map<BkPajakDetStr>(request);
+
+        if (!await _context.BkPajakDetStr.InsertAsync(added))
+          throw new ApiException("Problem saving changes");
+
+        return added;
+      }
+    }
+  }
+}

@@ -27,7 +27,6 @@ namespace Application.DM.UrusanUnitCQ
       }
     }
 
-
     public class Handler : IRequestHandler<Command, UrusanUnit>
     {
       private readonly IDbContext _context;

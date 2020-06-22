@@ -1,3 +1,4 @@
+using Application.DM.DaftPhk3CQ;
 using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper;
@@ -23,7 +24,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
-using Application.DM.DaftPhk3CQ;
 
 
 namespace API

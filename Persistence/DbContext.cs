@@ -3,6 +3,7 @@ using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
 using Persistence.Repository.MA;
+using Persistence.Repository.TUBEND;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -28,6 +29,7 @@ namespace Persistence
     DaftBankRepository DaftBank { get; }
     BkBKasRepository BkBKas { get; }
     PegawaiRepository Pegawai { get; }
+    ZKodeRepository ZKode { get; }
     PPKRepository PPK { get; }
     DPARepository DPA { get; }
     DPABRepository DPAB { get; }
@@ -61,6 +63,35 @@ namespace Persistence
     WebRoleRepository WebRole { get; }
     WebGroupRepository WebGroup { get; }
     WebOtorRepository WebOtor { get; }
+    KontrakRepository Kontrak { get; }
+    BeritaRepository Berita { get; }
+    BeritaDetRRepository BeritaDetR { get; }
+    SPDRepository SPD { get; }
+    SPDDetBRepository SPDDetB { get; }
+    SPDDetRRepository SPDDetR { get; }
+    SPPRepository SPP { get; }
+    SPPDetBRepository SPPDetB { get; }
+    SPPDetRRepository SPPDetR { get; }
+    SPPDetBDanaRepository SPPDetBDana { get; }
+    SPPDetRDanaRepository SPPDetRDana { get; }
+    SPPDetRPRepository SPPDetRP { get; }
+    JTrnlKasRepository JTrnlKas { get; }
+    BkBankRepository BkBank { get; }
+    BkBankDetRepository BkBankDet { get; }
+    TBPLRepository TBPL { get; }
+    TBPLDetRepository TBPLDet { get; }
+    TBPLDetKegRepository TBPLDetKeg { get; }
+    BPKRepository BPK { get; }
+    BPKDetRRepository BPKDetR { get; }
+    BPKDetRDanaRepository BPKDetRDana { get; }
+    BPKPajakStrRepository BPKPajakStr { get; }
+    BPKDetRPRepository BPKDetRP { get; }
+    BkPajakRepository BkPajak { get; }
+    BkPajakDetStrRepository BkPajakDetStr { get; }
+    STSRepository STS { get; }
+    STSDetRRepository STSDetR { get; }
+    STSDetDRepository STSDetD { get; }
+    STSDetBRepository STSDetB { get; }
   }
 
   public class DbContext : IDbContext
@@ -71,6 +102,7 @@ namespace Persistence
       Connection = new SqlConnection(connectionString);
       Connection.Open();
     }
+
 
     public IDbConnection Connection { get; }
     public DaftUnitRepository DaftUnit => new DaftUnitRepository(Connection);
@@ -91,6 +123,7 @@ namespace Persistence
     public DaftFungsiRepository DaftFungsi => new DaftFungsiRepository(Connection);
     public BkBKasRepository BkBKas => new BkBKasRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
+    public ZKodeRepository ZKode => new ZKodeRepository(Connection);
     public PPKRepository PPK => new PPKRepository(Connection);
     public DPARepository DPA => new DPARepository(Connection);
     public DPABRepository DPAB => new DPABRepository(Connection);
@@ -123,5 +156,34 @@ namespace Persistence
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
     public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
+    public KontrakRepository Kontrak => new KontrakRepository(Connection);
+    public BeritaRepository Berita => new BeritaRepository(Connection);
+    public BeritaDetRRepository BeritaDetR => new BeritaDetRRepository(Connection);
+    public SPDRepository SPD => new SPDRepository(Connection);
+    public SPDDetBRepository SPDDetB => new SPDDetBRepository(Connection);
+    public SPDDetRRepository SPDDetR => new SPDDetRRepository(Connection);
+    public SPPRepository SPP => new SPPRepository(Connection);
+    public SPPDetBRepository SPPDetB => new SPPDetBRepository(Connection);
+    public SPPDetRRepository SPPDetR => new SPPDetRRepository(Connection);
+    public SPPDetBDanaRepository SPPDetBDana => new SPPDetBDanaRepository(Connection);
+    public SPPDetRDanaRepository SPPDetRDana => new SPPDetRDanaRepository(Connection);
+    public SPPDetRPRepository SPPDetRP => new SPPDetRPRepository(Connection);
+    public JTrnlKasRepository JTrnlKas => new JTrnlKasRepository(Connection);
+    public BkBankRepository BkBank => new BkBankRepository(Connection);
+    public BkBankDetRepository BkBankDet => new BkBankDetRepository(Connection);
+    public TBPLRepository TBPL => new TBPLRepository(Connection);
+    public TBPLDetRepository TBPLDet => new TBPLDetRepository(Connection);
+    public TBPLDetKegRepository TBPLDetKeg => new TBPLDetKegRepository(Connection);
+    public BPKRepository BPK => new BPKRepository(Connection);
+    public BPKDetRRepository BPKDetR => new BPKDetRRepository(Connection);
+    public BPKDetRDanaRepository BPKDetRDana => new BPKDetRDanaRepository(Connection);
+    public BPKPajakStrRepository BPKPajakStr => new BPKPajakStrRepository(Connection);
+    public BPKDetRPRepository BPKDetRP => new BPKDetRPRepository(Connection);
+    public BkPajakRepository BkPajak => new BkPajakRepository(Connection);
+    public BkPajakDetStrRepository BkPajakDetStr => new BkPajakDetStrRepository(Connection);
+    public STSRepository STS => new STSRepository(Connection);
+    public STSDetRRepository STSDetR => new STSDetRRepository(Connection);
+    public STSDetDRepository STSDetD => new STSDetDRepository(Connection);
+    public STSDetBRepository STSDetB => new STSDetBRepository(Connection);
   }
 }
