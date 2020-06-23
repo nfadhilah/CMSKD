@@ -1,6 +1,7 @@
 ﻿using MicroOrm.Dapper.Repositories.Config;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Persistence.Repository.Auth;
+using Persistence.Repository.BUD;
 using Persistence.Repository.DM;
 using Persistence.Repository.MA;
 using Persistence.Repository.TUBEND;
@@ -92,6 +93,17 @@ namespace Persistence
     STSDetRRepository STSDetR { get; }
     STSDetDRepository STSDetD { get; }
     STSDetBRepository STSDetB { get; }
+    SPMRepository SPM { get; }
+    SP2DRepository SP2D { get; }
+    SP2DDetRRepository SP2DDetR { get; }
+    SP2DDetRDanaRepository SP2DDetRDana { get; }
+    SP2DDetRPRepository SP2DDetRP { get; }
+    SP2DDetBRepository SP2DDetB { get; }
+    SP2DDetBDanaRepository SP2DDetBDana { get; }
+    BKUDRepository BKUD { get; }
+    BKUKRepository BKUK { get; }
+    DPRepository DP { get; }
+    DPDetRepository DPDet { get; }
   }
 
   public class DbContext : IDbContext
@@ -102,7 +114,6 @@ namespace Persistence
       Connection = new SqlConnection(connectionString);
       Connection.Open();
     }
-
 
     public IDbConnection Connection { get; }
     public DaftUnitRepository DaftUnit => new DaftUnitRepository(Connection);
@@ -185,5 +196,16 @@ namespace Persistence
     public STSDetRRepository STSDetR => new STSDetRRepository(Connection);
     public STSDetDRepository STSDetD => new STSDetDRepository(Connection);
     public STSDetBRepository STSDetB => new STSDetBRepository(Connection);
+    public SPMRepository SPM => new SPMRepository(Connection);
+    public SP2DRepository SP2D => new SP2DRepository(Connection);
+    public SP2DDetRRepository SP2DDetR => new SP2DDetRRepository(Connection);
+    public SP2DDetRDanaRepository SP2DDetRDana => new SP2DDetRDanaRepository(Connection);
+    public SP2DDetRPRepository SP2DDetRP => new SP2DDetRPRepository(Connection);
+    public SP2DDetBRepository SP2DDetB => new SP2DDetBRepository(Connection);
+    public SP2DDetBDanaRepository SP2DDetBDana => new SP2DDetBDanaRepository(Connection);
+    public BKUDRepository BKUD => new BKUDRepository(Connection);
+    public BKUKRepository BKUK => new BKUKRepository(Connection);
+    public DPRepository DP => new DPRepository(Connection);
+    public DPDetRepository DPDet => new DPDetRepository(Connection);
   }
 }
