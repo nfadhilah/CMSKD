@@ -117,7 +117,7 @@ namespace API
           var policy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().Build();
 
-          // opt.Filters.Add(new AuthorizeFilter(policy));
+          opt.Filters.Add(new AuthorizeFilter(policy));
         })
         .AddFluentValidation(opt =>
           {
