@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Helpers;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.PegawaiCQ
 {
@@ -76,7 +76,7 @@ namespace Application.DM.PegawaiCQ
         var result = await _context.Pegawai
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPeg)
-          .FindAllAsync<DaftUnit, Golongan>(predicate, c => c.DaftUnit, c => c.Golongan);
+          .FindAllAsync<DaftUnit>(predicate, c => c.DaftUnit);
 
         return new PaginationWrapper(result, new Pagination
         {

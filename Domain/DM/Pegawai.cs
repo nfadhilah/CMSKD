@@ -16,7 +16,7 @@ namespace Domain.DM
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }
     public string KdGol { get; set; }
-    [LeftJoin("GOLONGAN", "KDGOL", "KDGOL")]
+    [LeftJoin("GOLONGAN", "IDGOL", "IDGOL")]
     public Golongan Golongan { get; set; }
     public string Nama { get; set; }
     public string Alamat { get; set; }

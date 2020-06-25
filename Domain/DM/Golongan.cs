@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.DM
 {
@@ -9,7 +9,6 @@ namespace Domain.DM
   {
     [Key, Identity]
     public long IdGol { get; set; }
-    [Key]
     public string KdGol { get; set; }
     public string NmGol { get; set; }
     public string Pangkat { get; set; }
