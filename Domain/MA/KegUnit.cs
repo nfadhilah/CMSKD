@@ -27,7 +27,7 @@ namespace Domain.MA
     public DateTime? TglAwal { get; set; }
     public Decimal? TargetP { get; set; }
     public string Lokasi { get; set; }
-    public Decimal? JumlanMin1 { get; set; }
+    public Decimal? JumlahMin1 { get; set; }
     public Decimal? Pagu { get; set; }
     public Decimal? JumlahPls1 { get; set; }
     public string Sasaran { get; set; }
