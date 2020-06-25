@@ -66,7 +66,7 @@ namespace Application.Auth.User
 
           _context.WebUser.Update(user);
 
-          throw new ApiException("Bad Username or Password",
+          throw new ApiException("Login gagal. Harap cek username dan password anda.",
             (int)HttpStatusCode.Unauthorized);
         }
 

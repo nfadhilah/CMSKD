@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Helpers;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.BendCQ
 {
@@ -21,6 +21,7 @@ namespace Application.DM.BendCQ
       public string JnsBend { get; set; }
       public string RekBend { get; set; }
       public string IdBank { get; set; }
+      public int? IdUnit { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -36,6 +37,9 @@ namespace Application.DM.BendCQ
         Query request, CancellationToken cancellationToken)
       {
         var parameters = new List<Expression<Func<Bend, bool>>>();
+
+        if (request.IdUnit.HasValue)
+          parameters.Add(d => d.Pegawai.IdUnit == request.IdUnit);
 
         if (!string.IsNullOrWhiteSpace(request.IdPeg))
           parameters.Add(d => d.IdPeg.Contains(request.IdPeg));
