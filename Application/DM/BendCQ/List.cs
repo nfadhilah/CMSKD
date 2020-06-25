@@ -21,6 +21,7 @@ namespace Application.DM.BendCQ
       public string JnsBend { get; set; }
       public string RekBend { get; set; }
       public string IdBank { get; set; }
+      public int? IdUnit { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -48,6 +49,9 @@ namespace Application.DM.BendCQ
 
         if (!string.IsNullOrWhiteSpace(request.IdBank))
           parameters.Add(d => d.IdBank == request.IdBank);
+
+        if (request.IdUnit.HasValue)
+          parameters.Add(d => d.Pegawai.IdUnit == request.IdUnit);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
