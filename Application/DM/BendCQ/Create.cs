@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.BendCQ
 {
@@ -15,8 +15,7 @@ namespace Application.DM.BendCQ
     public class Command : IRequest<Bend>
     {
       public string JnsBend { get; set; }
-      public string IdPeg { get; set; }
-      public Pegawai Pegawai { get; set; }
+      public long IdPeg { get; set; }
       public string IdBank { get; set; }
       public string NmCabBank { get; set; }
       public string RekBend { get; set; }

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.BendCQ
 {
@@ -19,7 +20,7 @@ namespace Application.DM.BendCQ
       private readonly IMapper _mapper;
 
       public string JnsBend { get; set; }
-      public string IdPeg { get; set; }
+      public long IdPeg { get; set; }
       public string IdBank { get; set; }
       public string NmCabBank { get; set; }
       public string RekBend { get; set; }
@@ -60,21 +61,8 @@ namespace Application.DM.BendCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : Bend, IRequest
     {
-      public long IdBend { get; set; }
-      public string JnsBend { get; set; }
-      public string IdPeg { get; set; }
-      public string IdBank { get; set; }
-      public string NmCabBank { get; set; }
-      public string RekBend { get; set; }
-      public string NPWPBend { get; set; }
-      public string JabBend { get; set; }
-      public Decimal? SaldoBend { get; set; }
-      public Decimal? SaldoBendT { get; set; }
-      public DateTime? TglStopBend { get; set; }
-      public string WargaNegara { get; set; }
-      public int? StAktif { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain.DM
 {

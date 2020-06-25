@@ -17,7 +17,7 @@ namespace Application.DM.BendCQ
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public string IdPeg { get; set; }
+      public long? IdPeg { get; set; }
       public string JnsBend { get; set; }
       public string RekBend { get; set; }
       public string IdBank { get; set; }
@@ -41,8 +41,8 @@ namespace Application.DM.BendCQ
         if (request.IdUnit.HasValue)
           parameters.Add(d => d.Pegawai.IdUnit == request.IdUnit);
 
-        if (!string.IsNullOrWhiteSpace(request.IdPeg))
-          parameters.Add(d => d.IdPeg.Contains(request.IdPeg));
+        if (request.IdPeg.HasValue)
+          parameters.Add(d => d.Pegawai.IdPeg == request.IdPeg);
 
         if (!string.IsNullOrWhiteSpace(request.JnsBend))
           parameters.Add(d => d.JnsBend.Contains(request.JnsBend));
