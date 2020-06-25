@@ -29,7 +29,7 @@ namespace Application.MA.KegUnitCQ
       public DateTime? TglAwal { get; set; }
       public Decimal? TargetP { get; set; }
       public string Lokasi { get; set; }
-      public Decimal? JumlanMin1 { get; set; }
+      public Decimal? JumlahMin1 { get; set; }
       public Decimal? Pagu { get; set; }
       public Decimal? JumlahPls1 { get; set; }
       public string Sasaran { get; set; }
@@ -85,8 +85,8 @@ namespace Application.MA.KegUnitCQ
           parameters.Add(d => d.TargetP == request.TargetP);
         if (!string.IsNullOrWhiteSpace(request.Lokasi))
           parameters.Add(d => d.Lokasi == request.Lokasi);
-        if (request.JumlanMin1.HasValue)
-          parameters.Add(d => d.JumlanMin1 == request.JumlanMin1);
+        if (request.JumlahMin1.HasValue)
+          parameters.Add(d => d.JumlahMin1 == request.JumlahMin1);
         if (request.Pagu.HasValue)
           parameters.Add(d => d.Pagu == request.Pagu);
         if (request.JumlahPls1.HasValue)
