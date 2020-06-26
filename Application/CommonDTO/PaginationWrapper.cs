@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos
+﻿namespace Application.CommonDTO
 {
   public class PaginationWrapper
   {

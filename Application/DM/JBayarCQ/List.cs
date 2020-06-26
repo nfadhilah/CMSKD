@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Dtos;
+using Application.CommonDTO;
 using Application.Helpers;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;

@@ -104,6 +104,7 @@ namespace Persistence
     BKUKRepository BKUK { get; }
     DPRepository DP { get; }
     DPDetRepository DPDet { get; }
+    WebSetRepository WebSet { get; }
   }
 
   public class DbContext : IDbContext
@@ -207,5 +208,6 @@ namespace Persistence
     public BKUKRepository BKUK => new BKUKRepository(Connection);
     public DPRepository DP => new DPRepository(Connection);
     public DPDetRepository DPDet => new DPDetRepository(Connection);
+    public WebSetRepository WebSet => new WebSetRepository(Connection);
   }
 }

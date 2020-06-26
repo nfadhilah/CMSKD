@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Auth;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace Application.Auth.RoleMenu
 {

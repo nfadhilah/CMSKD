@@ -62,6 +62,9 @@ namespace Application.TUBEND.SPPCQ
       {
         var added = _mapper.Map<SPP>(request);
 
+        if (await _context.SPP.FindAsync(x => x.NoSPP == request.NoSPP) != null)
+          throw new ApiException("No. SPP sudah terpakai di daftar SPP");
+
         if (!await _context.SPP.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 

@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Helpers;
+﻿using Application.Helpers;
 using Domain.DM;
 using Domain.MA;
 using MediatR;
@@ -11,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace Application.MA.SPDDetBCQ
 {

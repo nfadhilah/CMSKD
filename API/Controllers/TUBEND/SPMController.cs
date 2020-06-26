@@ -1,6 +1,11 @@
-﻿using Application.TUBEND.SPMCQ;
+﻿using Application.TUBEND.SPPCQ;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Create = Application.TUBEND.SPMCQ.Create;
+using Delete = Application.TUBEND.SPMCQ.Delete;
+using Detail = Application.TUBEND.SPMCQ.Detail;
+using List = Application.TUBEND.SPMCQ.List;
+using Update = Application.TUBEND.SPMCQ.Update;
 
 namespace API.Controllers.TUBEND
 {
@@ -8,6 +13,14 @@ namespace API.Controllers.TUBEND
   {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
+      Ok(await Mediator.Send(query));
+
+    [HttpGet("lastDocNo")]
+    public async Task<IActionResult> Get([FromQuery] GetLastDocNumber.Query query) =>
+      Ok(await Mediator.Send(query));
+
+    [HttpGet("lastRegNo")]
+    public async Task<IActionResult> Get([FromQuery] GetLastRegNumber.Query query) =>
       Ok(await Mediator.Send(query));
 
     [HttpGet("{id}", Name = "GetSPM")]

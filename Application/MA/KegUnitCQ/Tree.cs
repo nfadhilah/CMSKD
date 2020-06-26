@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,8 +10,16 @@ namespace Application.MA.KegUnitCQ
 {
   public class Tree
   {
+    public class TreeDTO
+    {
+      public long? IdKeg { get; set; }
+      public string Kode { get; set; }
+      public string Label { get; set; }
+      public int Lvl { get; set; }
+      public string Type { get; set; }
+    }
 
-    public class Query : IRequest<object>
+    public class Query : IRequest<IEnumerable<TreeDTO>>
     {
       public long IdUnit { get; set; }
       public string KdTahap { get; set; }
@@ -25,7 +34,7 @@ namespace Application.MA.KegUnitCQ
       }
     }
 
-    public class Handler : IRequestHandler<Query, object>
+    public class Handler : IRequestHandler<Query, IEnumerable<TreeDTO>>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -36,13 +45,15 @@ namespace Application.MA.KegUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<object> Handle(
+      public async Task<IEnumerable<TreeDTO>> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result = await
           _context.KegUnit.GetTreeKegUnit(request.IdUnit, request.KdTahap);
 
-        return result;
+        var mapConfig = new MapperConfiguration(cfg => { });
+
+        return _mapper.Map<IEnumerable<TreeDTO>>(result);
       }
     }
   }

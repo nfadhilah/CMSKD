@@ -1,10 +1,10 @@
-﻿using Application.Dtos;
-using MediatR;
+﻿using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace Application.Auth.Menu
 {

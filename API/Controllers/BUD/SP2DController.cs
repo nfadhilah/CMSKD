@@ -10,6 +10,14 @@ namespace API.Controllers.BUD
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(query));
 
+    [HttpGet("lastDocNo")]
+    public async Task<IActionResult> Get([FromQuery] GetLastDocNumber.Query query) =>
+      Ok(await Mediator.Send(query));
+
+    [HttpGet("lastRegNo")]
+    public async Task<IActionResult> Get([FromQuery] GetLastRegNumber.Query query) =>
+      Ok(await Mediator.Send(query));
+
     [HttpGet("{id}", Name = "GetSP2D")]
     public async Task<IActionResult> Get(long id) =>
       Ok(await Mediator.Send(new Detail.Query { IdSP2D = id }));

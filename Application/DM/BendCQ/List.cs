@@ -1,9 +1,9 @@
-﻿using Application.Dtos;
-using MediatR;
+﻿using MediatR;
 using Persistence;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace Application.DM.BendCQ
 {

@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Helpers;
+﻿using Application.Helpers;
 using AutoMapper;
 using Domain.DM;
 using MediatR;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace Application.DM.UrusanUnitCQ
 {

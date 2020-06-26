@@ -1,7 +1,7 @@
 ﻿using Application.DM.UrusanUnitCQ;
-using Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Application.CommonDTO;
 
 namespace API.Controllers.DM
 {
