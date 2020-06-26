@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Dtos;
+﻿using Application.Dtos;
 using Application.Helpers;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -52,7 +52,7 @@ namespace Application.DM.DaftPhk3CQ
         var result = await _context.DaftPhk3
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPhk3)
-          .FindAllAsync(predicate);
+          .FindAllAsync<DaftBank>(predicate, x => x.Bank);
 
         return new PaginationWrapper(result, new Pagination
         {

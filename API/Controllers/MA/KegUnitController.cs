@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.MA.KegUnitCQ;
+﻿using Application.MA.KegUnitCQ;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.MA
 {
@@ -8,6 +8,10 @@ namespace API.Controllers.MA
   {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
+      Ok(await Mediator.Send(query));
+
+    [HttpGet("tree")]
+    public async Task<IActionResult> Get([FromQuery] Tree.Query query) =>
       Ok(await Mediator.Send(query));
 
     [HttpGet("{id}", Name = "GetKegUnit")]

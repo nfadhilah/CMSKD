@@ -1,7 +1,8 @@
-﻿using System;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.DM
 {
@@ -13,10 +14,12 @@ namespace Domain.DM
     public string NmPhk3 { get; set; }
     public string NmInst { get; set; }
     public int IdBank { get; set; }
+    [LeftJoin("DAFTBANK", "IDBANK", "IDBANK")]
+    public DaftBank Bank { get; set; }
     public string CabangBank { get; set; }
     public string AlamatBank { get; set; }
     public string NoRekBank { get; set; }
-    public int IdJUsaha { get; set; }
+    public long IdJUsaha { get; set; }
     public string Alamat { get; set; }
     public string Telepon { get; set; }
     public string NPWP { get; set; }
