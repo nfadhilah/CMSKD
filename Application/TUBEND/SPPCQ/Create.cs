@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
+using Domain.MA;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,7 +71,13 @@ namespace Application.TUBEND.SPPCQ
         if (!await _context.SPP.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.SPP
+          .FindAllAsync<DaftUnit, StatTrs, Bend, SPD, DaftPhk3, ZKode>(
+            x => x.IdSPP == added.IdSPP, x => x.Unit,
+            x => x.StatTrs, x => x.Bendahara, x => x.SPD, x => x.Phk3,
+            x => x.ZKode);
+
+        return result.SingleOrDefault();
       }
     }
   }
