@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,7 +48,10 @@ namespace Application.BUD.DPDetCQ
         if (!await _context.DPDet.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.DPDet
+          .FindAllAsync<SP2D>(x => x.IdDPDet == added.IdDPDet, x => x.SP2D);
+
+        return result.SingleOrDefault();
       }
     }
   }

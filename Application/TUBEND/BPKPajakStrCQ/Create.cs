@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,7 +46,12 @@ namespace Application.TUBEND.BPKPajakStrCQ
         if (!await _context.BPKPajakStr.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BPKPajakStr
+          .FindAllAsync<BPKDetRP>(
+            x => x.IdBkPajakStr == added.IdBkPajakStr,
+            x => x.BPKDetRp);
+
+        return result.SingleOrDefault();
       }
     }
   }

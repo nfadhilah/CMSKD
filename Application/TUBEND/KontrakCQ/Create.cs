@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,7 +59,12 @@ namespace Application.TUBEND.KontrakCQ
         if (!await _context.Kontrak.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.Kontrak
+          .FindAllAsync<DaftUnit, DaftPhk3, MKegiatan>(
+            x => x.IdKontrak == added.IdKontrak, x => x.Unit,
+            x => x.Phk3, x => x.Kegiatan);
+
+        return result.SingleOrDefault();
       }
     }
   }

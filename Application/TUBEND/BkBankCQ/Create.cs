@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,7 +54,11 @@ namespace Application.TUBEND.BkBankCQ
         if (!await _context.BkBank.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BkBank
+          .FindAllAsync<DaftUnit, Bend, StatTrs>(x => x.IdBkBank == added.IdBkBank, x => x.Unit,
+            x => x.Bend, x => x.StatTrs);
+
+        return result.SingleOrDefault();
       }
     }
   }

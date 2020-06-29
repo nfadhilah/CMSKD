@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,7 +55,12 @@ namespace Application.TUBEND.SPPDetRPCQ
         if (!await _context.SPPDetRP.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.SPPDetRP
+          .FindAllAsync<SPPDetR, Pajak>(
+            x => x.IdSPPDetRP == added.IdSPPDetRP, x => x.SPPDetR,
+            x => x.Pajak);
+
+        return result.SingleOrDefault();
       }
     }
   }

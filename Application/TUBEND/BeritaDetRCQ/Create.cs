@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +50,12 @@ namespace Application.TUBEND.BeritaDetRCQ
         if (!await _context.BeritaDetR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BeritaDetR
+          .FindAllAsync<Berita, DaftRekening>(
+            x => x.IdBeritaDet == added.IdBeritaDet, x => x.Berita,
+            x => x.Rekening);
+
+        return result.SingleOrDefault();
       }
     }
   }

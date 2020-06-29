@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,7 +51,12 @@ namespace Application.BUD.SP2DDetBDanaCQ
         if (!await _context.SP2DDetBDana.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.SP2DDetBDana
+          .FindAllAsync<SP2DDetB, JDana>(
+            x => x.IdSP2DDetBDana == added.IdSP2DDetBDana, x => x.SP2DDetB,
+            x => x.JDana);
+
+        return result.SingleOrDefault();
       }
     }
   }

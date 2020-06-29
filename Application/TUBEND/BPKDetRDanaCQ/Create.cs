@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +49,11 @@ namespace Application.TUBEND.BPKDetRDanaCQ
         if (!await _context.BPKDetRDana.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BPKDetRDana
+          .FindAllAsync<BPKDetR>(
+            x => x.IdBPKDetRDana == added.IdBPKDetRDana, x => x.BPKDetR);
+
+        return result.SingleOrDefault();
       }
     }
   }

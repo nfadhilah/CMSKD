@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +50,12 @@ namespace Application.TUBEND.BPKDetRPCQ
         if (!await _context.BPKDetRP.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BPKDetRP
+          .FindAllAsync<BPKDetR, Pajak>(
+            x => x.IdBPKDetRP == added.IdBPKDetRP, x => x.BPKDetR,
+            x => x.Pajak);
+
+        return result.SingleOrDefault();
       }
     }
   }

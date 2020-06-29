@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,7 +62,12 @@ namespace Application.TUBEND.TBPLCQ
         if (!await _context.TBPL.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.TBPL
+          .FindAllAsync<DaftUnit, StatTrs, Bend, ZKode>(
+            x => x.IdTBPL == added.IdTBPL, x => x.Unit,
+            x => x.StatTrs, x => x.Bend, x => x.ZKode);
+
+        return result.SingleOrDefault();
       }
     }
   }

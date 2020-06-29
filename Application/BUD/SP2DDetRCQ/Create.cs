@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -52,7 +54,12 @@ namespace Application.BUD.SP2DDetRCQ
         if (!await _context.SP2DDetR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.SP2DDetR
+          .FindAllAsync<SP2D, MKegiatan, DaftRekening>(
+            x => x.IdSP2DDetR == added.IdSP2DDetR, x => x.SP2D, x => x.Kegiatan,
+            x => x.Rekening);
+
+        return result.SingleOrDefault();
       }
     }
   }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -61,7 +63,12 @@ namespace Application.TUBEND.STSCQ
         if (!await _context.STS.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.STS
+          .FindAllAsync<DaftUnit, Bend>(
+            x => x.IdSTS == added.IdSTS,
+            x => x.Unit, x => x.Bend);
+
+        return result.SingleOrDefault();
       }
     }
   }

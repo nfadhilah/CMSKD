@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,7 +56,11 @@ namespace Application.BUD.BKUKCQ
         if (!await _context.BKUK.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BKUK
+          .FindAllAsync<DaftUnit, SP2D>(
+            x => x.IdBKUK == added.IdBKUK, x => x.Unit, x => x.SP2D);
+
+        return result.SingleOrDefault();
       }
     }
   }

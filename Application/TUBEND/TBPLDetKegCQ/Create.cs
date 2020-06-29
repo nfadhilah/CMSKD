@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,7 +52,12 @@ namespace Application.TUBEND.TBPLDetKegCQ
         if (!await _context.TBPLDetKeg.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.TBPLDetKeg
+          .FindAllAsync<TBPLDet, JTrnlKas, MKegiatan>(
+            x => x.IdTBPLDet == added.IdTBPLDet, x => x.TBPLDet,
+            x => x.JTrnlKas, x => x.Kegiatan);
+
+        return result.SingleOrDefault();
       }
     }
   }
