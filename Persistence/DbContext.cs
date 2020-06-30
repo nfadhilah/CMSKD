@@ -25,6 +25,7 @@ namespace Persistence
     JnsAkunRepository JnsAkun { get; }
     JSatuanRepository JSatuan { get; }
     JBayarRepository JBayar { get; }
+    JUsahaRepository JUsaha { get; }
     ProfilRepository Profil { get; }
     DaftFungsiRepository DaftFungsi { get; }
     DaftBankRepository DaftBank { get; }
@@ -130,6 +131,7 @@ namespace Persistence
     public JnsAkunRepository JnsAkun => new JnsAkunRepository(Connection);
     public JSatuanRepository JSatuan => new JSatuanRepository(Connection);
     public JBayarRepository JBayar => new JBayarRepository(Connection);
+    public JUsahaRepository JUsaha => new JUsahaRepository(Connection);
     public ProfilRepository Profil => new ProfilRepository(Connection);
     public DaftBankRepository DaftBank => new DaftBankRepository(Connection);
     public DaftFungsiRepository DaftFungsi => new DaftFungsiRepository(Connection);
