@@ -43,6 +43,8 @@ WHERE w4.IDAPP = @IdApp
         .Distinct()
         .ToList().FirstOrDefault();
 
+      Connection.Close();
+
       return user;
     }
   }

@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -9,7 +10,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -52,7 +52,7 @@ namespace Application.DM.DaftPhk3CQ
         var result = await _context.DaftPhk3
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPhk3)
-          .FindAllAsync<DaftBank>(predicate, x => x.Bank);
+          .FindAllAsync<JBank, JUsaha>(predicate, x => x.Bank, x => x.JUsaha);
 
         return new PaginationWrapper(result, new Pagination
         {

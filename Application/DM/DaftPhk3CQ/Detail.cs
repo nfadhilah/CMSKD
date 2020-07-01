@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using AutoWrapper.Wrappers;
+﻿using AutoMapper;
 using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -30,13 +29,11 @@ namespace Application.DM.DaftPhk3CQ
       public async Task<DaftPhk3> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.DaftPhk3.FindByIdAsync(request.IdPhk3);
+        var result = await _context.DaftPhk3
+          .FindAllAsync<JBank, JUsaha>(x => x.IdPhk3 == request.IdPhk3,
+            x => x.Bank, x => x.IdJUsaha);
 
-        if (result == null)
-          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
-
-        return result;
+        return result.SingleOrDefault();
       }
     }
   }

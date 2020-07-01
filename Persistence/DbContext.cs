@@ -5,12 +5,13 @@ using Persistence.Repository.BUD;
 using Persistence.Repository.DM;
 using Persistence.Repository.MA;
 using Persistence.Repository.TUBEND;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace Persistence
 {
-  public interface IDbContext
+  public interface IDbContext : IDisposable
   {
     IDbConnection Connection { get; }
     BendRepository Bend { get; }
@@ -110,6 +111,8 @@ namespace Persistence
 
   public class DbContext : IDbContext
   {
+    private bool _disposed;
+
     public DbContext(string connectionString)
     {
       MicroOrmConfig.SqlProvider = SqlProvider.MSSQL;
@@ -211,5 +214,23 @@ namespace Persistence
     public DPRepository DP => new DPRepository(Connection);
     public DPDetRepository DPDet => new DPDetRepository(Connection);
     public WebSetRepository WebSet => new WebSetRepository(Connection);
+
+    protected virtual void Dispose(bool disposing)
+    {
+      if (!_disposed)
+      {
+        if (disposing)
+        {
+          Connection?.Dispose();
+        }
+      }
+      _disposed = true;
+    }
+
+    public void Dispose()
+    {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
   }
 }

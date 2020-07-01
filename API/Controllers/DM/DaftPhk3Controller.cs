@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.DM.DaftPhk3CQ;
+﻿using Application.DM.DaftPhk3CQ;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.DM
 {

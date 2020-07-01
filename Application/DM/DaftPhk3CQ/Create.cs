@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -26,7 +27,6 @@ namespace Application.DM.DaftPhk3CQ
       public string NPWP { get; set; }
       public int StValid { get; set; }
       public DateTime? DateCreate { get; set; }
-      public DateTime? DateUpdate { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -60,7 +60,11 @@ namespace Application.DM.DaftPhk3CQ
         if (!await _context.DaftPhk3.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.DaftPhk3
+          .FindAllAsync<JBank, JUsaha>(x => x.IdPhk3 == added.IdPhk3,
+            x => x.Bank, x => x.JUsaha);
+
+        return result.SingleOrDefault();
       }
     }
   }

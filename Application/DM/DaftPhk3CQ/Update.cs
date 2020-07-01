@@ -1,13 +1,15 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -28,8 +30,7 @@ namespace Application.DM.DaftPhk3CQ
       public string Telepon { get; set; }
       public string NPWP { get; set; }
       public int StValid { get; set; }
-      public DateTime DateCreate { get; set; }
-      public DateTime DateUpdate { get; set; }
+      public DateTime? DateUpdate { get; set; }
 
       public DTO()
       {
@@ -62,7 +63,7 @@ namespace Application.DM.DaftPhk3CQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : IRequest<DaftPhk3>
     {
       public int IdPhk3 { get; set; }
       public string NmPhk3 { get; set; }
@@ -76,11 +77,10 @@ namespace Application.DM.DaftPhk3CQ
       public string Telepon { get; set; }
       public string NPWP { get; set; }
       public int StValid { get; set; }
-      public DateTime DateCreate { get; set; }
-      public DateTime DateUpdate { get; set; }
+      public DateTime? DateUpdate { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DaftPhk3>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -91,7 +91,7 @@ namespace Application.DM.DaftPhk3CQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DaftPhk3> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -105,7 +105,11 @@ namespace Application.DM.DaftPhk3CQ
         if (!_context.DaftPhk3.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.DaftPhk3
+          .FindAllAsync<JBank, JUsaha>(x => x.IdPhk3 == updated.IdPhk3,
+            x => x.Bank, x => x.JUsaha);
+
+        return result.SingleOrDefault();
       }
     }
   }
