@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -50,11 +51,11 @@ namespace Application.TUBEND.BPKDetRCQ
       }
     }
 
-    public class Command : BPKDetR, IRequest
+    public class Command : BPKDetR, IRequest<BPKDetRDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BPKDetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -65,7 +66,7 @@ namespace Application.TUBEND.BPKDetRCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BPKDetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -79,7 +80,12 @@ namespace Application.TUBEND.BPKDetRCQ
         if (!_context.BPKDetR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BPKDetR
+          .FindAllAsync<BPK, MKegiatan, DaftRekening>(
+            x => x.IdBPKDetR == updated.IdBPKDetR, x => x.BPK,
+            x => x.Kegiatan, x => x.Rekening);
+
+        return _mapper.Map<BPKDetRDTO>(result);
       }
     }
   }

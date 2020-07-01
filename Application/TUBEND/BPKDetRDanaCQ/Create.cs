@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,10 +13,10 @@ namespace Application.TUBEND.BPKDetRDanaCQ
 {
   public class Create
   {
-    public class Command : IRequest<BPKDetRDana>
+    public class Command : IRequest<BPKDetRDanaDTO>
     {
       public long IdBPKDetR { get; set; }
-      public string KdDana { get; set; }
+      public long IdJDana { get; set; }
       public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
     }
@@ -26,11 +26,11 @@ namespace Application.TUBEND.BPKDetRDanaCQ
       public Validator()
       {
         RuleFor(d => d.IdBPKDetR).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, BPKDetRDana>
+    public class Handler : IRequestHandler<Command, BPKDetRDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -41,7 +41,7 @@ namespace Application.TUBEND.BPKDetRDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<BPKDetRDana> Handle(
+      public async Task<BPKDetRDanaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BPKDetRDana>(request);
@@ -50,10 +50,11 @@ namespace Application.TUBEND.BPKDetRDanaCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.BPKDetRDana
-          .FindAllAsync<BPKDetR>(
-            x => x.IdBPKDetRDana == added.IdBPKDetRDana, x => x.BPKDetR);
+          .FindAllAsync<BPKDetR, JDana>(
+            x => x.IdBPKDetRDana == added.IdBPKDetRDana, x => x.BPKDetR,
+            x => x.JDana);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BPKDetRDanaDTO>(result);
       }
     }
   }

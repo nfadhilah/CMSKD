@@ -14,7 +14,7 @@ namespace Application.TUBEND.BeritaDetRCQ
 {
   public class Create
   {
-    public class Command : IRequest<BeritaDetR>
+    public class Command : IRequest<BeritaDetRDTO>
     {
       public long IdBerita { get; set; }
       public long IdRek { get; set; }
@@ -31,7 +31,7 @@ namespace Application.TUBEND.BeritaDetRCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BeritaDetR>
+    public class Handler : IRequestHandler<Command, BeritaDetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -42,7 +42,7 @@ namespace Application.TUBEND.BeritaDetRCQ
         _mapper = mapper;
       }
 
-      public async Task<BeritaDetR> Handle(
+      public async Task<BeritaDetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BeritaDetR>(request);
@@ -55,7 +55,7 @@ namespace Application.TUBEND.BeritaDetRCQ
             x => x.IdBeritaDet == added.IdBeritaDet, x => x.Berita,
             x => x.Rekening);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BeritaDetRDTO>(result.SingleOrDefault());
       }
     }
   }

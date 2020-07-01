@@ -9,6 +9,7 @@ namespace Application.TUBEND.BPKPajakStrCQ
     {
       CreateMap<Create.Command, BPKPajakStr>();
       CreateMap<Update.Command, BPKPajakStr>();
+      CreateMap<BPKPajakStr, BPKPajakStrDTO>();
     }
   }
 }

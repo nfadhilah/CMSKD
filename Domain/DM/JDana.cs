@@ -8,7 +8,8 @@ namespace Domain.DM
   [Table("JDANA")]
   public class JDana
   {
-    [Key]
+    [Key, Identity]
+    public long IdJDana { get; set; }
     public string KdDana { get; set; }
     public string NmDana { get; set; }
     public string Ket { get; set; }

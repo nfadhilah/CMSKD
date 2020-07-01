@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using Domain.MA;
 using Domain.TUBEND;
@@ -11,7 +13,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.TUBEND.SPMCQ
 {
@@ -40,10 +41,12 @@ namespace Application.TUBEND.SPMCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -110,12 +113,13 @@ namespace Application.TUBEND.SPMCQ
             predicate, x => x.Unit, x => x.Bend, x => x.SPD,
             x => x.SPP, x => x.Phk3);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(_mapper.Map<IEnumerable<SPMDTO>>(result),
+          new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

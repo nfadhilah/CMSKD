@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.TUBEND;
+using Domain.DM;
+using Domain.MA;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,12 +13,12 @@ namespace Application.TUBEND.SPPCQ
 {
   public class Detail
   {
-    public class Query : IRequest<SPP>
+    public class Query : IRequest<SPPDTO>
     {
       public long IdSPP { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, SPP>
+    public class Handler : IRequestHandler<Query, SPPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +29,19 @@ namespace Application.TUBEND.SPPCQ
         _mapper = mapper;
       }
 
-      public async Task<SPP> Handle(
+      public async Task<SPPDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.SPP.FindByIdAsync(request.IdSPP);
+        var result = await _context.SPP
+          .FindAllAsync<DaftUnit, StatTrs, Bend, SPD, DaftPhk3, ZKode>(
+            x => x.IdSPP == request.IdSPP, x => x.Unit,
+            x => x.StatTrs, x => x.Bendahara, x => x.SPD, x => x.Phk3,
+            x => x.ZKode);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<SPPDTO>(result.SingleOrDefault());
       }
     }
   }

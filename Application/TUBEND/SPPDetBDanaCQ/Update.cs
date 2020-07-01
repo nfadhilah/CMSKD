@@ -1,10 +1,12 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +20,7 @@ namespace Application.TUBEND.SPPDetBDanaCQ
       private readonly IMapper _mapper;
 
       public long IdSPPDetB { get; set; }
-      public string KdDana { get; set; }
+      public long IdJDana { get; set; }
       public decimal? Nilai { get; set; }
 
       public DTO()
@@ -42,15 +44,15 @@ namespace Application.TUBEND.SPPDetBDanaCQ
       public Validator()
       {
         RuleFor(d => d.IdSPPDetB).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Command : SPPDetBDana, IRequest
+    public class Command : SPPDetBDana, IRequest<SPPDetBDanaDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, SPPDetBDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -61,7 +63,7 @@ namespace Application.TUBEND.SPPDetBDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<SPPDetBDanaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -75,7 +77,12 @@ namespace Application.TUBEND.SPPDetBDanaCQ
         if (!_context.SPPDetBDana.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.SPPDetBDana
+          .FindAllAsync<SPPDetR, JDana>(
+            x => x.IdSPPDetBDana == updated.IdSPPDetBDana, x => x.SPPDetB,
+            x => x.JDana);
+
+        return _mapper.Map<SPPDetBDanaDTO>(result.SingleOrDefault());
       }
     }
   }

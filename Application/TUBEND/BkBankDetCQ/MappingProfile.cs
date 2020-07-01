@@ -9,6 +9,8 @@ namespace Application.TUBEND.BkBankDetCQ
     {
       CreateMap<Create.Command, BkBankDet>();
       CreateMap<Update.Command, BkBankDet>();
+      CreateMap<BkBankDet, BKBankDetDTO>().ForMember(d => d.NoBuku,
+        opt => opt.MapFrom(s => s.BkBank.NoBuku));
     }
   }
 }

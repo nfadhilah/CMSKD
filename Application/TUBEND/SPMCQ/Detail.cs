@@ -14,12 +14,12 @@ namespace Application.TUBEND.SPMCQ
 {
   public class Detail
   {
-    public class Query : IRequest<SPM>
+    public class Query : IRequest<SPMDTO>
     {
       public long IdSPM { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, SPM>
+    public class Handler : IRequestHandler<Query, SPMDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,7 +30,7 @@ namespace Application.TUBEND.SPMCQ
         _mapper = mapper;
       }
 
-      public async Task<SPM> Handle(
+      public async Task<SPMDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -41,7 +41,7 @@ namespace Application.TUBEND.SPMCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<SPMDTO>(result);
       }
     }
   }

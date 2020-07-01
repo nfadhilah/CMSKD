@@ -15,8 +15,8 @@ namespace Domain.TUBEND
     public long IdSPPDetB { get; set; }
     [InnerJoin("SPPDETB", "IDSPPDETB", "IDSPPDETB")]
     public SPPDetB SPPDetB { get; set; }
-    public string KdDana { get; set; }
-    [LeftJoin("JDANA", "KDDANA", "KDDANA")]
+    public long IdJDana { get; set; }
+    [LeftJoin("JDANA", "IDJDANA", "IDJDANA")]
     public JDana JDana { get; set; }
     public decimal? Nilai { get; set; }
     public DateTime? DateCreate { get; set; }

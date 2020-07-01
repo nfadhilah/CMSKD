@@ -14,7 +14,7 @@ namespace Application.TUBEND.BPKDetRPCQ
 {
   public class Create
   {
-    public class Command : IRequest<BPKDetRP>
+    public class Command : IRequest<BPKDetRPDTO>
     {
       public long IdBPKDetR { get; set; }
       public long IdPajak { get; set; }
@@ -31,7 +31,7 @@ namespace Application.TUBEND.BPKDetRPCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BPKDetRP>
+    public class Handler : IRequestHandler<Command, BPKDetRPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -42,7 +42,7 @@ namespace Application.TUBEND.BPKDetRPCQ
         _mapper = mapper;
       }
 
-      public async Task<BPKDetRP> Handle(
+      public async Task<BPKDetRPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BPKDetRP>(request);
@@ -55,7 +55,7 @@ namespace Application.TUBEND.BPKDetRPCQ
             x => x.IdBPKDetRP == added.IdBPKDetRP, x => x.BPKDetR,
             x => x.Pajak);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BPKDetRPDTO>(result.SingleOrDefault());
       }
     }
   }

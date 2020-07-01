@@ -1,4 +1,5 @@
-﻿using MicroOrm.Dapper.Repositories.Attributes;
+﻿using Domain.DM;
+using MicroOrm.Dapper.Repositories.Attributes;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,9 @@ namespace Domain.TUBEND
     public long IdBPKDetR { get; set; }
     [InnerJoin("BPKDETR", "IDBPKDETR", "IDBPKDETR")]
     public BPKDetR BPKDetR { get; set; }
-    public string KdDana { get; set; }
+    public long IdJDana { get; set; }
+    [InnerJoin("JDANA", "IDJDANA", "IDJDANA")]
+    public JDana JDana { get; set; }
     public decimal? Nilai { get; set; }
     public DateTime? DateCreate { get; set; }
     [UpdatedAt]

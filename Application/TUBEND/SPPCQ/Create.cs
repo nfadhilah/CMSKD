@@ -15,7 +15,7 @@ namespace Application.TUBEND.SPPCQ
 {
   public class Create
   {
-    public class Command : IRequest<SPP>
+    public class Command : IRequest<SPPDTO>
     {
       public long IdUnit { get; set; }
       public string NoSPP { get; set; }
@@ -49,7 +49,7 @@ namespace Application.TUBEND.SPPCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, SPP>
+    public class Handler : IRequestHandler<Command, SPPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.TUBEND.SPPCQ
         _mapper = mapper;
       }
 
-      public async Task<SPP> Handle(
+      public async Task<SPPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SPP>(request);
@@ -77,7 +77,7 @@ namespace Application.TUBEND.SPPCQ
             x => x.StatTrs, x => x.Bendahara, x => x.SPD, x => x.Phk3,
             x => x.ZKode);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SPPDTO>(result.SingleOrDefault());
       }
     }
   }

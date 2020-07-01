@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,12 +13,12 @@ namespace Application.TUBEND.SPPDetBDanaCQ
 {
   public class Detail
   {
-    public class Query : IRequest<SPPDetBDana>
+    public class Query : IRequest<SPPDetBDanaDTO>
     {
       public long IdSPPDetBDana { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, SPPDetBDana>
+    public class Handler : IRequestHandler<Query, SPPDetBDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +29,18 @@ namespace Application.TUBEND.SPPDetBDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<SPPDetBDana> Handle(
+      public async Task<SPPDetBDanaDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.SPPDetBDana.FindByIdAsync(request.IdSPPDetBDana);
+        var result = (await _context.SPPDetBDana
+          .FindAllAsync<SPPDetR, JDana>(
+            x => x.IdSPPDetBDana == request.IdSPPDetBDana, x => x.SPPDetB,
+            x => x.JDana)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<SPPDetBDanaDTO>(result);
       }
     }
   }

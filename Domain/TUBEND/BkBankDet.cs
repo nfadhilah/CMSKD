@@ -14,7 +14,7 @@ namespace Domain.TUBEND
     public long IdBkBank { get; set; }
     [InnerJoin("BKBANK", "IDBKBANK", "IDBKBANK")]
     public BkBank BkBank { get; set; }
-    public int NoJeTra { get; set; }
+    public int IdNoJeTra { get; set; }
     [InnerJoin("JTRNLKAS", "IDNOJETRA", "IDNOJETRA")]
     public JTrnlKas JTrnlKas { get; set; }
     public decimal? Nilai { get; set; }

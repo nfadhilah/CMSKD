@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using Domain.TUBEND;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.TUBEND.BPKCQ
 {
@@ -22,7 +23,7 @@ namespace Application.TUBEND.BPKCQ
       public long? IdPhk3 { get; set; }
       public string NoBPK { get; set; }
       public string KdStatus { get; set; }
-      public string JBayar { get; set; }
+      public long? IdJBayar { get; set; }
       public int? IdxKode { get; set; }
       public long? IdBend { get; set; }
       public DateTime? TglBPK { get; set; }
@@ -39,10 +40,12 @@ namespace Application.TUBEND.BPKCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -56,8 +59,8 @@ namespace Application.TUBEND.BPKCQ
         if (!string.IsNullOrWhiteSpace(request.NoBPK))
           parameters.Add(d => d.NoBPK.Contains(request.NoBPK));
 
-        if (!string.IsNullOrWhiteSpace(request.JBayar))
-          parameters.Add(d => d.JBayar == request.JBayar);
+        if (request.IdJBayar.HasValue)
+          parameters.Add(d => d.IdJBayar == request.IdJBayar);
 
         if (!string.IsNullOrWhiteSpace(request.KdStatus))
           parameters.Add(d => d.KdStatus == request.KdStatus);
@@ -99,16 +102,17 @@ namespace Application.TUBEND.BPKCQ
         var result = await _context.BPK
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.NoBPK)
-          .FindAllAsync<DaftUnit, DaftPhk3, Bend, Berita>(
+          .FindAllAsync<DaftUnit, DaftPhk3, Bend, Berita, JBayar>(
             predicate, x => x.Unit,
-            x => x.Phk3, x => x.Bend, x => x.Berita);
+            x => x.Phk3, x => x.Bend, x => x.Berita, x => x.JBayar);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(_mapper.Map<IEnumerable<BPKDTO>>(result),
+          new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

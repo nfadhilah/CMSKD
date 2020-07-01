@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +24,7 @@ namespace Application.TUBEND.BPKCQ
       public long IdPhk3 { get; set; }
       public string NoBPK { get; set; }
       public string KdStatus { get; set; }
-      public string JBayar { get; set; }
+      public long IdJBayar { get; set; }
       public int IdxKode { get; set; }
       public long IdBend { get; set; }
       public DateTime? TglBPK { get; set; }
@@ -58,14 +60,15 @@ namespace Application.TUBEND.BPKCQ
         RuleFor(d => d.NoBPK).NotEmpty();
         RuleFor(d => d.KdStatus).NotEmpty();
         RuleFor(d => d.IdxKode).NotEmpty();
+        RuleFor(d => d.IdJBayar).NotEmpty();
       }
     }
 
-    public class Command : BPK, IRequest
+    public class Command : BPK, IRequest<BPKDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BPKDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -76,7 +79,7 @@ namespace Application.TUBEND.BPKCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BPKDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -90,7 +93,12 @@ namespace Application.TUBEND.BPKCQ
         if (!_context.BPK.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BPK
+          .FindAllAsync<DaftUnit, DaftPhk3, Bend, Berita, JBayar>(
+            x => x.IdBPK == updated.IdBPK, x => x.Unit,
+            x => x.Phk3, x => x.Bend, x => x.Berita, x => x.JBayar);
+
+        return _mapper.Map<BPKDTO>(result.SingleOrDefault());
       }
     }
   }

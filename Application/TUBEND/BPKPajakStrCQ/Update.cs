@@ -5,6 +5,7 @@ using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,11 +44,11 @@ namespace Application.TUBEND.BPKPajakStrCQ
       }
     }
 
-    public class Command : BPKPajakStr, IRequest
+    public class Command : BPKPajakStr, IRequest<BPKPajakStrDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BPKPajakStrDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -58,7 +59,7 @@ namespace Application.TUBEND.BPKPajakStrCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BPKPajakStrDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -72,7 +73,12 @@ namespace Application.TUBEND.BPKPajakStrCQ
         if (!_context.BPKPajakStr.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BPKPajakStr
+          .FindAllAsync<BPKDetRP>(
+            x => x.IdBkPajakStr == updated.IdBkPajakStr,
+            x => x.BPKDetRp);
+
+        return _mapper.Map<BPKPajakStrDTO>(result.SingleOrDefault());
       }
     }
   }

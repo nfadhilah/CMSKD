@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,11 +54,11 @@ namespace Application.TUBEND.BkBankCQ
       }
     }
 
-    public class Command : BkBank, IRequest
+    public class Command : BkBank, IRequest<BKBankDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BKBankDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -67,7 +69,7 @@ namespace Application.TUBEND.BkBankCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BKBankDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -81,7 +83,12 @@ namespace Application.TUBEND.BkBankCQ
         if (!_context.BkBank.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = (await _context.BkBank
+          .FindAllAsync<DaftUnit, Bend, StatTrs>(
+            x => x.IdBkBank == updated.IdBkBank, x => x.Unit,
+            x => x.Bend, x => x.StatTrs)).SingleOrDefault();
+
+        return _mapper.Map<BKBankDTO>(result);
       }
     }
   }

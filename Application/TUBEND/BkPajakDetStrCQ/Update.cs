@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,11 +55,11 @@ namespace Application.TUBEND.BkPajakDetStrCQ
       }
     }
 
-    public class Command : BkPajakDetStr, IRequest
+    public class Command : BkPajakDetStr, IRequest<BkPajakDetStrDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BkPajakDetStrDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -68,7 +70,7 @@ namespace Application.TUBEND.BkPajakDetStrCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BkPajakDetStrDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -82,7 +84,12 @@ namespace Application.TUBEND.BkPajakDetStrCQ
         if (!_context.BkPajakDetStr.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BkPajakDetStr
+          .FindAllAsync<BPKPajakStr, Pajak, BkPajak>(
+            x => x.IdBkPajakDetStr == updated.IdBkPajakDetStr,
+            x => x.BPKPajakStr, x => x.Pajak, x => x.BkPajak);
+
+        return _mapper.Map<BkPajakDetStrDTO>(result.SingleOrDefault());
       }
     }
   }

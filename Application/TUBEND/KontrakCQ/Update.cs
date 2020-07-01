@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,11 +59,11 @@ namespace Application.TUBEND.KontrakCQ
       }
     }
 
-    public class Command : Kontrak, IRequest
+    public class Command : Kontrak, IRequest<KontrakDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, KontrakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -72,7 +74,7 @@ namespace Application.TUBEND.KontrakCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<KontrakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -86,7 +88,12 @@ namespace Application.TUBEND.KontrakCQ
         if (!_context.Kontrak.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.Kontrak
+          .FindAllAsync<DaftUnit, DaftPhk3, MKegiatan>(
+            x => x.IdKontrak == updated.IdKontrak, x => x.Unit,
+            x => x.Phk3, x => x.Kegiatan);
+
+        return _mapper.Map<KontrakDTO>(result.SingleOrDefault());
       }
     }
   }

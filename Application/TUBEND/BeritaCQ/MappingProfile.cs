@@ -9,6 +9,14 @@ namespace Application.TUBEND.BeritaCQ
     {
       CreateMap<Create.Command, Berita>();
       CreateMap<Update.Command, Berita>();
+      CreateMap<Berita, BeritaDTO>()
+        .ForMember(s => s.KdUnit, opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()))
+        .ForMember(s => s.NmUnit, opt => opt.MapFrom(s => s.Unit.NmUnit.Trim()))
+        .ForMember(s => s.NuKeg, opt => opt.MapFrom(s => s.Kegiatan.NuKeg.Trim()))
+        .ForMember(s => s.NmKegUnit,
+          opt => opt.MapFrom(s => s.Kegiatan.NmKegUnit.Trim()))
+        .ForMember(s => s.NoKontrak,
+          opt => opt.MapFrom(s => s.Kontrak.NoKontrak));
     }
   }
 }

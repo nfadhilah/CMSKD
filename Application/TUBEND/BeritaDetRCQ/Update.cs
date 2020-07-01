@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -48,11 +49,11 @@ namespace Application.TUBEND.BeritaDetRCQ
       }
     }
 
-    public class Command : BeritaDetR, IRequest
+    public class Command : BeritaDetR, IRequest<BeritaDetRDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BeritaDetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -63,7 +64,7 @@ namespace Application.TUBEND.BeritaDetRCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BeritaDetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -77,7 +78,12 @@ namespace Application.TUBEND.BeritaDetRCQ
         if (!_context.BeritaDetR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BeritaDetR
+          .FindAllAsync<Berita, DaftRekening>(
+            x => x.IdBeritaDet == updated.IdBeritaDet, x => x.Berita,
+            x => x.Rekening);
+
+        return _mapper.Map<BeritaDetRDTO>(result);
       }
     }
   }

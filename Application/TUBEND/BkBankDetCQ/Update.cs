@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -18,7 +19,7 @@ namespace Application.TUBEND.BkBankDetCQ
       private readonly IMapper _mapper;
 
       public long IdBkBank { get; set; }
-      public int NoJeTra { get; set; }
+      public int IdNoJeTra { get; set; }
       public decimal? Nilai { get; set; }
 
       public DTO()
@@ -42,15 +43,13 @@ namespace Application.TUBEND.BkBankDetCQ
       public Validator()
       {
         RuleFor(d => d.IdBkBank).NotEmpty();
-        RuleFor(d => d.NoJeTra).NotEmpty();
+        RuleFor(d => d.IdNoJeTra).NotEmpty();
       }
     }
 
-    public class Command : BkBankDet, IRequest
-    {
-    }
+    public class Command : BkBankDet, IRequest<BKBankDetDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BKBankDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -61,7 +60,7 @@ namespace Application.TUBEND.BkBankDetCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BKBankDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -75,7 +74,12 @@ namespace Application.TUBEND.BkBankDetCQ
         if (!_context.BkBankDet.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BkBankDet
+          .FindAllAsync<BkBank, JTrnlKas>(x => x.IdBankDet == updated.IdBankDet,
+            x => x.BkBank,
+            x => x.JTrnlKas);
+
+        return _mapper.Map<BKBankDetDTO>(result);
       }
     }
   }

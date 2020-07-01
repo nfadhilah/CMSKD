@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using MediatR;
 using Persistence;
@@ -11,12 +12,12 @@ namespace Application.TUBEND.BPKDetRDanaCQ
 {
   public class Detail
   {
-    public class Query : IRequest<BPKDetRDana>
+    public class Query : IRequest<BPKDetRDanaDTO>
     {
       public long IdBPKDetRDana { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BPKDetRDana>
+    public class Handler : IRequestHandler<Query, BPKDetRDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +28,18 @@ namespace Application.TUBEND.BPKDetRDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<BPKDetRDana> Handle(
+      public async Task<BPKDetRDanaDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.BPKDetRDana.FindByIdAsync(request.IdBPKDetRDana);
+        var result = (await _context.BPKDetRDana
+          .FindAllAsync<BPKDetR, JDana>(
+            x => x.IdBPKDetRDana == request.IdBPKDetRDana, x => x.BPKDetR,
+            x => x.JDana));
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BPKDetRDanaDTO>(result);
       }
     }
   }

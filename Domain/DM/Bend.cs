@@ -9,7 +9,7 @@ namespace Domain.DM
   [Table("BEND")]
   public class Bend
   {
-    [Key]
+    [Key, Identity]
     public long IdBend { get; set; }
     public string JnsBend { get; set; }
     public long IdPeg { get; set; }

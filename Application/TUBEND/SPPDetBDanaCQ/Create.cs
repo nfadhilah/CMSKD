@@ -14,10 +14,10 @@ namespace Application.TUBEND.SPPDetBDanaCQ
 {
   public class Create
   {
-    public class Command : IRequest<SPPDetBDana>
+    public class Command : IRequest<SPPDetBDanaDTO>
     {
       public long IdSPPDetB { get; set; }
-      public string KdDana { get; set; }
+      public long IdJDana { get; set; }
       public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
     }
@@ -27,11 +27,11 @@ namespace Application.TUBEND.SPPDetBDanaCQ
       public Validator()
       {
         RuleFor(d => d.IdSPPDetB).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, SPPDetBDana>
+    public class Handler : IRequestHandler<Command, SPPDetBDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -42,7 +42,7 @@ namespace Application.TUBEND.SPPDetBDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<SPPDetBDana> Handle(
+      public async Task<SPPDetBDanaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SPPDetBDana>(request);
@@ -55,7 +55,7 @@ namespace Application.TUBEND.SPPDetBDanaCQ
             x => x.IdSPPDetBDana == added.IdSPPDetBDana, x => x.SPPDetB,
             x => x.JDana);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SPPDetBDanaDTO>(result.SingleOrDefault());
       }
     }
   }

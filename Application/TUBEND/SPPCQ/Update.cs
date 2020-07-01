@@ -1,11 +1,14 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
+using Domain.MA;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,11 +68,11 @@ namespace Application.TUBEND.SPPCQ
       }
     }
 
-    public class Command : SPP, IRequest
+    public class Command : SPP, IRequest<SPPDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, SPPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -80,7 +83,7 @@ namespace Application.TUBEND.SPPCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<SPPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -94,7 +97,13 @@ namespace Application.TUBEND.SPPCQ
         if (!_context.SPP.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.SPP
+          .FindAllAsync<DaftUnit, StatTrs, Bend, SPD, DaftPhk3, ZKode>(
+            x => x.IdSPP == updated.IdSPP, x => x.Unit,
+            x => x.StatTrs, x => x.Bendahara, x => x.SPD, x => x.Phk3,
+            x => x.ZKode);
+
+        return _mapper.Map<SPPDTO>(result.SingleOrDefault());
       }
     }
   }

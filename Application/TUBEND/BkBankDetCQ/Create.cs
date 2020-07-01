@@ -13,10 +13,10 @@ namespace Application.TUBEND.BkBankDetCQ
 {
   public class Create
   {
-    public class Command : IRequest<BkBankDet>
+    public class Command : IRequest<BKBankDetDTO>
     {
       public long IdBkBank { get; set; }
-      public int NoJeTra { get; set; }
+      public int IdNoJeTra { get; set; }
       public decimal? Nilai { get; set; }
     }
 
@@ -25,11 +25,11 @@ namespace Application.TUBEND.BkBankDetCQ
       public Validator()
       {
         RuleFor(d => d.IdBkBank).NotEmpty();
-        RuleFor(d => d.NoJeTra).NotEmpty();
+        RuleFor(d => d.IdNoJeTra).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, BkBankDet>
+    public class Handler : IRequestHandler<Command, BKBankDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -40,7 +40,7 @@ namespace Application.TUBEND.BkBankDetCQ
         _mapper = mapper;
       }
 
-      public async Task<BkBankDet> Handle(
+      public async Task<BKBankDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BkBankDet>(request);
@@ -53,7 +53,7 @@ namespace Application.TUBEND.BkBankDetCQ
             x => x.BkBank,
             x => x.JTrnlKas);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BKBankDetDTO>(result.SingleOrDefault());
       }
     }
   }

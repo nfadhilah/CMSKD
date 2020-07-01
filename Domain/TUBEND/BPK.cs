@@ -20,7 +20,9 @@ namespace Domain.TUBEND
     public DaftPhk3 Phk3 { get; set; }
     public string NoBPK { get; set; }
     public string KdStatus { get; set; }
-    public string JBayar { get; set; }
+    public long IdJBayar { get; set; }
+    [LeftJoin("JBAYAR", "IDJBAYAR", "IDJBAYAR")]
+    public JBayar JBayar { get; set; }
     public int IdxKode { get; set; }
     public long IdBend { get; set; }
     [LeftJoin("BEND", "IDBEND", "IDBEND")]

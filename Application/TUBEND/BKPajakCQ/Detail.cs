@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.TUBEND;
+using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,12 +12,12 @@ namespace Application.TUBEND.BKPajakCQ
 {
   public class Detail
   {
-    public class Query : IRequest<BkPajak>
+    public class Query : IRequest<BkPajakDTO>
     {
       public long IdBkPajak { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BkPajak>
+    public class Handler : IRequestHandler<Query, BkPajakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +28,18 @@ namespace Application.TUBEND.BKPajakCQ
         _mapper = mapper;
       }
 
-      public async Task<BkPajak> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<BkPajakDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.BkPajak.FindByIdAsync(request.IdBkPajak);
+        var result = (await _context.BkPajak
+            .FindAllAsync<DaftUnit, Bend>(
+              x => x.IdBkPajak == request.IdBkPajak, x => x.Unit, x => x.Bend))
+          .SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BkPajakDTO>(result);
       }
     }
   }

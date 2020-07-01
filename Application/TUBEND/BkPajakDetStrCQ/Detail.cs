@@ -13,12 +13,12 @@ namespace Application.TUBEND.BkPajakDetStrCQ
 {
   public class Detail
   {
-    public class Query : IRequest<BkPajakDetStr>
+    public class Query : IRequest<BkPajakDetStrDTO>
     {
       public long IdBkPajakDetStr { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BkPajakDetStr>
+    public class Handler : IRequestHandler<Query, BkPajakDetStrDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Application.TUBEND.BkPajakDetStrCQ
         _mapper = mapper;
       }
 
-      public async Task<BkPajakDetStr> Handle(
+      public async Task<BkPajakDetStrDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -41,7 +41,7 @@ namespace Application.TUBEND.BkPajakDetStrCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BkPajakDetStrDTO>(result);
       }
     }
   }

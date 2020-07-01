@@ -14,13 +14,13 @@ namespace Application.TUBEND.BPKCQ
 {
   public class Create
   {
-    public class Command : IRequest<BPK>
+    public class Command : IRequest<BPKDTO>
     {
       public long IdUnit { get; set; }
       public long IdPhk3 { get; set; }
       public string NoBPK { get; set; }
       public string KdStatus { get; set; }
-      public string JBayar { get; set; }
+      public long IdJBayar { get; set; }
       public int IdxKode { get; set; }
       public long IdBend { get; set; }
       public DateTime? TglBPK { get; set; }
@@ -42,10 +42,11 @@ namespace Application.TUBEND.BPKCQ
         RuleFor(d => d.NoBPK).NotEmpty();
         RuleFor(d => d.KdStatus).NotEmpty();
         RuleFor(d => d.IdxKode).NotEmpty();
+        RuleFor(d => d.IdJBayar).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, BPK>
+    public class Handler : IRequestHandler<Command, BPKDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -56,7 +57,7 @@ namespace Application.TUBEND.BPKCQ
         _mapper = mapper;
       }
 
-      public async Task<BPK> Handle(
+      public async Task<BPKDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BPK>(request);
@@ -65,11 +66,11 @@ namespace Application.TUBEND.BPKCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.BPK
-          .FindAllAsync<DaftUnit, DaftPhk3, Bend, Berita>(
+          .FindAllAsync<DaftUnit, DaftPhk3, Bend, Berita, JBayar>(
             x => x.IdBPK == added.IdBPK, x => x.Unit,
-            x => x.Phk3, x => x.Bend, x => x.Berita);
+            x => x.Phk3, x => x.Bend, x => x.Berita, x => x.JBayar);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BPKDTO>(result.SingleOrDefault());
       }
     }
   }

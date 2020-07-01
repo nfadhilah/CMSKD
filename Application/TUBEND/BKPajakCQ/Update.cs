@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -59,11 +60,9 @@ namespace Application.TUBEND.BKPajakCQ
       }
     }
 
-    public class Command : BkPajak, IRequest
-    {
-    }
+    public class Command : BkPajak, IRequest<BkPajakDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BkPajakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -74,7 +73,7 @@ namespace Application.TUBEND.BKPajakCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BkPajakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -88,7 +87,11 @@ namespace Application.TUBEND.BKPajakCQ
         if (!_context.BkPajak.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BkPajak
+          .FindAllAsync<DaftUnit, Bend>(
+            x => x.IdBkPajak == updated.IdBkPajak, x => x.Unit, x => x.Bend);
+
+        return _mapper.Map<BkPajakDTO>(result);
       }
     }
   }

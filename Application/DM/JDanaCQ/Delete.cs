@@ -12,7 +12,7 @@ namespace Application.DM.JDanaCQ
   {
     public class Command : IRequest
     {
-      public string KdDana { get; set; }
+      public long IdJDana { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -30,7 +30,7 @@ namespace Application.DM.JDanaCQ
         Command request, CancellationToken cancellationToken)
       {
         var deleted =
-          await _context.JDana.FindAsync(x => x.KdDana == request.KdDana);
+          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
 
         if (deleted == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

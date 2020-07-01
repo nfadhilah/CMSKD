@@ -14,7 +14,7 @@ namespace Application.TUBEND.BeritaCQ
 {
   public class Create
   {
-    public class Command : IRequest<Berita>
+    public class Command : IRequest<BeritaDTO>
     {
       public long IdUnit { get; set; }
       public long IdKeg { get; set; }
@@ -39,7 +39,7 @@ namespace Application.TUBEND.BeritaCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, Berita>
+    public class Handler : IRequestHandler<Command, BeritaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -50,7 +50,7 @@ namespace Application.TUBEND.BeritaCQ
         _mapper = mapper;
       }
 
-      public async Task<Berita> Handle(
+      public async Task<BeritaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<Berita>(request);
@@ -63,7 +63,7 @@ namespace Application.TUBEND.BeritaCQ
             x => x.IdBerita == added.IdBerita, x => x.Unit,
             x => x.Kegiatan, x => x.Kontrak);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BeritaDTO>(result.SingleOrDefault());
       }
     }
   }

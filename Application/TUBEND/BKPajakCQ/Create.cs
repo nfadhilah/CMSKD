@@ -14,7 +14,7 @@ namespace Application.TUBEND.BKPajakCQ
 {
   public class Create
   {
-    public class Command : IRequest<BkPajak>
+    public class Command : IRequest<BkPajakDTO>
     {
       public long IdUnit { get; set; }
       public long IdBend { get; set; }
@@ -43,7 +43,7 @@ namespace Application.TUBEND.BKPajakCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BkPajak>
+    public class Handler : IRequestHandler<Command, BkPajakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -54,7 +54,7 @@ namespace Application.TUBEND.BKPajakCQ
         _mapper = mapper;
       }
 
-      public async Task<BkPajak> Handle(
+      public async Task<BkPajakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BkPajak>(request);
@@ -66,7 +66,7 @@ namespace Application.TUBEND.BKPajakCQ
           .FindAllAsync<DaftUnit, Bend>(
             x => x.IdBkPajak == added.IdBkPajak, x => x.Unit, x => x.Bend);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BkPajakDTO>(result.SingleOrDefault());
       }
     }
   }

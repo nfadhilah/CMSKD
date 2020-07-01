@@ -15,7 +15,7 @@ namespace Application.TUBEND.SPMCQ
 {
   public class Create
   {
-    public class Command : IRequest<SPM>
+    public class Command : IRequest<SPMDTO>
     {
       public long IdUnit { get; set; }
       public string NoSPM { get; set; }
@@ -50,7 +50,7 @@ namespace Application.TUBEND.SPMCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, SPM>
+    public class Handler : IRequestHandler<Command, SPMDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -61,7 +61,7 @@ namespace Application.TUBEND.SPMCQ
         _mapper = mapper;
       }
 
-      public async Task<SPM> Handle(
+      public async Task<SPMDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SPM>(request);
@@ -74,7 +74,7 @@ namespace Application.TUBEND.SPMCQ
             x => x.IdSPM == added.IdSPM, x => x.Unit, x => x.Bend, x => x.SPD,
             x => x.SPP, x => x.Phk3);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SPMDTO>(result.SingleOrDefault());
       }
     }
   }

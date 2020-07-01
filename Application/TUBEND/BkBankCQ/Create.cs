@@ -14,7 +14,7 @@ namespace Application.TUBEND.BkBankCQ
 {
   public class Create
   {
-    public class Command : IRequest<BkBank>
+    public class Command : IRequest<BKBankDTO>
     {
       public long IdUnit { get; set; }
       public long IdBend { get; set; }
@@ -35,7 +35,7 @@ namespace Application.TUBEND.BkBankCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BkBank>
+    public class Handler : IRequestHandler<Command, BKBankDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -46,7 +46,7 @@ namespace Application.TUBEND.BkBankCQ
         _mapper = mapper;
       }
 
-      public async Task<BkBank> Handle(
+      public async Task<BKBankDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BkBank>(request);
@@ -58,7 +58,7 @@ namespace Application.TUBEND.BkBankCQ
           .FindAllAsync<DaftUnit, Bend, StatTrs>(x => x.IdBkBank == added.IdBkBank, x => x.Unit,
             x => x.Bend, x => x.StatTrs);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BKBankDTO>(result.SingleOrDefault());
       }
     }
   }

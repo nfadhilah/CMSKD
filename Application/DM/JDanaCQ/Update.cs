@@ -1,10 +1,10 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,12 +45,8 @@ namespace Application.DM.JDanaCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JDana, IRequest
     {
-      public string KdDana { get; set; }
-      public string NmDana { get; set; }
-      public string Ket { get; set; }
-      public DateTime? DateCreate { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>
@@ -68,7 +64,7 @@ namespace Application.DM.JDanaCQ
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JDana.FindAsync(x => x.KdDana == request.KdDana);
+          await _context.JDana.FindAsync(x => x.IdJDana == request.IdJDana);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

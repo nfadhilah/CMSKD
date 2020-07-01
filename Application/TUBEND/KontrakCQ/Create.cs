@@ -14,7 +14,7 @@ namespace Application.TUBEND.KontrakCQ
 {
   public class Create
   {
-    public class Command : IRequest<Kontrak>
+    public class Command : IRequest<KontrakDTO>
     {
       public long IdUnit { get; set; }
       public string NoKontrak { get; set; }
@@ -40,7 +40,7 @@ namespace Application.TUBEND.KontrakCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, Kontrak>
+    public class Handler : IRequestHandler<Command, KontrakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -51,7 +51,7 @@ namespace Application.TUBEND.KontrakCQ
         _mapper = mapper;
       }
 
-      public async Task<Kontrak> Handle(
+      public async Task<KontrakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<Kontrak>(request);
@@ -64,7 +64,7 @@ namespace Application.TUBEND.KontrakCQ
             x => x.IdKontrak == added.IdKontrak, x => x.Unit,
             x => x.Phk3, x => x.Kegiatan);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<KontrakDTO>(result.SingleOrDefault());
       }
     }
   }

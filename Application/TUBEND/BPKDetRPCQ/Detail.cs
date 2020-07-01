@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,12 +13,12 @@ namespace Application.TUBEND.BPKDetRPCQ
 {
   public class Detail
   {
-    public class Query : IRequest<BPKDetRP>
+    public class Query : IRequest<BPKDetRPDTO>
     {
       public long IdBPKDetRP { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BPKDetRP>
+    public class Handler : IRequestHandler<Query, BPKDetRPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +29,18 @@ namespace Application.TUBEND.BPKDetRPCQ
         _mapper = mapper;
       }
 
-      public async Task<BPKDetRP> Handle(
+      public async Task<BPKDetRPDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.BPKDetRP.FindByIdAsync(request.IdBPKDetRP);
+        var result = (await _context.BPKDetRP
+          .FindAllAsync<BPKDetR, Pajak>(
+            x => x.IdBPKDetRP == request.IdBPKDetRP, x => x.BPKDetR,
+            x => x.Pajak)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BPKDetRPDTO>(result);
       }
     }
   }
