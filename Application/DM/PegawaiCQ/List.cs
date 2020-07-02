@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -9,7 +11,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.DM.PegawaiCQ
 {
@@ -17,7 +18,7 @@ namespace Application.DM.PegawaiCQ
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
-      public long? NIP { get; set; }
+      public string NIP { get; set; }
       public long? IdUnit { get; set; }
       public string KdGol { get; set; }
       public string Nama { get; set; }
@@ -31,10 +32,12 @@ namespace Application.DM.PegawaiCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -42,8 +45,8 @@ namespace Application.DM.PegawaiCQ
       {
         var parameters = new List<Expression<Func<Pegawai, bool>>>();
 
-        if (request.NIP.HasValue)
-          parameters.Add(d => d.NIP == request.NIP);
+        if (!string.IsNullOrWhiteSpace(request.NIP))
+          parameters.Add(d => d.NIP.Contains(request.NIP));
 
         if (request.IdUnit.HasValue)
           parameters.Add(d => d.IdUnit == request.IdUnit);
@@ -76,14 +79,16 @@ namespace Application.DM.PegawaiCQ
         var result = await _context.Pegawai
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPeg)
-          .FindAllAsync<DaftUnit>(predicate, c => c.DaftUnit);
+          .FindAllAsync<DaftUnit, Golongan>(predicate, c => c.DaftUnit,
+            c => c.Golongan);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<PegawaiDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

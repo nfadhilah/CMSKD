@@ -1,11 +1,11 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JBankCQ
 {
@@ -14,7 +14,7 @@ namespace Application.DM.JBankCQ
 
     public class Query : IRequest<JBank>
     {
-      public long IdJBank { get; set; }
+      public long IdBank { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, JBank>
@@ -32,7 +32,7 @@ namespace Application.DM.JBankCQ
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.JBank.FindByIdAsync(request.IdJBank);
+          await _context.JBank.FindByIdAsync(request.IdBank);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

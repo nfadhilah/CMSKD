@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Application.DM.BKBKasCQ
 {
   public class Create
   {
-    public class Command : IRequest<BkBKas>
+    public class Command : IRequest<BKBKasDTO>
     {
       public string NoBBantu { get; set; }
       public long IdUnit { get; set; }
@@ -37,7 +38,7 @@ namespace Application.DM.BKBKasCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BkBKas>
+    public class Handler : IRequestHandler<Command, BKBKasDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -48,7 +49,7 @@ namespace Application.DM.BKBKasCQ
         _mapper = mapper;
       }
 
-      public async Task<BkBKas> Handle(
+      public async Task<BKBKasDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BkBKas>(request);
@@ -56,7 +57,11 @@ namespace Application.DM.BKBKasCQ
         if (!await _context.BkBKas.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BkBKas.FindAllAsync<DaftUnit, DaftRekening>(
+          x => x.NoBBantu == request.NoBBantu, x => x.DaftUnit,
+          x => x.DaftRekening);
+
+        return _mapper.Map<BKBKasDTO>(result.SingleOrDefault());
       }
     }
   }

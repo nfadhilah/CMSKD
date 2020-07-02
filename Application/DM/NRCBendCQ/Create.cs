@@ -1,17 +1,18 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.DM.NRCBendCQ
+namespace Application.DM.NrcBendCQ
 {
   public class Create
   {
-    public class Command : IRequest<NrcBend>
+    public class Command : IRequest<NrcBendDTO>
     {
       public long IdBend { get; set; }
       public long IdRek { get; set; }
@@ -26,7 +27,7 @@ namespace Application.DM.NRCBendCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, NrcBend>
+    public class Handler : IRequestHandler<Command, NrcBendDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -37,7 +38,7 @@ namespace Application.DM.NRCBendCQ
         _mapper = mapper;
       }
 
-      public async Task<NrcBend> Handle(
+      public async Task<NrcBendDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<NrcBend>(request);
@@ -45,7 +46,11 @@ namespace Application.DM.NRCBendCQ
         if (!await _context.NrcBend.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result =
+          await _context.NrcBend.FindAllAsync<DaftRekening>(
+            x => x.IdNrcBend == added.IdNrcBend, x => x.DaftRekening);
+
+        return _mapper.Map<NrcBendDTO>(result.Single());
       }
     }
   }

@@ -1,18 +1,19 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JabTtdCQ
 {
   public class Create
   {
-    public class Command : IRequest<JabTtd>
+    public class Command : IRequest<JabTTdDTO>
     {
       public long IdUnit { get; set; }
       public long IdPeg { get; set; }
@@ -34,7 +35,7 @@ namespace Application.DM.JabTtdCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, JabTtd>
+    public class Handler : IRequestHandler<Command, JabTTdDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -45,7 +46,7 @@ namespace Application.DM.JabTtdCQ
         _mapper = mapper;
       }
 
-      public async Task<JabTtd> Handle(
+      public async Task<JabTTdDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<JabTtd>(request);
@@ -53,7 +54,11 @@ namespace Application.DM.JabTtdCQ
         if (!await _context.JabTtd.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.JabTtd
+          .FindAllAsync<DaftUnit, Pegawai>(x => x.IdTtd == added.IdTtd,
+            x => x.DaftUnit, x => x.Pegawai);
+
+        return _mapper.Map<JabTTdDTO>(result.SingleOrDefault());
       }
     }
   }

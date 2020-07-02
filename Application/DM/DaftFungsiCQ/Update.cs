@@ -1,12 +1,13 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftFungsiCQ
 {
@@ -44,14 +45,11 @@ namespace Application.DM.DaftFungsiCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : DaftFungsi, IRequest<DaftFungsiDTO>
     {
-      public long IdFung { get; set; }
-      public string KdFung { get; set; }
-      public string NmFung { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DaftFungsiDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -62,7 +60,7 @@ namespace Application.DM.DaftFungsiCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DaftFungsiDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -76,7 +74,7 @@ namespace Application.DM.DaftFungsiCQ
         if (!_context.DaftFungsi.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return _mapper.Map<DaftFungsiDTO>(updated);
       }
     }
   }

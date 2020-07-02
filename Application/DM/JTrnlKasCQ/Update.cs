@@ -45,11 +45,11 @@ namespace Application.DM.JTrnlKasCQ
       }
     }
 
-    public class Command : JTrnlKas, IRequest
+    public class Command : JTrnlKas, IRequest<JTrnlKas>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JTrnlKas>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.DM.JTrnlKasCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JTrnlKas> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +74,7 @@ namespace Application.DM.JTrnlKasCQ
         if (!_context.JTrnlKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

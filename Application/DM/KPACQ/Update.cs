@@ -1,12 +1,14 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.KPACQ
 {
@@ -43,14 +45,11 @@ namespace Application.DM.KPACQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : KPA, IRequest<KPADTO>
     {
-      public long IdKPA { get; set; }
-      public long IdPeg { get; set; }
-      public string Jabatan { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, KPADTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -61,7 +60,7 @@ namespace Application.DM.KPACQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<KPADTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +73,10 @@ namespace Application.DM.KPACQ
         if (!_context.KPA.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.KPA
+          .FindAllAsync<Pegawai>(x => x.IdKPA == updated.IdKPA, x => x.Pegawai);
+
+        return _mapper.Map<KPADTO>(result.Single());
       }
     }
   }

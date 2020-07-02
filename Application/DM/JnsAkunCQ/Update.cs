@@ -1,12 +1,13 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JnsAkunCQ
 {
@@ -44,14 +45,11 @@ namespace Application.DM.JnsAkunCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JnsAkun, IRequest<JnsAkun>
     {
-      public long IdJnsAkun { get; set; }
-      public string UraiAkun { get; set; }
-      public string KdPers { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JnsAkun>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -62,7 +60,7 @@ namespace Application.DM.JnsAkunCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JnsAkun> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -76,7 +74,7 @@ namespace Application.DM.JnsAkunCQ
         if (!_context.JnsAkun.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

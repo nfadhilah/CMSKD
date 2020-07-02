@@ -1,5 +1,4 @@
 ﻿using MicroOrm.Dapper.Repositories.Attributes;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,8 +11,6 @@ namespace Domain.DM
     [Key, Identity]
     public long IdPrgrm { get; set; }
     public long IdUrus { get; set; }
-    [LeftJoin("DAFTUNIT", "IDURUS", "IDUNIT")]
-    public DaftUnit Urusan { get; set; }
     public string NmPrgrm { get; set; }
     public string NuPrgrm { get; set; }
     public string IdPrioda { get; set; }

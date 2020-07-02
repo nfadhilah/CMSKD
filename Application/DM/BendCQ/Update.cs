@@ -61,11 +61,11 @@ namespace Application.DM.BendCQ
       }
     }
 
-    public class Command : Bend, IRequest
+    public class Command : Bend, IRequest<BendDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BendDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -76,7 +76,7 @@ namespace Application.DM.BendCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BendDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -90,7 +90,10 @@ namespace Application.DM.BendCQ
         if (!_context.Bend.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.Bend.FindAllAsync<Pegawai, JBank>(
+          x => x.IdBend == updated.IdBend, x => x.Peg, x => x.Bank);
+
+        return _mapper.Map<BendDTO>(result);
       }
     }
   }

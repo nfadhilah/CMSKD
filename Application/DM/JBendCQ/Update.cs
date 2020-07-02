@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -44,14 +45,11 @@ namespace Application.DM.JBendCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JBend, IRequest<JBend>
     {
-      public string JnsBend { get; set; }
-      public long IdRek { get; set; }
-      public string UraiBend { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JBend>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -62,7 +60,7 @@ namespace Application.DM.JBendCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JBend> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -76,7 +74,7 @@ namespace Application.DM.JBendCQ
         if (!_context.JBend.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

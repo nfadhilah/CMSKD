@@ -53,11 +53,11 @@ namespace Application.DM.PajakCQ
       }
     }
 
-    public class Command : Pajak, IRequest
+    public class Command : Pajak, IRequest<PajakDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, PajakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -68,7 +68,7 @@ namespace Application.DM.PajakCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<PajakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -82,7 +82,7 @@ namespace Application.DM.PajakCQ
         if (!_context.Pajak.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return _mapper.Map<PajakDTO>(updated);
       }
     }
   }

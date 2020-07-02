@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.DM.KPACQ;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Application.DM.KPACQ;
 
 namespace API.Controllers.DM
 {
@@ -18,9 +18,8 @@ namespace API.Controllers.DM
       }));
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Create.DTO dto)
+    public async Task<IActionResult> Post([FromBody] Create.Command command)
     {
-      var command = dto.MapDTO(new Create.Command());
       var request = await Mediator.Send(command);
       return CreatedAtRoute("GetKPA", new { id = request.IdKPA },
         request);

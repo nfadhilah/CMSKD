@@ -1,22 +1,23 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.DM.NRCBendCQ
+namespace Application.DM.NrcBendCQ
 {
   public class Detail
   {
-    public class Query : IRequest<NrcBend>
+    public class Query : IRequest<NrcBendDTO>
     {
       public long IdNrcBend { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, NrcBend>
+    public class Handler : IRequestHandler<Query, NrcBendDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +28,17 @@ namespace Application.DM.NRCBendCQ
         _mapper = mapper;
       }
 
-      public async Task<NrcBend> Handle(
+      public async Task<NrcBendDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          await _context.NrcBend.FindByIdAsync(request.IdNrcBend);
+          (await _context.NrcBend.FindAllAsync<DaftRekening>(
+            x => x.IdNrcBend == request.IdNrcBend, x => x.DaftRekening)).Single();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<NrcBendDTO>(result);
       }
     }
   }

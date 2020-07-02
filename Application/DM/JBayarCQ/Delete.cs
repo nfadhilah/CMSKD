@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JBayarCQ
 {
@@ -14,13 +13,6 @@ namespace Application.DM.JBayarCQ
     public class Command : IRequest
     {
       public long IdJBayar { get; set; }
-    }
-
-    public class Validator : AbstractValidator<Command>
-    {
-      public Validator()
-      {
-      }
     }
 
     public class Handler : IRequestHandler<Command>

@@ -1,17 +1,17 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftFungsiCQ
 {
   public class Create
   {
-    public class Command : IRequest<DaftFungsi>
+    public class Command : IRequest<DaftFungsiDTO>
     {
       // public long IdFung { get; set; }
       public string KdFung { get; set; }
@@ -28,7 +28,7 @@ namespace Application.DM.DaftFungsiCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DaftFungsi>
+    public class Handler : IRequestHandler<Command, DaftFungsiDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -39,7 +39,7 @@ namespace Application.DM.DaftFungsiCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftFungsi> Handle(
+      public async Task<DaftFungsiDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DaftFungsi>(request);
@@ -47,7 +47,7 @@ namespace Application.DM.DaftFungsiCQ
         if (!await _context.DaftFungsi.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DaftFungsiDTO>(added);
       }
     }
   }

@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -46,15 +47,11 @@ namespace Application.DM.JAKasCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JAKas, IRequest<JAKas>
     {
-      public long IdKas { get; set; }
-      public string KdAKas { get; set; }
-      public string NmAKas { get; set; }
-      public string LabelKas { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JAKas>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -65,7 +62,7 @@ namespace Application.DM.JAKasCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JAKas> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -79,7 +76,7 @@ namespace Application.DM.JAKasCQ
         if (!_context.JAKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

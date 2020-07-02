@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using Application.CommonDTO;
+using AutoMapper;
+using MediatR;
 using Persistence;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.DM.BendCQ
 {
@@ -21,10 +23,12 @@ namespace Application.DM.BendCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -36,12 +40,13 @@ namespace Application.DM.BendCQ
         var result = await _context.Bend.GetBend(req.IdPeg,
           req.JnsBend, req.RekBend, req.IdBank, req.IdUnit);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = req.CurrentPage,
-          PageSize = req.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(_mapper.Map<IEnumerable<BendDTO>>(result),
+          new Pagination
+          {
+            CurrentPage = req.CurrentPage,
+            PageSize = req.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

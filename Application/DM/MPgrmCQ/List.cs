@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
 using AutoMapper;
 using Domain.DM;
 using MediatR;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.DM.MPgrmCQ
 {
@@ -79,7 +79,7 @@ namespace Application.DM.MPgrmCQ
         var result = await _context.MPgrm
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.NuPrgrm)
-          .FindAllAsync<DaftUnit>(predicate, x => x.Urusan);
+          .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination
         {

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JBankCQ
 {
@@ -14,7 +14,6 @@ namespace Application.DM.JBankCQ
   {
     public class Command : IRequest<JBank>
     {
-      // public long IdJBank { get; set; }
       public string KdBank { get; set; }
       public string NmBank { get; set; }
       public string Uraian { get; set; }
@@ -26,7 +25,6 @@ namespace Application.DM.JBankCQ
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJBank).NotEmpty();
         RuleFor(d => d.KdBank).NotEmpty();
         RuleFor(d => d.NmBank).NotEmpty();
         RuleFor(d => d.Uraian).NotEmpty();

@@ -13,7 +13,6 @@ namespace Application.DM.JAKasCQ
   {
     public class Command : IRequest<JAKas>
     {
-      // public long IdKas { get; set; }
       public string KdAKas { get; set; }
       public string NmAKas { get; set; }
       public string LabelKas { get; set; }

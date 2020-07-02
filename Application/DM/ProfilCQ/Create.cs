@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.ProfilCQ
 {
@@ -14,7 +14,6 @@ namespace Application.DM.ProfilCQ
   {
     public class Command : IRequest<Profil>
     {
-      // public long IdProfil { get; set; }
       public string KdProfil { get; set; }
       public string NmProfil { get; set; }
       public DateTime? DateCreate { get; set; }
@@ -25,11 +24,8 @@ namespace Application.DM.ProfilCQ
     {
       public Validator()
       {
-        // RuleFor(d => d.IdProfil).NotEmpty();
         RuleFor(d => d.KdProfil).NotEmpty();
         RuleFor(d => d.NmProfil).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
-        RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 

@@ -45,11 +45,11 @@ namespace Application.DM.JDanaCQ
       }
     }
 
-    public class Command : JDana, IRequest
+    public class Command : JDana, IRequest<JDana>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JDana>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.DM.JDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JDana> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +74,7 @@ namespace Application.DM.JDanaCQ
         if (!_context.JDana.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

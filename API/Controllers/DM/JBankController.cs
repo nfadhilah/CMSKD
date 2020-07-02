@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using Application.DM.JBankCQ;
+﻿using Application.DM.JBankCQ;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace API.Controllers.DM
 {
@@ -12,7 +12,7 @@ namespace API.Controllers.DM
 
     [HttpGet("{id}", Name = "DetailKodeBank")]
     public async Task<IActionResult> Get(long id) =>
-      Ok(await Mediator.Send(new Detail.Query { IdJBank = id }));
+      Ok(await Mediator.Send(new Detail.Query { IdBank = id }));
 
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
@@ -25,8 +25,7 @@ namespace API.Controllers.DM
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
-      var command = dto.MapDTO(new Update.Command());
-      command.IdJBank = id;
+      var command = dto.MapDTO(new Update.Command { IdBank = id });
       return Ok(await Mediator.Send(command));
     }
 

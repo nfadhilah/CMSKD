@@ -1,4 +1,5 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
 using AutoMapper;
 using Domain.DM;
 using MediatR;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.DM.MKegiatanCQ
 {
@@ -39,7 +39,7 @@ namespace Application.DM.MKegiatanCQ
       }
 
       public async Task<PaginationWrapper> Handle(
-      Query request, CancellationToken cancellationToken)
+        Query request, CancellationToken cancellationToken)
       {
         var parameters = new List<Expression<Func<MKegiatan, bool>>>();
 
@@ -71,14 +71,15 @@ namespace Application.DM.MKegiatanCQ
         var result = await _context.MKegiatan
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.NuKeg)
-          .FindAllAsync(predicate);
+          .FindAllAsync<MPgrm>(predicate, x => x.Program);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<MKegiatanDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

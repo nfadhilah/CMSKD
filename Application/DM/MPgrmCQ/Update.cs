@@ -53,11 +53,11 @@ namespace Application.DM.MPgrmCQ
       }
     }
 
-    public class Command : MPgrm, IRequest
+    public class Command : MPgrm, IRequest<MPgrm>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, MPgrm>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -68,7 +68,7 @@ namespace Application.DM.MPgrmCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<MPgrm> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -82,7 +82,7 @@ namespace Application.DM.MPgrmCQ
         if (!_context.MPgrm.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

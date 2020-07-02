@@ -1,4 +1,5 @@
 ﻿using MicroOrm.Dapper.Repositories.Attributes;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,6 +10,8 @@ namespace Domain.DM
     [Key, Identity]
     public long IdKeg { get; set; }
     public long IdPrgrm { get; set; }
+    [InnerJoin("MPGRM", "IDPRGRM", "IDPRGRM")]
+    public MPgrm Program { get; set; }
     public string KdPerspektif { get; set; }
     public string NuKeg { get; set; }
     public string NmKegUnit { get; set; }

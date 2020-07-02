@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -42,13 +43,11 @@ namespace Application.DM.JTransCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JTrans, IRequest<JTrans>
     {
-      public string IdTrans { get; set; }
-      public string NmTrans { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JTrans>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -59,7 +58,7 @@ namespace Application.DM.JTransCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JTrans> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -73,7 +72,7 @@ namespace Application.DM.JTransCQ
         if (!_context.JTrans.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

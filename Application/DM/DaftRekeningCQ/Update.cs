@@ -1,12 +1,13 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftRekeningCQ
 {
@@ -54,20 +55,11 @@ namespace Application.DM.DaftRekeningCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : DaftRekening, IRequest<DaftRekeningDTO>
     {
-      public long IdRek { get; set; }
-      public string KdPer { get; set; }
-      public string NmPer { get; set; }
-      public int MtgLevel { get; set; }
-      public int KdKhusus { get; set; }
-      public long IdJRek { get; set; }
-      public long? IdJnsAkun { get; set; }
-      public string Type { get; set; }
-      public int? StAktif { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DaftRekeningDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -78,7 +70,7 @@ namespace Application.DM.DaftRekeningCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DaftRekeningDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -92,7 +84,7 @@ namespace Application.DM.DaftRekeningCQ
         if (!_context.DaftRekening.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return _mapper.Map<DaftRekeningDTO>(updated);
       }
     }
   }

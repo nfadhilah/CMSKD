@@ -1,5 +1,6 @@
 ﻿using Application.CommonDTO;
 using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -25,10 +26,12 @@ namespace Application.DM.DaftPhk3CQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -54,12 +57,13 @@ namespace Application.DM.DaftPhk3CQ
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPhk3)
           .FindAllAsync<JBank, JUsaha>(predicate, x => x.Bank, x => x.JUsaha);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<DaftPhk3DTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

@@ -7,9 +7,8 @@ namespace Domain.DM
   [Table("JBM")]
   public class JBM
   {
-    [Identity]
+    [Key, Identity]
     public long IdJBM { get; set; }
-    [Key]
     public string KdBM { get; set; }
     public string NmBM { get; set; }
   }

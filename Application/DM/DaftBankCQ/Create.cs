@@ -12,7 +12,7 @@ namespace Application.DM.DaftBankCQ
 {
   public class Create
   {
-    public class Command : IRequest<DaftBank>
+    public class Command : IRequest<DaftBankDTO>
     {
       public string KdBank { get; set; }
       public string AkBank { get; set; }
@@ -35,7 +35,7 @@ namespace Application.DM.DaftBankCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DaftBank>
+    public class Handler : IRequestHandler<Command, DaftBankDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -46,7 +46,7 @@ namespace Application.DM.DaftBankCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftBank> Handle(
+      public async Task<DaftBankDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DaftBank>(request);
@@ -54,7 +54,7 @@ namespace Application.DM.DaftBankCQ
         if (!await _context.DaftBank.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DaftBankDTO>(added);
       }
     }
   }

@@ -9,6 +9,9 @@ namespace Application.DM.DaftFungsiCQ
     {
       CreateMap<Create.Command, DaftFungsi>();
       CreateMap<Update.Command, DaftFungsi>();
+      CreateMap<DaftFungsi, DaftFungsiDTO>()
+        .ForMember(d => d.KdFung, opt => opt.MapFrom(s => s.KdFung.Trim()))
+        .ForMember(d => d.NmFung, opt => opt.MapFrom(s => s.NmFung.Trim()));
     }
   }
 }

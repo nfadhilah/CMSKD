@@ -1,9 +1,11 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,21 +57,11 @@ namespace Application.DM.MKegiatanCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : MKegiatan, IRequest<MKegiatanDTO>
     {
-      public long IdKeg { get; set; }
-      public long IdPrgrm { get; set; }
-      public string KdPerspektif { get; set; }
-      public string NuKeg { get; set; }
-      public string NmKegUnit { get; set; }
-      public int LevelKeg { get; set; }
-      public string Type { get; set; }
-      public long? IdKegInduk { get; set; }
-      public bool? StAktif { get; set; }
-      public bool? StValid { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, MKegiatanDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -80,7 +72,7 @@ namespace Application.DM.MKegiatanCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<MKegiatanDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -94,7 +86,11 @@ namespace Application.DM.MKegiatanCQ
         if (!_context.MKegiatan.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await
+          _context.MKegiatan.FindAllAsync<MPgrm>(x => x.IdKeg == updated.IdKeg,
+            x => x.Program);
+
+        return _mapper.Map<MKegiatanDTO>(result.Single());
       }
     }
   }

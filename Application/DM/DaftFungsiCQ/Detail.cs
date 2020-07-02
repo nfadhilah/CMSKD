@@ -1,23 +1,22 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftFungsiCQ
 {
   public class Detail
   {
 
-    public class Query : IRequest<DaftFungsi>
+    public class Query : IRequest<DaftFungsiDTO>
     {
       public long IdFung { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DaftFungsi>
+    public class Handler : IRequestHandler<Query, DaftFungsiDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -28,7 +27,7 @@ namespace Application.DM.DaftFungsiCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftFungsi> Handle(
+      public async Task<DaftFungsiDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -37,7 +36,7 @@ namespace Application.DM.DaftFungsiCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DaftFungsiDTO>(result);
       }
     }
   }

@@ -1,10 +1,12 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,18 +55,11 @@ namespace Application.DM.BKBKasCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : BkBKas, IRequest<BKBKasDTO>
     {
-      public string NoBBantu { get; set; }
-      public long IdUnit { get; set; }
-      public long IdRek { get; set; }
-      public long IdBank { get; set; }
-      public string NmBKas { get; set; }
-      public string NoRek { get; set; }
-      public Decimal? Saldo { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BKBKasDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -75,7 +70,7 @@ namespace Application.DM.BKBKasCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BKBKasDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -89,7 +84,11 @@ namespace Application.DM.BKBKasCQ
         if (!_context.BkBKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BkBKas.FindAllAsync<DaftUnit, DaftRekening>(
+          x => x.NoBBantu == request.NoBBantu, x => x.DaftUnit,
+          x => x.DaftRekening);
+
+        return _mapper.Map<BKBKasDTO>(result.SingleOrDefault());
       }
     }
   }

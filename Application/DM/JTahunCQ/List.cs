@@ -13,7 +13,7 @@ namespace Application.DM.JTahunCQ
   {
     public class Query : IRequest<IEnumerable<JTahun>> { }
 
-    public class Handler : IRequestHandler<Query, IEnumerable<Domain.DM.JTahun>>
+    public class Handler : IRequestHandler<Query, IEnumerable<JTahun>>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;

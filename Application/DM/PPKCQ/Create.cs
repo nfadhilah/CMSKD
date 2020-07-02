@@ -4,6 +4,7 @@ using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace Application.DM.PPKCQ
 {
   public class Create
   {
-    public class Command : IRequest<PPK>
+    public class Command : IRequest<PPKDTO>
     {
       public long IdPeg { get; set; }
     }
@@ -24,7 +25,7 @@ namespace Application.DM.PPKCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, PPK>
+    public class Handler : IRequestHandler<Command, PPKDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -35,7 +36,7 @@ namespace Application.DM.PPKCQ
         _mapper = mapper;
       }
 
-      public async Task<PPK> Handle(
+      public async Task<PPKDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<PPK>(request);
@@ -43,7 +44,11 @@ namespace Application.DM.PPKCQ
         if (!await _context.PPK.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result =
+          await _context.PPK.FindAllAsync<Pegawai>(x => x.IdPPK == added.IdPPK,
+            x => x.Pegawai);
+
+        return _mapper.Map<PPKDTO>(result.Single());
       }
     }
   }

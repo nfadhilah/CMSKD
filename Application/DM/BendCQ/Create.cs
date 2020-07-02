@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Application.DM.BendCQ
 {
   public class Create
   {
-    public class Command : IRequest<Bend>
+    public class Command : IRequest<BendDTO>
     {
       public string JnsBend { get; set; }
       public long IdPeg { get; set; }
@@ -41,7 +42,7 @@ namespace Application.DM.BendCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, Bend>
+    public class Handler : IRequestHandler<Command, BendDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -52,7 +53,7 @@ namespace Application.DM.BendCQ
         _mapper = mapper;
       }
 
-      public async Task<Bend> Handle(
+      public async Task<BendDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<Bend>(request);
@@ -60,7 +61,11 @@ namespace Application.DM.BendCQ
         if (!await _context.Bend.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result =
+          await _context.Bend.FindAllAsync<Pegawai, JBank>(
+            x => x.IdBend == added.IdBend, x => x.Peg, x => x.Bank);
+
+        return _mapper.Map<BendDTO>(result.SingleOrDefault());
       }
     }
   }

@@ -63,24 +63,11 @@ namespace Application.DM.DaftPhk3CQ
       }
     }
 
-    public class Command : IRequest<DaftPhk3>
+    public class Command : DaftPhk3, IRequest<DaftPhk3DTO>
     {
-      public int IdPhk3 { get; set; }
-      public string NmPhk3 { get; set; }
-      public string NmInst { get; set; }
-      public int IdBank { get; set; }
-      public string CabangBank { get; set; }
-      public string AlamatBank { get; set; }
-      public string NoRekBank { get; set; }
-      public int IdJUsaha { get; set; }
-      public string Alamat { get; set; }
-      public string Telepon { get; set; }
-      public string NPWP { get; set; }
-      public int StValid { get; set; }
-      public DateTime? DateUpdate { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, DaftPhk3>
+    public class Handler : IRequestHandler<Command, DaftPhk3DTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -91,7 +78,7 @@ namespace Application.DM.DaftPhk3CQ
         _mapper = mapper;
       }
 
-      public async Task<DaftPhk3> Handle(
+      public async Task<DaftPhk3DTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -109,7 +96,7 @@ namespace Application.DM.DaftPhk3CQ
           .FindAllAsync<JBank, JUsaha>(x => x.IdPhk3 == updated.IdPhk3,
             x => x.Bank, x => x.JUsaha);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<DaftPhk3DTO>(result.SingleOrDefault());
       }
     }
   }

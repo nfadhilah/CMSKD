@@ -13,12 +13,12 @@ namespace Application.DM.PPKCQ
   public class Detail
   {
 
-    public class Query : IRequest<PPK>
+    public class Query : IRequest<PPKDTO>
     {
       public long IdPPK { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, PPK>
+    public class Handler : IRequestHandler<Query, PPKDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,17 +29,17 @@ namespace Application.DM.PPKCQ
         _mapper = mapper;
       }
 
-      public async Task<PPK> Handle(
+      public async Task<PPKDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
           (await _context.PPK.FindAllAsync<Pegawai>(
-            x => x.IdPPK == request.IdPPK, c => c.Pegawai)).First();
+            x => x.IdPPK == request.IdPPK, c => c.Pegawai)).FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<PPKDTO>(result);
       }
     }
   }

@@ -9,6 +9,7 @@ namespace Application.DM.DaftUnitCQ
     {
       CreateMap<Create.Command, DaftUnit>();
       CreateMap<Update.Command, DaftUnit>();
+      CreateMap<DaftUnit, DaftUnitDTO>();
     }
   }
 }

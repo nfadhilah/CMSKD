@@ -1,53 +1,53 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.SifatKegCQ
 {
-	public class Delete
-	{
-		public class Command : IRequest
-		{
-			public long IdSifatKeg { get; set; }
-		}
+  public class Delete
+  {
+    public class Command : IRequest
+    {
+      public long IdSifatKeg { get; set; }
+    }
 
-		public class Validator : AbstractValidator<Command>
-		{
-			public Validator()
-			{
-			}
-		}
+    public class Validator : AbstractValidator<Command>
+    {
+      public Validator()
+      {
+      }
+    }
 
-		public class Handler : IRequestHandler<Command>
-		{
-			private readonly IDbContext _context;
-			private readonly IMapper _mapper;
+    public class Handler : IRequestHandler<Command>
+    {
+      private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-			public Handler(IDbContext context, IMapper mapper)
-			{
-				_context = context;
-				_mapper = mapper;
-			}
+      public Handler(IDbContext context, IMapper mapper)
+      {
+        _context = context;
+        _mapper = mapper;
+      }
 
-			public async Task<Unit> Handle(
-			  Command request, CancellationToken cancellationToken)
-			{
-				var deleted =
-				  await _context.SifatKeg.FindByIdAsync(request.IdSifatKeg);
+      public async Task<Unit> Handle(
+        Command request, CancellationToken cancellationToken)
+      {
+        var deleted =
+          await _context.SifatKeg.FindByIdAsync(request.IdSifatKeg);
 
-				if (deleted == null)
-					throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
+        if (deleted == null)
+          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-				if (!_context.SifatKeg.Delete(deleted))
-					throw new ApiException("Problem saving changes");
+        if (!_context.SifatKeg.Delete(deleted))
+          throw new ApiException("Problem saving changes");
 
-				return Unit.Value;
-			}
-		}
-	}
+        return Unit.Value;
+      }
+    }
+  }
 }

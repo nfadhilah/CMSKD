@@ -26,10 +26,12 @@ namespace Persistence.Repository.DM
     {
       var builder = new SqlBuilder();
       var cmd = builder.AddTemplate(@"SELECT b.*,
-       p.*
+       p.*, d.*
 FROM dbo.BEND b
     INNER JOIN dbo.PEGAWAI p
         ON p.IDPEG = b.IDPEG
+    INNER JOIN dbo.JBANK d
+        ON b.IDBANK = d.IDBANK
 /**where**/;");
 
       if (idUnit.HasValue)
@@ -47,12 +49,13 @@ FROM dbo.BEND b
       if (!string.IsNullOrWhiteSpace(idBank))
         builder.Where("p.IDBANK = @IdBank", new { IdBank = idBank });
 
-      var result = (await Connection.QueryAsync<Bend, Pegawai, Bend>(cmd.RawSql,
-        (bend, pegawai) =>
+      var result = (await Connection.QueryAsync<Bend, Pegawai, JBank, Bend>(cmd.RawSql,
+        (bend, pegawai, bank) =>
         {
           bend.Peg = pegawai;
+          bend.Bank = bank;
           return bend;
-        }, cmd.Parameters, splitOn: "IDPEG")).ToList();
+        }, cmd.Parameters, splitOn: "IDPEG, IDBANK")).ToList();
 
       return result;
     }

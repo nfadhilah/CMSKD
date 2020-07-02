@@ -1,16 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MicroOrm.Dapper.Repositories.Attributes;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.DM
 {
-    [Table("STRUREK")]
-    public class StruRek
-    {
-        [Key]
-        public int MtgLevel { get; set; }
-        [Key, Identity]
-        public long IdStruRek { get; set; }
-        public string NmLevel { get; set; }
-    }
+  [Table("STRUREK")]
+  public class StruRek
+  {
+    [Key, Identity]
+    public long IdStruRek { get; set; }
+    public int MtgLevel { get; set; }
+    public string NmLevel { get; set; }
+  }
 }

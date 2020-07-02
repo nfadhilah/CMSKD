@@ -1,22 +1,23 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JabTtdCQ
 {
   public class Detail
   {
-    public class Query : IRequest<JabTtd>
+    public class Query : IRequest<JabTTdDTO>
     {
       public long IdTtd { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, JabTtd>
+    public class Handler : IRequestHandler<Query, JabTTdDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,16 +28,17 @@ namespace Application.DM.JabTtdCQ
         _mapper = mapper;
       }
 
-      public async Task<JabTtd> Handle(
+      public async Task<JabTTdDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
-        var result =
-          await _context.JabTtd.FindByIdAsync(request.IdTtd);
+        var result = (await _context.JabTtd
+          .FindAllAsync<DaftUnit, Pegawai>(x => x.IdTtd == request.IdTtd,
+            x => x.DaftUnit, x => x.Pegawai)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<JabTTdDTO>(result);
       }
     }
   }

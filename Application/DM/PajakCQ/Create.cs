@@ -11,7 +11,7 @@ namespace Application.DM.PajakCQ
 {
   public class Create
   {
-    public class Command : IRequest<Pajak>
+    public class Command : IRequest<PajakDTO>
     {
       public string KdPajak { get; set; }
       public string NmPajak { get; set; }
@@ -34,7 +34,7 @@ namespace Application.DM.PajakCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, Pajak>
+    public class Handler : IRequestHandler<Command, PajakDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -45,7 +45,7 @@ namespace Application.DM.PajakCQ
         _mapper = mapper;
       }
 
-      public async Task<Pajak> Handle(
+      public async Task<PajakDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<Pajak>(request);
@@ -53,7 +53,7 @@ namespace Application.DM.PajakCQ
         if (!await _context.Pajak.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<PajakDTO>(added);
       }
     }
   }

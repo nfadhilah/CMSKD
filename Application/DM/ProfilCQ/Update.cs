@@ -1,13 +1,14 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.ProfilCQ
 {
@@ -44,21 +45,14 @@ namespace Application.DM.ProfilCQ
       {
         RuleFor(d => d.KdProfil).NotEmpty();
         RuleFor(d => d.NmProfil).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
-        RuleFor(d => d.DateUpdate).NotEmpty();
       }
     }
 
-    public class Command : IRequest
+    public class Command : Profil, IRequest<Profil>
     {
-      public long IdProfil { get; set; }
-      public string KdProfil { get; set; }
-      public string NmProfil { get; set; }
-      public DateTime? DateCreate { get; set; }
-      public DateTime? DateUpdate { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, Profil>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -69,7 +63,7 @@ namespace Application.DM.ProfilCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<Profil> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -83,7 +77,7 @@ namespace Application.DM.ProfilCQ
         if (!_context.Profil.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

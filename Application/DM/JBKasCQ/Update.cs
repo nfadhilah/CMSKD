@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -42,13 +43,11 @@ namespace Application.DM.JBKasCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JBKas, IRequest<JBKas>
     {
-      public long IdBKas { get; set; }
-      public string NmBKas { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JBKas>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -59,7 +58,7 @@ namespace Application.DM.JBKasCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JBKas> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -73,7 +72,7 @@ namespace Application.DM.JBKasCQ
         if (!_context.JBKas.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

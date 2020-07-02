@@ -13,7 +13,7 @@ namespace Application.DM.DaftPhk3CQ
 {
   public class Create
   {
-    public class Command : IRequest<DaftPhk3>
+    public class Command : IRequest<DaftPhk3DTO>
     {
       public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
@@ -41,7 +41,7 @@ namespace Application.DM.DaftPhk3CQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DaftPhk3>
+    public class Handler : IRequestHandler<Command, DaftPhk3DTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -52,7 +52,7 @@ namespace Application.DM.DaftPhk3CQ
         _mapper = mapper;
       }
 
-      public async Task<DaftPhk3> Handle(
+      public async Task<DaftPhk3DTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DaftPhk3>(request);
@@ -64,7 +64,7 @@ namespace Application.DM.DaftPhk3CQ
           .FindAllAsync<JBank, JUsaha>(x => x.IdPhk3 == added.IdPhk3,
             x => x.Bank, x => x.JUsaha);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<DaftPhk3DTO>(result.SingleOrDefault());
       }
     }
   }

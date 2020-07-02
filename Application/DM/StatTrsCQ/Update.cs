@@ -45,11 +45,11 @@ namespace Application.DM.StatTrsCQ
       }
     }
 
-    public class Command : StatTrs, IRequest
+    public class Command : StatTrs, IRequest<StatTrs>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, StatTrs>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.DM.StatTrsCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<StatTrs> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +74,7 @@ namespace Application.DM.StatTrsCQ
         if (!_context.StatTrs.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

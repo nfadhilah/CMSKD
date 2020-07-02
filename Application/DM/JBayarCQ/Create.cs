@@ -14,7 +14,6 @@ namespace Application.DM.JBayarCQ
   {
     public class Command : IRequest<JBayar>
     {
-      // public long IdJBayar { get; set; }
       public int KdBayar { get; set; }
       public string UraianBayar { get; set; }
       public DateTime? DateCreate { get; set; }
@@ -25,7 +24,6 @@ namespace Application.DM.JBayarCQ
     {
       public Validator()
       {
-        // RuleFor(d => d.IdJBayar).NotEmpty();
         RuleFor(d => d.KdBayar).NotEmpty();
         RuleFor(d => d.UraianBayar).NotEmpty();
         RuleFor(d => d.DateCreate).NotEmpty();

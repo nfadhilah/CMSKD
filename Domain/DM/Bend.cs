@@ -16,8 +16,8 @@ namespace Domain.DM
     [InnerJoin("PEGAWAI", "IDPEG", "IDPEG")]
     public Pegawai Peg { get; set; }
     public string IdBank { get; set; }
-    [InnerJoin("DAFTBANK", "IDBANK", "IDBANK")]
-    public DaftBank Bank { get; set; }
+    [InnerJoin("JBANK", "IDBANK", "IDBANK")]
+    public JBank Bank { get; set; }
     public string NmCabBank { get; set; }
     public string RekBend { get; set; }
     public string NPWPBend { get; set; }

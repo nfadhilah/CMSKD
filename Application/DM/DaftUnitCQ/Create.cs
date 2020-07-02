@@ -1,18 +1,18 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftUnitCQ
 {
   public class Create
   {
-    public class Command : IRequest<DaftUnit>
+    public class Command : IRequest<DaftUnitDTO>
     {
       public string KdUnit { get; set; }
       public string NmUnit { get; set; }
@@ -37,7 +37,7 @@ namespace Application.DM.DaftUnitCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DaftUnit>
+    public class Handler : IRequestHandler<Command, DaftUnitDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -48,14 +48,14 @@ namespace Application.DM.DaftUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftUnit> Handle(Command request, CancellationToken cancellationToken)
+      public async Task<DaftUnitDTO> Handle(Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DaftUnit>(request);
 
         if (!await _context.DaftUnit.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DaftUnitDTO>(added);
       }
     }
   }

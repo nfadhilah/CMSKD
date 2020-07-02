@@ -9,6 +9,7 @@ namespace Application.DM.DaftRekeningCQ
     {
       CreateMap<Create.Command, DaftRekening>();
       CreateMap<Update.Command, DaftRekening>();
+      CreateMap<DaftRekening, DaftRekeningDTO>();
     }
   }
 }

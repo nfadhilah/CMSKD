@@ -1,12 +1,13 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JBMCQ
 {
@@ -44,14 +45,11 @@ namespace Application.DM.JBMCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JBM, IRequest<JBM>
     {
-      public long IdJBM { get; set; }
-      public string KdBM { get; set; }
-      public string NmBM { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JBM>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -62,7 +60,7 @@ namespace Application.DM.JBMCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JBM> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -76,7 +74,7 @@ namespace Application.DM.JBMCQ
         if (!_context.JBM.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

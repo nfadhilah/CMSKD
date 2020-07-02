@@ -11,7 +11,7 @@ namespace Domain.DM
   {
     [Key, Identity]
     public long IdPeg { get; set; }
-    public long NIP { get; set; }
+    public string NIP { get; set; }
     public long IdUnit { get; set; }
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }

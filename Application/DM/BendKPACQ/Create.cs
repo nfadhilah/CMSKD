@@ -1,17 +1,17 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.BendKPACQ
 {
   public class Create
   {
-    public class Command : IRequest<BendKPA>
+    public class Command : IRequest<BendKPADTO>
     {
       public long IdBend { get; set; }
       public long IdPeg { get; set; }
@@ -26,7 +26,7 @@ namespace Application.DM.BendKPACQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BendKPA>
+    public class Handler : IRequestHandler<Command, BendKPADTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -37,7 +37,7 @@ namespace Application.DM.BendKPACQ
         _mapper = mapper;
       }
 
-      public async Task<BendKPA> Handle(
+      public async Task<BendKPADTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BendKPA>(request);
@@ -45,7 +45,10 @@ namespace Application.DM.BendKPACQ
         if (!await _context.BendKPA.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.BendKPA.FindAllAsync<Bend, Pegawai>(
+          x => x.IdBendKPA == added.IdBendKPA, x => x.Bend, x => x.Pegawai);
+
+        return _mapper.Map<BendKPADTO>(result);
       }
     }
   }

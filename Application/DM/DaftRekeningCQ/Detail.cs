@@ -1,22 +1,21 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftRekeningCQ
 {
   public class Detail
   {
-    public class Query : IRequest<DaftRekening>
+    public class Query : IRequest<DaftRekeningDTO>
     {
       public long IdRek { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DaftRekening>
+    public class Handler : IRequestHandler<Query, DaftRekeningDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,7 +26,7 @@ namespace Application.DM.DaftRekeningCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftRekening> Handle(
+      public async Task<DaftRekeningDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -36,7 +35,7 @@ namespace Application.DM.DaftRekeningCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DaftRekeningDTO>(result);
       }
     }
   }

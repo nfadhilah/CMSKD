@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using MediatR;
 using Persistence;
 using System.Net;
@@ -11,12 +10,12 @@ namespace Application.DM.DaftBankCQ
 {
   public class Detail
   {
-    public class Query : IRequest<DaftBank>
+    public class Query : IRequest<DaftBankDTO>
     {
       public string KdBank { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DaftBank>
+    public class Handler : IRequestHandler<Query, DaftBankDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,7 +26,7 @@ namespace Application.DM.DaftBankCQ
         _mapper = mapper;
       }
 
-      public async Task<DaftBank> Handle(
+      public async Task<DaftBankDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -36,7 +35,7 @@ namespace Application.DM.DaftBankCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DaftBankDTO>(result);
       }
     }
   }

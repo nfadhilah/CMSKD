@@ -4,6 +4,7 @@ using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace Application.DM.MKegiatanCQ
 {
   public class Create
   {
-    public class Command : IRequest<MKegiatan>
+    public class Command : IRequest<MKegiatanDTO>
     {
       public long IdPrgrm { get; set; }
       public string KdPerspektif { get; set; }
@@ -37,7 +38,7 @@ namespace Application.DM.MKegiatanCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, MKegiatan>
+    public class Handler : IRequestHandler<Command, MKegiatanDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -48,7 +49,7 @@ namespace Application.DM.MKegiatanCQ
         _mapper = mapper;
       }
 
-      public async Task<MKegiatan> Handle(
+      public async Task<MKegiatanDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<MKegiatan>(request);
@@ -56,7 +57,11 @@ namespace Application.DM.MKegiatanCQ
         if (!await _context.MKegiatan.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await
+          _context.MKegiatan.FindAllAsync<MPgrm>(x => x.IdKeg == added.IdKeg,
+            x => x.Program);
+
+        return _mapper.Map<MKegiatanDTO>(result.Single());
       }
     }
   }

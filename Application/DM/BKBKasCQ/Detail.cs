@@ -13,12 +13,12 @@ namespace Application.DM.BKBKasCQ
   public class Detail
   {
 
-    public class Query : IRequest<BkBKas>
+    public class Query : IRequest<BKBKasDTO>
     {
       public string NoBBantu { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BkBKas>
+    public class Handler : IRequestHandler<Query, BKBKasDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,18 +29,18 @@ namespace Application.DM.BKBKasCQ
         _mapper = mapper;
       }
 
-      public async Task<BkBKas> Handle(
+      public async Task<BKBKasDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
           (await _context.BkBKas.FindAllAsync<DaftUnit, DaftRekening>(
             x => x.NoBBantu == request.NoBBantu, c => c.DaftUnit,
-            c => c.DaftRekening)).First();
+            c => c.DaftRekening)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BKBKasDTO>(result);
       }
     }
   }

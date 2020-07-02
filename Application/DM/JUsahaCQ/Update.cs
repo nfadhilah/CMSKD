@@ -45,11 +45,11 @@ namespace Application.DM.JUsahaCQ
       }
     }
 
-    public class Command : JUsaha, IRequest
+    public class Command : JUsaha, IRequest<JUsaha>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JUsaha>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.DM.JUsahaCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JUsaha> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +74,7 @@ namespace Application.DM.JUsahaCQ
         if (!_context.JUsaha.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }

@@ -1,40 +1,25 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.KPACQ
 {
   public class Create
   {
-    public class DTO : IMapDTO<Command>
+    public class Command : IRequest<KPADTO>
     {
-      private readonly IMapper _mapper;
-
       public long IdPeg { get; set; }
       public string Jabatan { get; set; }
-
-      public DTO()
-      {
-        var config = new MapperConfiguration(opt =>
-        {
-          opt.CreateMap<DTO, Command>();
-        });
-
-        _mapper = config.CreateMapper();
-      }
-
-      public Command MapDTO(Command destination) =>
-        _mapper.Map(this, destination);
     }
 
-    public class Validator : AbstractValidator<DTO>
+    public class Validator : AbstractValidator<Command>
     {
       public Validator()
       {
@@ -43,14 +28,7 @@ namespace Application.DM.KPACQ
       }
     }
 
-    public class Command : IRequest<KPA>
-    {
-      public long IdKPA { get; set; }
-      public long IdPeg { get; set; }
-      public string Jabatan { get; set; }
-    }
-
-    public class Handler : IRequestHandler<Command, KPA>
+    public class Handler : IRequestHandler<Command, KPADTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -61,7 +39,7 @@ namespace Application.DM.KPACQ
         _mapper = mapper;
       }
 
-      public async Task<KPA> Handle(Command request, CancellationToken cancellationToken)
+      public async Task<KPADTO> Handle(Command request, CancellationToken cancellationToken)
       {
         if (await _context.Pegawai.FindByIdAsync(request.IdPeg) == null)
           throw new ApiException("Pegawai tidak ditemukan", (int)HttpStatusCode.NotFound);
@@ -71,7 +49,10 @@ namespace Application.DM.KPACQ
         if (!await _context.KPA.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.KPA
+          .FindAllAsync<Pegawai>(x => x.IdKPA == added.IdKPA, x => x.Pegawai);
+
+        return _mapper.Map<KPADTO>(result.SingleOrDefault());
       }
     }
   }

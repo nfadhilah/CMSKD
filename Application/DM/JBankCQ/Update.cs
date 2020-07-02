@@ -1,13 +1,14 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.JBankCQ
 {
@@ -51,17 +52,11 @@ namespace Application.DM.JBankCQ
       }
     }
 
-    public class Command : IRequest
+    public class Command : JBank, IRequest<JBank>
     {
-      public long IdJBank { get; set; }
-      public string KdBank { get; set; }
-      public string NmBank { get; set; }
-      public string Uraian { get; set; }
-      public string Akronim { get; set; }
-      public DateTime? DateCreate { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, JBank>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -72,11 +67,11 @@ namespace Application.DM.JBankCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<JBank> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.JBank.FindByIdAsync(request.IdJBank);
+          await _context.JBank.FindByIdAsync(request.IdBank);
 
         if (updated == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
@@ -86,7 +81,7 @@ namespace Application.DM.JBankCQ
         if (!_context.JBank.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return updated;
       }
     }
   }
