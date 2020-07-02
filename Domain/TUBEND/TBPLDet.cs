@@ -18,7 +18,7 @@ namespace Domain.TUBEND
     public long IdBend { get; set; }
     [InnerJoin("BEND", "IDBEND", "IDBEND")]
     public Bend Bend { get; set; }
-    public int IdNoJetTra { get; set; }
+    public int IdNoJeTra { get; set; }
     [InnerJoin("JTRNLKAS", "IDNOJETRA", "IDNOJETRA")]
     public JTrnlKas JTrnlKas { get; set; }
     public decimal? Nilai { get; set; }

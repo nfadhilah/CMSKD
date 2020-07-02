@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
-using Domain.TUBEND;
 using MediatR;
 using Persistence;
 using System.Linq;
@@ -13,12 +12,12 @@ namespace Application.TUBEND.STSCQ
 {
   public class Detail
   {
-    public class Query : IRequest<STS>
+    public class Query : IRequest<STSDTO>
     {
       public long IdSTS { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, STS>
+    public class Handler : IRequestHandler<Query, STSDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,7 +28,7 @@ namespace Application.TUBEND.STSCQ
         _mapper = mapper;
       }
 
-      public async Task<STS> Handle(
+      public async Task<STSDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -41,7 +40,7 @@ namespace Application.TUBEND.STSCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<STSDTO>(result);
       }
     }
   }

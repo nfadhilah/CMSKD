@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -48,11 +49,11 @@ namespace Application.TUBEND.TBPLDetKegCQ
       }
     }
 
-    public class Command : TBPLDetKeg, IRequest
+    public class Command : TBPLDetKeg, IRequest<TBPLDetKegDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, TBPLDetKegDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -63,7 +64,7 @@ namespace Application.TUBEND.TBPLDetKegCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<TBPLDetKegDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -77,7 +78,12 @@ namespace Application.TUBEND.TBPLDetKegCQ
         if (!_context.TBPLDetKeg.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.TBPLDetKeg
+          .FindAllAsync<TBPLDet, JTrnlKas, MKegiatan>(
+            x => x.IdTBPLDet == updated.IdTBPLDetKeg, x => x.TBPLDet,
+            x => x.JTrnlKas, x => x.Kegiatan);
+
+        return _mapper.Map<TBPLDetKegDTO>(result);
       }
     }
   }

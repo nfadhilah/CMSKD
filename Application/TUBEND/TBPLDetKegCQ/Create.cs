@@ -14,7 +14,7 @@ namespace Application.TUBEND.TBPLDetKegCQ
 {
   public class Create
   {
-    public class Command : IRequest<TBPLDetKeg>
+    public class Command : IRequest<TBPLDetKegDTO>
     {
       public long IdTBPLDet { get; set; }
       public int IdNoJeTra { get; set; }
@@ -33,7 +33,7 @@ namespace Application.TUBEND.TBPLDetKegCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, TBPLDetKeg>
+    public class Handler : IRequestHandler<Command, TBPLDetKegDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,7 +44,7 @@ namespace Application.TUBEND.TBPLDetKegCQ
         _mapper = mapper;
       }
 
-      public async Task<TBPLDetKeg> Handle(
+      public async Task<TBPLDetKegDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<TBPLDetKeg>(request);
@@ -54,10 +54,10 @@ namespace Application.TUBEND.TBPLDetKegCQ
 
         var result = await _context.TBPLDetKeg
           .FindAllAsync<TBPLDet, JTrnlKas, MKegiatan>(
-            x => x.IdTBPLDet == added.IdTBPLDet, x => x.TBPLDet,
+            x => x.IdTBPLDet == added.IdTBPLDetKeg, x => x.TBPLDet,
             x => x.JTrnlKas, x => x.Kegiatan);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<TBPLDetKegDTO>(result.SingleOrDefault());
       }
     }
   }

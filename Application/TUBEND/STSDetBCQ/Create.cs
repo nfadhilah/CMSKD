@@ -14,7 +14,7 @@ namespace Application.TUBEND.STSDetBCQ
 {
   public class Create
   {
-    public class Command : IRequest<STSDetB>
+    public class Command : IRequest<STSDetBDTO>
     {
       public long IdSTS { get; set; }
       public long IdRek { get; set; }
@@ -33,7 +33,7 @@ namespace Application.TUBEND.STSDetBCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, STSDetB>
+    public class Handler : IRequestHandler<Command, STSDetBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,7 +44,7 @@ namespace Application.TUBEND.STSDetBCQ
         _mapper = mapper;
       }
 
-      public async Task<STSDetB> Handle(
+      public async Task<STSDetBDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<STSDetB>(request);
@@ -57,7 +57,7 @@ namespace Application.TUBEND.STSDetBCQ
             x => x.IdSTSDetB == added.IdSTSDetB,
             x => x.STS, x => x.Rekening);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<STSDetBDTO>(result.SingleOrDefault());
       }
     }
   }

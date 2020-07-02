@@ -9,6 +9,13 @@ namespace Application.TUBEND.SPPDetRPCQ
     {
       CreateMap<Create.Command, SPPDetRP>();
       CreateMap<Update.Command, SPPDetRP>();
+      CreateMap<SPPDetRP, SPPDetRPDTO>()
+        .ForMember(d => d.NmPajak,
+          opt => opt.MapFrom(s => s.Pajak.NmPajak.Trim()))
+        .ForMember(d => d.KdPajak,
+          opt => opt.MapFrom(s => s.Pajak.KdPajak.Trim()))
+        .ForMember(d => d.UraianPajak,
+          opt => opt.MapFrom(s => s.Pajak.Uraian.Trim()));
     }
   }
 }

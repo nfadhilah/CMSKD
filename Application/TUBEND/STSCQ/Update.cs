@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -60,11 +61,11 @@ namespace Application.TUBEND.STSCQ
       }
     }
 
-    public class Command : STS, IRequest
+    public class Command : STS, IRequest<STSDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, STSDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -75,7 +76,7 @@ namespace Application.TUBEND.STSCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<STSDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -89,7 +90,12 @@ namespace Application.TUBEND.STSCQ
         if (!_context.STS.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.STS
+          .FindAllAsync<DaftUnit, Bend>(
+            x => x.IdSTS == updated.IdSTS,
+            x => x.Unit, x => x.Bend);
+
+        return _mapper.Map<STSDTO>(result);
       }
     }
   }

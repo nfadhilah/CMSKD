@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
@@ -20,7 +21,7 @@ namespace Application.TUBEND.TBPLDetCQ
 
       public long IdTBPL { get; set; }
       public long IdBend { get; set; }
-      public int IdNoJetTra { get; set; }
+      public int IdNoJeTra { get; set; }
       public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
 
@@ -46,15 +47,15 @@ namespace Application.TUBEND.TBPLDetCQ
       {
         RuleFor(d => d.IdTBPL).NotEmpty();
         RuleFor(d => d.IdBend).NotEmpty();
-        RuleFor(d => d.IdNoJetTra).NotEmpty();
+        RuleFor(d => d.IdNoJeTra).NotEmpty();
       }
     }
 
-    public class Command : TBPLDet, IRequest
+    public class Command : TBPLDet, IRequest<TBPLDetDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, TBPLDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -65,7 +66,7 @@ namespace Application.TUBEND.TBPLDetCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<TBPLDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -79,7 +80,12 @@ namespace Application.TUBEND.TBPLDetCQ
         if (!_context.TBPLDet.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.TBPLDet
+          .FindAllAsync<TBPL, Bend, JTrnlKas>(
+            x => x.IdTBPLDet == updated.IdTBPLDet, x => x.TBPL,
+            x => x.Bend, x => x.JTrnlKas);
+
+        return _mapper.Map<TBPLDetDTO>(result);
       }
     }
   }

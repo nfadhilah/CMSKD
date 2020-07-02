@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -117,7 +118,7 @@ namespace API
           var policy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().Build();
 
-          // opt.Filters.Add(new AuthorizeFilter(policy));
+          opt.Filters.Add(new AuthorizeFilter(policy));
         })
         .AddFluentValidation(opt =>
           {

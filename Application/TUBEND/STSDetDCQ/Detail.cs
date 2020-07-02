@@ -13,12 +13,12 @@ namespace Application.TUBEND.STSDetDCQ
 {
   public class Detail
   {
-    public class Query : IRequest<STSDetD>
+    public class Query : IRequest<STSDetDDTO>
     {
       public long IdSTSDetD { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, STSDetD>
+    public class Handler : IRequestHandler<Query, STSDetDDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Application.TUBEND.STSDetDCQ
         _mapper = mapper;
       }
 
-      public async Task<STSDetD> Handle(
+      public async Task<STSDetDDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -41,7 +41,7 @@ namespace Application.TUBEND.STSDetDCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<STSDetDDTO>(result);
       }
     }
   }

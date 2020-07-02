@@ -14,7 +14,7 @@ namespace Application.TUBEND.TBPLCQ
 {
   public class Create
   {
-    public class Command : IRequest<TBPL>
+    public class Command : IRequest<TBPLDTO>
     {
       public long IdUnit { get; set; }
       public string NoTBPL { get; set; }
@@ -43,7 +43,7 @@ namespace Application.TUBEND.TBPLCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, TBPL>
+    public class Handler : IRequestHandler<Command, TBPLDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -54,7 +54,7 @@ namespace Application.TUBEND.TBPLCQ
         _mapper = mapper;
       }
 
-      public async Task<TBPL> Handle(
+      public async Task<TBPLDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<TBPL>(request);
@@ -67,7 +67,7 @@ namespace Application.TUBEND.TBPLCQ
             x => x.IdTBPL == added.IdTBPL, x => x.Unit,
             x => x.StatTrs, x => x.Bend, x => x.ZKode);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<TBPLDTO>(result.SingleOrDefault());
       }
     }
   }

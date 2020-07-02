@@ -14,7 +14,7 @@ namespace Application.TUBEND.SPPDetRPCQ
 {
   public class Create
   {
-    public class Command : IRequest<SPPDetRP>
+    public class Command : IRequest<SPPDetRPDTO>
     {
       public long IdSPPDetR { get; set; }
       public long IdPajak { get; set; }
@@ -36,7 +36,7 @@ namespace Application.TUBEND.SPPDetRPCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, SPPDetRP>
+    public class Handler : IRequestHandler<Command, SPPDetRPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -47,7 +47,7 @@ namespace Application.TUBEND.SPPDetRPCQ
         _mapper = mapper;
       }
 
-      public async Task<SPPDetRP> Handle(
+      public async Task<SPPDetRPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SPPDetRP>(request);
@@ -60,7 +60,7 @@ namespace Application.TUBEND.SPPDetRPCQ
             x => x.IdSPPDetRP == added.IdSPPDetRP, x => x.SPPDetR,
             x => x.Pajak);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SPPDetRPDTO>(result.SingleOrDefault());
       }
     }
   }

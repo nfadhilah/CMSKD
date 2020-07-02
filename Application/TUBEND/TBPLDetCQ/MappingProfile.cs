@@ -9,6 +9,11 @@ namespace Application.TUBEND.TBPLDetCQ
     {
       CreateMap<Create.Command, TBPLDet>();
       CreateMap<Update.Command, TBPLDet>();
+      CreateMap<TBPLDet, TBPLDetDTO>()
+        .ForMember(d => d.NmJeTra,
+          opt => opt.MapFrom(s => s.JTrnlKas.NmJeTra.Trim()))
+        .ForMember(d => d.KdPersJeTra,
+          opt => opt.MapFrom(s => s.JTrnlKas.KdPers.Trim()));
     }
   }
 }

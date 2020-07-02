@@ -9,6 +9,7 @@ namespace Application.TUBEND.STSCQ
     {
       CreateMap<Create.Command, STS>();
       CreateMap<Update.Command, STS>();
+      CreateMap<STS, STSDTO>();
     }
   }
 }

@@ -1,10 +1,12 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,11 +50,11 @@ namespace Application.TUBEND.STSDetDCQ
       }
     }
 
-    public class Command : STSDetD, IRequest
+    public class Command : STSDetD, IRequest<STSDetDDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, STSDetDDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -63,7 +65,7 @@ namespace Application.TUBEND.STSDetDCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<STSDetDDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -77,7 +79,12 @@ namespace Application.TUBEND.STSDetDCQ
         if (!_context.STSDetD.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.STSDetD
+          .FindAllAsync<STS, DaftRekening>(
+            x => x.IdSTSDetD == updated.IdSTSDetD,
+            x => x.STS, x => x.Rekening);
+
+        return _mapper.Map<STSDetDDTO>(result.SingleOrDefault());
       }
     }
   }

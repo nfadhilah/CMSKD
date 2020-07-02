@@ -14,11 +14,11 @@ namespace Application.TUBEND.TBPLDetCQ
 {
   public class Create
   {
-    public class Command : IRequest<TBPLDet>
+    public class Command : IRequest<TBPLDetDTO>
     {
       public long IdTBPL { get; set; }
       public long IdBend { get; set; }
-      public int IdNoJetTra { get; set; }
+      public int IdNoJeTra { get; set; }
       public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
     }
@@ -29,11 +29,11 @@ namespace Application.TUBEND.TBPLDetCQ
       {
         RuleFor(d => d.IdTBPL).NotEmpty();
         RuleFor(d => d.IdBend).NotEmpty();
-        RuleFor(d => d.IdNoJetTra).NotEmpty();
+        RuleFor(d => d.IdNoJeTra).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, TBPLDet>
+    public class Handler : IRequestHandler<Command, TBPLDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,7 +44,7 @@ namespace Application.TUBEND.TBPLDetCQ
         _mapper = mapper;
       }
 
-      public async Task<TBPLDet> Handle(
+      public async Task<TBPLDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<TBPLDet>(request);
@@ -57,7 +57,7 @@ namespace Application.TUBEND.TBPLDetCQ
             x => x.IdTBPLDet == added.IdTBPLDet, x => x.TBPL,
             x => x.Bend, x => x.JTrnlKas);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<TBPLDetDTO>(result.SingleOrDefault());
       }
     }
   }

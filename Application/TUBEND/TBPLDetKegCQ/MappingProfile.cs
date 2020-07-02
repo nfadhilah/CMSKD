@@ -9,6 +9,15 @@ namespace Application.TUBEND.TBPLDetKegCQ
     {
       CreateMap<Create.Command, TBPLDetKeg>();
       CreateMap<Update.Command, TBPLDetKeg>();
+      CreateMap<TBPLDetKeg, TBPLDetKegDTO>()
+        .ForMember(d => d.NuKeg,
+          opt => opt.MapFrom(s => s.Kegiatan.NuKeg.Trim()))
+        .ForMember(d => d.NmKegUnit,
+          opt => opt.MapFrom(s => s.Kegiatan.NmKegUnit.Trim()))
+        .ForMember(d => d.NmJeTra,
+          opt => opt.MapFrom(s => s.JTrnlKas.NmJeTra.Trim()))
+        .ForMember(d => d.KdPersJeTra,
+          opt => opt.MapFrom(s => s.JTrnlKas.KdPers.Trim()));
     }
   }
 }
