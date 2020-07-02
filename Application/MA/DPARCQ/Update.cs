@@ -1,14 +1,15 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPARCQ
 {
@@ -53,11 +54,11 @@ namespace Application.MA.DPARCQ
       }
     }
 
-    public class Command : DPAR, IRequest
+    public class Command : DPAR, IRequest<DPARDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPARDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -68,7 +69,7 @@ namespace Application.MA.DPARCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPARDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -82,7 +83,12 @@ namespace Application.MA.DPARCQ
         if (!_context.DPAR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result =
+          await _context.DPAR.FindAllAsync<DPA, MKegiatan, DaftRekening>(
+            x => x.IdDPAR == updated.IdDPAR, x => x.DPA, x => x.Kegiatan,
+            x => x.DaftRekening);
+
+        return _mapper.Map<DPARDTO>(result);
       }
     }
   }

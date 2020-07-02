@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,10 +14,10 @@ namespace Application.MA.DPADanaRCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPADanaR>
+    public class Command : IRequest<DPADanaRDTO>
     {
       public long IdDPAR { get; set; }
-      public string KdDana { get; set; }
+      public long IdJDana { get; set; }
       public Decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
@@ -26,11 +28,11 @@ namespace Application.MA.DPADanaRCQ
       public Validator()
       {
         RuleFor(d => d.IdDPAR).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPADanaR>
+    public class Handler : IRequestHandler<Command, DPADanaRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -41,7 +43,7 @@ namespace Application.MA.DPADanaRCQ
         _mapper = mapper;
       }
 
-      public async Task<DPADanaR> Handle(
+      public async Task<DPADanaRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPADanaR>(request);
@@ -49,7 +51,10 @@ namespace Application.MA.DPADanaRCQ
         if (!await _context.DPADanaR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.DPADanaR.FindAllAsync<DPAR, JDana>(
+          x => x.IdDPADanaR == added.IdDPADanaR, x => x.DPAR, x => x.JDana);
+
+        return _mapper.Map<DPADanaRDTO>(result.Single());
       }
     }
   }

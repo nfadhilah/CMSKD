@@ -13,13 +13,12 @@ namespace Application.MA.DPADanaBCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<DPADanaB>
+    public class Query : IRequest<DPADanaBDTO>
     {
       public long IdDPADanaB { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPADanaB>
+    public class Handler : IRequestHandler<Query, DPADanaBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +29,18 @@ namespace Application.MA.DPADanaBCQ
         _mapper = mapper;
       }
 
-      public async Task<DPADanaB> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<DPADanaBDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.DPADanaB.FindAllAsync<DPAB>(x => x.IdDPADanaB == request.IdDPADanaB, c => c.DPAB)).First();
+          (await _context.DPADanaB.FindAllAsync<DPAB, JDana>(
+            x => x.IdDPADanaB == request.IdDPADanaB, c => c.DPAB, c => c.JDana))
+          .FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPADanaBDTO>(result);
       }
     }
   }

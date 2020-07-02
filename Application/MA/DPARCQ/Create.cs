@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +14,7 @@ namespace Application.MA.DPARCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPAR>
+    public class Command : IRequest<DPARDTO>
     {
       public long IdDPA { get; set; }
       public string KdTahap { get; set; }
@@ -36,7 +38,7 @@ namespace Application.MA.DPARCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPAR>
+    public class Handler : IRequestHandler<Command, DPARDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -47,7 +49,7 @@ namespace Application.MA.DPARCQ
         _mapper = mapper;
       }
 
-      public async Task<DPAR> Handle(
+      public async Task<DPARDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPAR>(request);
@@ -55,7 +57,12 @@ namespace Application.MA.DPARCQ
         if (!await _context.DPAR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result =
+          await _context.DPAR.FindAllAsync<DPA, MKegiatan, DaftRekening>(
+            x => x.IdDPAR == added.IdDPAR, x => x.DPA, x => x.Kegiatan,
+            x => x.DaftRekening);
+
+        return _mapper.Map<DPARDTO>(result.Single());
       }
     }
   }

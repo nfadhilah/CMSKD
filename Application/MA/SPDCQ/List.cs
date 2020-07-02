@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using Domain.MA;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.MA.SPDCQ
 {
@@ -31,10 +32,12 @@ namespace Application.MA.SPDCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -64,7 +67,8 @@ namespace Application.MA.SPDCQ
           parameters.Add(d => d.IdxKode == request.IdxKode);
 
         if (!string.IsNullOrWhiteSpace(request.Keterangan))
-          parameters.Add(d => d.Keterangan.Contains(request.Keterangan)); ;
+          parameters.Add(d => d.Keterangan.Contains(request.Keterangan));
+        ;
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
@@ -75,12 +79,13 @@ namespace Application.MA.SPDCQ
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.NoSPD)
           .FindAllAsync<DaftUnit>(predicate, x => x.Unit);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(_mapper.Map<IEnumerable<SPDDTO>>(result),
+          new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

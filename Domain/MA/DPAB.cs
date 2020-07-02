@@ -20,7 +20,7 @@ namespace Domain.MA
     public long IdRek { get; set; }
     [LeftJoin("DAFTREKENING", "IDREK", "IDREK")]
     public DaftRekening DaftRekening { get; set; }
-    public Decimal? Nilai { get; set; }
+    public decimal? Nilai { get; set; }
     [UpdatedAt]
     public DateTime? DateCreate { get; set; }
     [UpdatedAt]

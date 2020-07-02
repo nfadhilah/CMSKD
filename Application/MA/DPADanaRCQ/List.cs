@@ -1,4 +1,7 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
+using Domain.DM;
 using Domain.MA;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -9,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.MA.DPADanaRCQ
 {
@@ -18,8 +20,8 @@ namespace Application.MA.DPADanaRCQ
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
       public long? IdDPAR { get; set; }
-      public string KdDana { get; set; }
-      public Decimal? Nilai { get; set; }
+      public long? IdJDana { get; set; }
+      public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
     }
@@ -27,10 +29,12 @@ namespace Application.MA.DPADanaRCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -40,8 +44,8 @@ namespace Application.MA.DPADanaRCQ
 
         if (request.IdDPAR.HasValue)
           parameters.Add(d => d.IdDPAR == request.IdDPAR);
-        if (!string.IsNullOrWhiteSpace(request.KdDana))
-          parameters.Add(d => d.KdDana == request.KdDana);
+        if (request.IdJDana.HasValue)
+          parameters.Add(d => d.IdJDana == request.IdJDana);
         if (request.Nilai.HasValue)
           parameters.Add(d => d.Nilai == request.Nilai);
         if (request.DateCreate.HasValue)
@@ -56,9 +60,9 @@ namespace Application.MA.DPADanaRCQ
         var result = await _context.DPADanaR
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPADanaR)
-          .FindAllAsync<DPAR>(predicate, c => c.DPAR);
+          .FindAllAsync<DPAR, JDana>(predicate, c => c.DPAR, c => c.JDana);
 
-        return new PaginationWrapper(result, new Pagination
+        return new PaginationWrapper(_mapper.Map<IEnumerable<DPADanaRDTO>>(result), new Pagination
         {
           CurrentPage = request.CurrentPage,
           PageSize = request.PageSize,

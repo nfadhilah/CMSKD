@@ -9,6 +9,7 @@ namespace Application.MA.DPABlnRCQ
     {
       CreateMap<Create.Command, DPABlnR>();
       CreateMap<Update.Command, DPABlnR>();
+      CreateMap<DPABlnR, DPABlnRDTO>();
     }
   }
 }

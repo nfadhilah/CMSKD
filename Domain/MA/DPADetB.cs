@@ -17,10 +17,10 @@ namespace Domain.MA
     public string KdNilai { get; set; }
     public string KdJabar { get; set; }
     public string Uraian { get; set; }
-    public Decimal? JumBYek { get; set; }
+    public decimal? JumBYek { get; set; }
     public string Satuan { get; set; }
-    public Decimal? Tarif { get; set; }
-    public Decimal? SubTotal { get; set; }
+    public decimal? Tarif { get; set; }
+    public decimal? SubTotal { get; set; }
     public string Ekspresi { get; set; }
     public byte InclSubtotal { get; set; }
     public string Type { get; set; }

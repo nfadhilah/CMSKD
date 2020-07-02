@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using Domain.MA;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.MA.DPARCQ
 {
@@ -31,10 +32,12 @@ namespace Application.MA.DPARCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -66,9 +69,10 @@ namespace Application.MA.DPARCQ
         var result = await _context.DPAR
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPAR)
-          .FindAllAsync<DPA, DaftRekening, KegUnit>(predicate, c => c.DPA, c => c.DaftRekening, c => c.KegUnit);
+          .FindAllAsync<DPA, DaftRekening, MKegiatan>(predicate, c => c.DPA,
+            c => c.DaftRekening, c => c.Kegiatan);
 
-        return new PaginationWrapper(result, new Pagination
+        return new PaginationWrapper(_mapper.Map<IEnumerable<DPARDTO>>(result), new Pagination
         {
           CurrentPage = request.CurrentPage,
           PageSize = request.PageSize,

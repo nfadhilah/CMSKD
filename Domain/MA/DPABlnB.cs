@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.MA
 {
-  [Table("DPABlnB")]
+  [Table("DPABLNB")]
   public class DPABlnB
   {
     [Key, Identity]

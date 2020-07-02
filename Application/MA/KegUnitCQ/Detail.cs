@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
-using Domain.MA;
 using MediatR;
 using Persistence;
 using System.Linq;
@@ -13,13 +12,12 @@ namespace Application.MA.KegUnitCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<KegUnit>
+    public class Query : IRequest<KegUnitDTO>
     {
       public long IdKegUnit { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, KegUnit>
+    public class Handler : IRequestHandler<Query, KegUnitDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +28,19 @@ namespace Application.MA.KegUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<KegUnit> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<KegUnitDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.KegUnit.FindAllAsync<MPgrm, MKegiatan>(x => x.IdKegUnit == request.IdKegUnit, c => c.MPgrm, c => c.MKegiatan)).First();
+          (await _context.KegUnit
+            .FindAllAsync<DaftUnit, MPgrm, MKegiatan, Pegawai>(
+              x => x.IdKegUnit == request.IdKegUnit, c => c.Unit, c => c.MPgrm,
+              c => c.MKegiatan, c => c.Pegawai)).FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<KegUnitDTO>(result);
       }
     }
   }

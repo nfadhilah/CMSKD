@@ -13,13 +13,12 @@ namespace Application.MA.DPARCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<DPAR>
+    public class Query : IRequest<DPARDTO>
     {
       public long IdDPAR { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPAR>
+    public class Handler : IRequestHandler<Query, DPARDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +29,18 @@ namespace Application.MA.DPARCQ
         _mapper = mapper;
       }
 
-      public async Task<DPAR> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<DPARDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.DPAR.FindAllAsync<DPA, DaftRekening, KegUnit>(x => x.IdDPAR == request.IdDPAR, c => c.DPA, c => c.DaftRekening, c => c.KegUnit)).First();
+          (await _context.DPAR.FindAllAsync<DPA, DaftRekening, MKegiatan>(
+            x => x.IdDPAR == request.IdDPAR, c => c.DPA, c => c.DaftRekening,
+            c => c.Kegiatan)).FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPARDTO>(result);
       }
     }
   }

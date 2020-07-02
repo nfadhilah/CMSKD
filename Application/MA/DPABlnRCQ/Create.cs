@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,11 +13,11 @@ namespace Application.MA.DPABlnRCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPABlnR>
+    public class Command : IRequest<DPABlnRDTO>
     {
       public long IdDPAR { get; set; }
       public long IdBulan { get; set; }
-      public Decimal? Nilai { get; set; }
+      public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
     }
@@ -30,7 +31,7 @@ namespace Application.MA.DPABlnRCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPABlnR>
+    public class Handler : IRequestHandler<Command, DPABlnRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -41,7 +42,7 @@ namespace Application.MA.DPABlnRCQ
         _mapper = mapper;
       }
 
-      public async Task<DPABlnR> Handle(
+      public async Task<DPABlnRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPABlnR>(request);
@@ -49,7 +50,11 @@ namespace Application.MA.DPABlnRCQ
         if (!await _context.DPABlnR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await
+          _context.DPABlnR.FindAllAsync<DPAR>(
+            x => x.IdDPABlnR == added.IdDPABlnR, x => x.DPAR);
+
+        return _mapper.Map<DPABlnRDTO>(result.Single());
       }
     }
   }

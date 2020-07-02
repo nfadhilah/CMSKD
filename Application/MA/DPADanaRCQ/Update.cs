@@ -1,14 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPADanaRCQ
 {
@@ -49,11 +51,11 @@ namespace Application.MA.DPADanaRCQ
       }
     }
 
-    public class Command : DPADanaR, IRequest
+    public class Command : DPADanaR, IRequest<DPADanaRDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPADanaRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -64,7 +66,7 @@ namespace Application.MA.DPADanaRCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPADanaRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -78,7 +80,10 @@ namespace Application.MA.DPADanaRCQ
         if (!_context.DPADanaR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.DPADanaR.FindAllAsync<DPAR, JDana>(
+          x => x.IdDPADanaR == updated.IdDPADanaR, x => x.DPAR, x => x.JDana);
+
+        return _mapper.Map<DPADanaRDTO>(result.Single());
       }
     }
   }

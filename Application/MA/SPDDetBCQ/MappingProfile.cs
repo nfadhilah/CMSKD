@@ -9,6 +9,12 @@ namespace Application.MA.SPDDetBCQ
     {
       CreateMap<Create.Command, SPDDetB>();
       CreateMap<Update.Command, SPDDetB>();
+      CreateMap<SPDDetB, SPDDetBDTO>()
+        .ForMember(d => d.NoSPD, opt => opt.MapFrom(s => s.SPD.NoSPD.Trim()))
+        .ForMember(d => d.KdPer,
+          opt => opt.MapFrom(s => s.Rekening.KdPer.Trim()))
+        .ForMember(d => d.NmPer,
+          opt => opt.MapFrom(s => s.Rekening.NmPer.Trim()));
     }
   }
 }

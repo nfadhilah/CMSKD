@@ -13,13 +13,12 @@ namespace Application.MA.DPABCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<DPAB>
+    public class Query : IRequest<DPABDTO>
     {
       public long IdDPAB { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPAB>
+    public class Handler : IRequestHandler<Query, DPABDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +29,18 @@ namespace Application.MA.DPABCQ
         _mapper = mapper;
       }
 
-      public async Task<DPAB> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<DPABDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.DPAB.FindAllAsync<DPA, DaftRekening>(x => x.IdDPAB == request.IdDPAB, c => c.DPA, c => c.DaftRekening)).First();
+          (await _context.DPAB.FindAllAsync<DPA, DaftRekening>(
+            x => x.IdDPAB == request.IdDPAB, c => c.DPA, c => c.DaftRekening))
+          .SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPABDTO>(result);
       }
     }
   }

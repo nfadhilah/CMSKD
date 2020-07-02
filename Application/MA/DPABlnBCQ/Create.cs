@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Application.MA.DPABlnBCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPABlnB>
+    public class Command : IRequest<DPABlnBDTO>
     {
       public long IdDPAB { get; set; }
       public long IdBulan { get; set; }
@@ -30,7 +31,7 @@ namespace Application.MA.DPABlnBCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPABlnB>
+    public class Handler : IRequestHandler<Command, DPABlnBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -41,7 +42,7 @@ namespace Application.MA.DPABlnBCQ
         _mapper = mapper;
       }
 
-      public async Task<DPABlnB> Handle(
+      public async Task<DPABlnBDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPABlnB>(request);
@@ -49,7 +50,9 @@ namespace Application.MA.DPABlnBCQ
         if (!await _context.DPABlnB.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.DPABlnB.FindAllAsync<DPAB>(x => x.IdDPABlnB == added.IdDPABlnB, x => x.DPAB);
+
+        return _mapper.Map<DPABlnBDTO>(result.Single());
       }
     }
   }

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPABlnRCQ
 {
@@ -49,11 +50,11 @@ namespace Application.MA.DPABlnRCQ
       }
     }
 
-    public class Command : DPABlnR, IRequest
+    public class Command : DPABlnR, IRequest<DPABlnRDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPABlnRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -64,7 +65,7 @@ namespace Application.MA.DPABlnRCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPABlnRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -78,7 +79,11 @@ namespace Application.MA.DPABlnRCQ
         if (!_context.DPABlnR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await
+          _context.DPABlnR.FindAllAsync<DPAR>(
+            x => x.IdDPABlnR == updated.IdDPABlnR, x => x.DPAR);
+
+        return _mapper.Map<DPABlnRDTO>(result.Single());
       }
     }
   }

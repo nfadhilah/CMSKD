@@ -9,6 +9,7 @@ namespace Application.MA.DPADetRCQ
     {
       CreateMap<Create.Command, DPADetR>();
       CreateMap<Update.Command, DPADetR>();
+      CreateMap<DPADetR, DPADetRDTO>();
     }
   }
 }

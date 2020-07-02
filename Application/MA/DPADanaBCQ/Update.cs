@@ -1,14 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPADanaBCQ
 {
@@ -19,8 +21,8 @@ namespace Application.MA.DPADanaBCQ
       private readonly IMapper _mapper;
 
       public long IdDPAB { get; set; }
-      public string KdDana { get; set; }
-      public Decimal? Nilai { get; set; }
+      public long IdJDana { get; set; }
+      public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
 
@@ -45,15 +47,15 @@ namespace Application.MA.DPADanaBCQ
       public Validator()
       {
         RuleFor(d => d.IdDPAB).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Command : DPADanaB, IRequest
+    public class Command : DPADanaB, IRequest<DPADanaBDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPADanaBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -64,7 +66,7 @@ namespace Application.MA.DPADanaBCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPADanaBDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -78,7 +80,10 @@ namespace Application.MA.DPADanaBCQ
         if (!_context.DPADanaB.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.DPADanaB.FindAllAsync<DPAB, JDana>(
+          x => x.IdDPADanaB == updated.IdDPADanaB, x => x.DPAB, x => x.JDana);
+
+        return _mapper.Map<DPADanaBDTO>(result.Single());
       }
     }
   }

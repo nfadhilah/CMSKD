@@ -12,16 +12,16 @@ namespace Application.MA.DPADetBCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPADetB>
+    public class Command : IRequest<DPADetBDTO>
     {
       public long IdDPAB { get; set; }
       public string KdNilai { get; set; }
       public string KdJabar { get; set; }
       public string Uraian { get; set; }
-      public Decimal? JumBYek { get; set; }
+      public decimal? JumBYek { get; set; }
       public string Satuan { get; set; }
-      public Decimal? Tarif { get; set; }
-      public Decimal? SubTotal { get; set; }
+      public decimal? Tarif { get; set; }
+      public decimal? SubTotal { get; set; }
       public string Ekspresi { get; set; }
       public byte InclSubtotal { get; set; }
       public string Type { get; set; }
@@ -39,7 +39,7 @@ namespace Application.MA.DPADetBCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPADetB>
+    public class Handler : IRequestHandler<Command, DPADetBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -50,7 +50,7 @@ namespace Application.MA.DPADetBCQ
         _mapper = mapper;
       }
 
-      public async Task<DPADetB> Handle(
+      public async Task<DPADetBDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPADetB>(request);
@@ -58,7 +58,7 @@ namespace Application.MA.DPADetBCQ
         if (!await _context.DPADetB.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DPADetBDTO>(added);
       }
     }
   }

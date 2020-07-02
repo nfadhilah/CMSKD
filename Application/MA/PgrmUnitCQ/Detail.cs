@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
-using Domain.MA;
 using MediatR;
 using Persistence;
 using System.Linq;
@@ -13,13 +12,12 @@ namespace Application.MA.PgrmUnitCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<PgrmUnit>
+    public class Query : IRequest<PgrmUnitDTO>
     {
       public long IdPgrmUnit { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, PgrmUnit>
+    public class Handler : IRequestHandler<Query, PgrmUnitDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +28,18 @@ namespace Application.MA.PgrmUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<PgrmUnit> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<PgrmUnitDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.PgrmUnit.FindAllAsync<MPgrm>(x => x.IdPgrmUnit == request.IdPgrmUnit, c => c.MPgrm)).First();
+          (await _context.PgrmUnit.FindAllAsync<DaftUnit, MPgrm>(
+            x => x.IdPgrmUnit == request.IdPgrmUnit, c => c.DaftUnit,
+            c => c.MPgrm)).FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<PgrmUnitDTO>(result);
       }
     }
   }

@@ -1,4 +1,5 @@
-﻿using MicroOrm.Dapper.Repositories.Attributes;
+﻿using Domain.DM;
+using MicroOrm.Dapper.Repositories.Attributes;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -14,8 +15,10 @@ namespace Domain.MA
     public long IdDPAB { get; set; }
     [LeftJoin("DPAB", "IDDPAB", "IDDPAB")]
     public DPAB DPAB { get; set; }
-    public string KdDana { get; set; }
-    public Decimal? Nilai { get; set; }
+    public long IdJDana { get; set; }
+    [LeftJoin("JDANA", "IDJDANA", "IDJDANA")]
+    public JDana JDana { get; set; }
+    public decimal? Nilai { get; set; }
     [UpdatedAt]
     public DateTime? DateCreate { get; set; }
     [UpdatedAt]

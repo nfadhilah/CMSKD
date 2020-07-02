@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,11 +52,9 @@ namespace Application.MA.SPDDetBCQ
       }
     }
 
-    public class Command : SPDDetB, IRequest
-    {
-    }
+    public class Command : SPDDetB, IRequest<SPDDetBDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, SPDDetBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -65,7 +65,7 @@ namespace Application.MA.SPDDetBCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<SPDDetBDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -79,7 +79,10 @@ namespace Application.MA.SPDDetBCQ
         if (!_context.SPDDetB.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.SPDDetB.FindAllAsync<SPD, DaftRekening>(
+          x => x.IdSPDDetB == updated.IdSPDDetB, x => x.SPD, x => x.Rekening);
+
+        return _mapper.Map<SPDDetBDTO>(result.Single());
       }
     }
   }

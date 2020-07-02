@@ -15,7 +15,7 @@ namespace Domain.MA
     [LeftJoin("DPAR", "IDDPAR", "IDDPAR")]
     public DPAR DPAR { get; set; }
     public long IdBulan { get; set; }
-    public Decimal? Nilai { get; set; }
+    public decimal? Nilai { get; set; }
     [UpdatedAt]
     public DateTime? DateCreate { get; set; }
     [UpdatedAt]

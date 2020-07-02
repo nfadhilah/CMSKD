@@ -1,14 +1,14 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPADetRCQ
 {
@@ -56,11 +56,11 @@ namespace Application.MA.DPADetRCQ
       }
     }
 
-    public class Command : DPADetR, IRequest
+    public class Command : DPADetR, IRequest<DPADetRDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPADetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -71,7 +71,7 @@ namespace Application.MA.DPADetRCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPADetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -85,7 +85,7 @@ namespace Application.MA.DPADetRCQ
         if (!_context.DPADetR.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return _mapper.Map<DPADetRDTO>(updated);
       }
     }
   }

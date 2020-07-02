@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.DM;
 using Domain.MA;
 using MediatR;
 using Persistence;
@@ -13,13 +12,12 @@ namespace Application.MA.DPADetBCQ
 {
   public class Detail
   {
-
-    public class Query : IRequest<DPADetB>
+    public class Query : IRequest<DPADetBDTO>
     {
       public long IdDPADetB { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPADetB>
+    public class Handler : IRequestHandler<Query, DPADetBDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,16 +28,18 @@ namespace Application.MA.DPADetBCQ
         _mapper = mapper;
       }
 
-      public async Task<DPADetB> Handle(
-      Query request, CancellationToken cancellationToken)
+      public async Task<DPADetBDTO> Handle(
+        Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.DPADetB.FindAllAsync<DPAB>(x => x.IdDPADetB == request.IdDPADetB, c => c.DPAB)).First();
+          (await _context.DPADetB.FindAllAsync<DPAB>(
+            x => x.IdDPADetB == request.IdDPADetB, c => c.DPAB))
+          .FirstOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPADetBDTO>(result);
       }
     }
   }

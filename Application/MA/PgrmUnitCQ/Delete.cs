@@ -1,11 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.PgrmUnitCQ
 {

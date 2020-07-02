@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +14,7 @@ namespace Application.MA.DPACQ
 {
   public class Create
   {
-    public class Command : IRequest<DPA>
+    public class Command : IRequest<DPADTO>
     {
       public long IdUnit { get; set; }
       public string NoDPA { get; set; }
@@ -33,7 +35,7 @@ namespace Application.MA.DPACQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPA>
+    public class Handler : IRequestHandler<Command, DPADTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -44,7 +46,7 @@ namespace Application.MA.DPACQ
         _mapper = mapper;
       }
 
-      public async Task<DPA> Handle(
+      public async Task<DPADTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPA>(request);
@@ -52,7 +54,11 @@ namespace Application.MA.DPACQ
         if (!await _context.DPA.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result =
+          await _context.DPA.FindAllAsync<DaftUnit>(x => x.IdDPA == added.IdDPA,
+            x => x.DaftUnit);
+
+        return _mapper.Map<DPADTO>(result.Single());
       }
     }
   }

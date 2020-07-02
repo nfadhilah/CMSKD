@@ -9,6 +9,7 @@ namespace Application.MA.DPADetBCQ
     {
       CreateMap<Create.Command, DPADetB>();
       CreateMap<Update.Command, DPADetB>();
+      CreateMap<DPADetB, DPADetBDTO>();
     }
   }
 }

@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.MA;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -9,7 +11,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.MA.DPABlnBCQ
 {
@@ -27,10 +28,12 @@ namespace Application.MA.DPABlnBCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -58,12 +61,13 @@ namespace Application.MA.DPABlnBCQ
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPABlnB)
           .FindAllAsync<DPAB>(predicate, c => c.DPAB);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<DPABlnBDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

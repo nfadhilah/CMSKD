@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +14,7 @@ namespace Application.MA.PgrmUnitCQ
 {
   public class Create
   {
-    public class Command : IRequest<PgrmUnit>
+    public class Command : IRequest<PgrmUnitDTO>
     {
       public long IdUnit { get; set; }
       public string KdTahap { get; set; }
@@ -39,7 +41,7 @@ namespace Application.MA.PgrmUnitCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, PgrmUnit>
+    public class Handler : IRequestHandler<Command, PgrmUnitDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -50,7 +52,7 @@ namespace Application.MA.PgrmUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<PgrmUnit> Handle(
+      public async Task<PgrmUnitDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<PgrmUnit>(request);
@@ -58,7 +60,10 @@ namespace Application.MA.PgrmUnitCQ
         if (!await _context.PgrmUnit.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        var result = await _context.PgrmUnit.FindAllAsync<DaftUnit, MPgrm>(
+          x => x.IdPgrmUnit == added.IdPgrmUnit, x => x.DaftUnit, x => x.MPgrm);
+
+        return _mapper.Map<PgrmUnitDTO>(result.Single());
       }
     }
   }

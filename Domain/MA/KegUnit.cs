@@ -13,6 +13,8 @@ namespace Domain.MA
     [Key, Identity]
     public long IdKegUnit { get; set; }
     public long IdUnit { get; set; }
+    [InnerJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
+    public DaftUnit Unit { get; set; }
     public long IdKeg { get; set; }
     [LeftJoin("MKEGIATAN", "IDKEG", "IDKEG")]
     public MKegiatan MKegiatan { get; set; }
@@ -23,13 +25,15 @@ namespace Domain.MA
     public int? NoPrior { get; set; }
     public long IdSifatKeg { get; set; }
     public long? IdPeg { get; set; }
+    [LeftJoin("PEGAWAI", "IDPEG", "IDPEG")]
+    public Pegawai Pegawai { get; set; }
     public DateTime? TglAkhir { get; set; }
     public DateTime? TglAwal { get; set; }
-    public Decimal? TargetP { get; set; }
+    public decimal? TargetP { get; set; }
     public string Lokasi { get; set; }
-    public Decimal? JumlahMin1 { get; set; }
-    public Decimal? Pagu { get; set; }
-    public Decimal? JumlahPls1 { get; set; }
+    public decimal? JumlahMin1 { get; set; }
+    public decimal? Pagu { get; set; }
+    public decimal? JumlahPls1 { get; set; }
     public string Sasaran { get; set; }
     public string KetKeg { get; set; }
     public string IdPrioDa { get; set; }
@@ -40,8 +44,8 @@ namespace Domain.MA
     public string Volume { get; set; }
     public string Volume1 { get; set; }
     public string Satuan { get; set; }
-    public Decimal? PaguPlus { get; set; }
-    public Decimal? PaguTif { get; set; }
+    public decimal? PaguPlus { get; set; }
+    public decimal? PaguTif { get; set; }
     public DateTime? TglValid { get; set; }
     [UpdatedAt]
     public DateTime? DateCreate { get; set; }

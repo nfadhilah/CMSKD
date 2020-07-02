@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.DM;
 using Domain.MA;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.MA.PgrmUnitCQ
 {
@@ -36,10 +37,12 @@ namespace Application.MA.PgrmUnitCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -81,14 +84,16 @@ namespace Application.MA.PgrmUnitCQ
         var result = await _context.PgrmUnit
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdPgrmUnit)
-          .FindAllAsync<MPgrm>(predicate, c => c.MPgrm);
+          .FindAllAsync<DaftUnit, MPgrm>(predicate, c => c.DaftUnit,
+            c => c.MPgrm);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<PgrmUnitDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

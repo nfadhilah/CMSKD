@@ -12,7 +12,7 @@ namespace Application.MA.DPADetRCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPADetR>
+    public class Command : IRequest<DPADetRDTO>
     {
       public long IdDPAR { get; set; }
       public string KdNilai { get; set; }
@@ -39,7 +39,7 @@ namespace Application.MA.DPADetRCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPADetR>
+    public class Handler : IRequestHandler<Command, DPADetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -50,7 +50,7 @@ namespace Application.MA.DPADetRCQ
         _mapper = mapper;
       }
 
-      public async Task<DPADetR> Handle(
+      public async Task<DPADetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPADetR>(request);
@@ -58,7 +58,7 @@ namespace Application.MA.DPADetRCQ
         if (!await _context.DPADetR.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DPADetRDTO>(added);
       }
     }
   }

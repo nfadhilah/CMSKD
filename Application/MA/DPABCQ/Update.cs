@@ -1,14 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.DPABCQ
 {
@@ -46,14 +48,14 @@ namespace Application.MA.DPABCQ
       {
         RuleFor(d => d.IdDPA).NotEmpty();
         RuleFor(d => d.IdRek).NotEmpty();
+        RuleFor(d => d.KdTahap).NotEmpty();
+        RuleFor(d => d.IdXKode).NotEmpty();
       }
     }
 
-    public class Command : DPAB, IRequest
-    {
-    }
+    public class Command : DPAB, IRequest<DPABDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPABDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -64,7 +66,7 @@ namespace Application.MA.DPABCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPABDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -78,7 +80,11 @@ namespace Application.MA.DPABCQ
         if (!_context.DPAB.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result =
+          await _context.DPAB.FindAllAsync<DPA, DaftRekening>(
+            x => x.IdDPAB == updated.IdDPAB, x => x.DPA, x => x.DaftRekening);
+
+        return _mapper.Map<DPABDTO>(result.Single());
       }
     }
   }

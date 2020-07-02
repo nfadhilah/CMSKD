@@ -1,14 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.DM;
 using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.MA.PgrmUnitCQ
 {
@@ -58,11 +60,11 @@ namespace Application.MA.PgrmUnitCQ
       }
     }
 
-    public class Command : PgrmUnit, IRequest
+    public class Command : PgrmUnit, IRequest<PgrmUnitDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, PgrmUnitDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -73,7 +75,7 @@ namespace Application.MA.PgrmUnitCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<PgrmUnitDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -87,7 +89,10 @@ namespace Application.MA.PgrmUnitCQ
         if (!_context.PgrmUnit.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.PgrmUnit.FindAllAsync<DaftUnit, MPgrm>(
+          x => x.IdPgrmUnit == updated.IdPgrmUnit, x => x.DaftUnit, x => x.MPgrm);
+
+        return _mapper.Map<PgrmUnitDTO>(result.Single());
       }
     }
   }
