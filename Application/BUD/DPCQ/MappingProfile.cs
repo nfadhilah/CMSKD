@@ -9,6 +9,7 @@ namespace Application.BUD.DPCQ
     {
       CreateMap<Create.Command, DP>();
       CreateMap<Update.Command, DP>();
+      CreateMap<DP, DPDTO>();
     }
   }
 }

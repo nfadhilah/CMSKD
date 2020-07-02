@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.BUD;
 using MediatR;
 using Persistence;
 using System.Net;
@@ -11,12 +10,12 @@ namespace Application.BUD.DPCQ
 {
   public class Detail
   {
-    public class Query : IRequest<DP>
+    public class Query : IRequest<DPDTO>
     {
       public long IdDP { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DP>
+    public class Handler : IRequestHandler<Query, DPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -27,7 +26,7 @@ namespace Application.BUD.DPCQ
         _mapper = mapper;
       }
 
-      public async Task<DP> Handle(
+      public async Task<DPDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result = await _context.DP.FindByIdAsync(request.IdDP);
@@ -35,7 +34,7 @@ namespace Application.BUD.DPCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPDTO>(result);
       }
     }
   }

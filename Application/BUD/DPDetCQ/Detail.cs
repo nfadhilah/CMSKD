@@ -12,12 +12,12 @@ namespace Application.BUD.DPDetCQ
 {
   public class Detail
   {
-    public class Query : IRequest<DPDet>
+    public class Query : IRequest<DPDetDTO>
     {
       public long IdDPDet { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, DPDet>
+    public class Handler : IRequestHandler<Query, DPDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace Application.BUD.DPDetCQ
         _mapper = mapper;
       }
 
-      public async Task<DPDet> Handle(
+      public async Task<DPDetDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -38,7 +38,7 @@ namespace Application.BUD.DPDetCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<DPDetDTO>(result);
       }
     }
   }

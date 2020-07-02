@@ -13,12 +13,12 @@ namespace Application.BUD.SP2DDetRPCQ
 {
   public class Detail
   {
-    public class Query : IRequest<SP2DDetRP>
+    public class Query : IRequest<SP2DDetRPDTO>
     {
       public long IdSP2DDetRP { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, SP2DDetRP>
+    public class Handler : IRequestHandler<Query, SP2DDetRPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Application.BUD.SP2DDetRPCQ
         _mapper = mapper;
       }
 
-      public async Task<SP2DDetRP> Handle(
+      public async Task<SP2DDetRPDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -40,7 +40,7 @@ namespace Application.BUD.SP2DDetRPCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<SP2DDetRPDTO>(result);
       }
     }
   }

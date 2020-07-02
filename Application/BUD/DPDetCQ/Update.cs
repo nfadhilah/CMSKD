@@ -45,11 +45,11 @@ namespace Application.BUD.DPDetCQ
       }
     }
 
-    public class Command : DPDet, IRequest
+    public class Command : DPDet, IRequest<DPDetDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -60,7 +60,7 @@ namespace Application.BUD.DPDetCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -74,7 +74,10 @@ namespace Application.BUD.DPDetCQ
         if (!_context.DPDet.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.DPDet
+          .FindAllAsync<SP2D>(x => x.IdDPDet == updated.IdDPDet, x => x.SP2D);
+
+        return _mapper.Map<DPDetDTO>(result);
       }
     }
   }

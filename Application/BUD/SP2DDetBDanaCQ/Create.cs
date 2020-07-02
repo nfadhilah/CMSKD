@@ -14,11 +14,10 @@ namespace Application.BUD.SP2DDetBDanaCQ
 {
   public class Create
   {
-    public class Command : IRequest<SP2DDetBDana>
+    public class Command : IRequest<SP2DDetBDanaDTO>
     {
-      public long IdSP2DDetBDana { get; set; }
       public long IdSP2DDetB { get; set; }
-      public long KdDana { get; set; }
+      public long IdJDana { get; set; }
       public decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
     }
@@ -28,11 +27,11 @@ namespace Application.BUD.SP2DDetBDanaCQ
       public Validator()
       {
         RuleFor(d => d.IdSP2DDetB).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Handler : IRequestHandler<Command, SP2DDetBDana>
+    public class Handler : IRequestHandler<Command, SP2DDetBDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -43,7 +42,7 @@ namespace Application.BUD.SP2DDetBDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<SP2DDetBDana> Handle(
+      public async Task<SP2DDetBDanaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SP2DDetBDana>(request);
@@ -56,7 +55,7 @@ namespace Application.BUD.SP2DDetBDanaCQ
             x => x.IdSP2DDetBDana == added.IdSP2DDetBDana, x => x.SP2DDetB,
             x => x.JDana);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SP2DDetBDanaDTO>(result.SingleOrDefault());
       }
     }
   }

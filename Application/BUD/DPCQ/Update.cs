@@ -49,11 +49,11 @@ namespace Application.BUD.DPCQ
       }
     }
 
-    public class Command : DP, IRequest
+    public class Command : DP, IRequest<DPDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, DPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -64,7 +64,7 @@ namespace Application.BUD.DPCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<DPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -78,7 +78,7 @@ namespace Application.BUD.DPCQ
         if (!_context.DP.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        return _mapper.Map<DPDTO>(updated);
       }
     }
   }

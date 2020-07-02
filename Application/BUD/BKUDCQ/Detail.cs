@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.BUD;
 using Domain.DM;
 using Domain.TUBEND;
 using MediatR;
@@ -14,12 +13,12 @@ namespace Application.BUD.BKUDCQ
 {
   public class Detail
   {
-    public class Query : IRequest<BKUD>
+    public class Query : IRequest<BKUDDTO>
     {
       public long IdBKUD { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, BKUD>
+    public class Handler : IRequestHandler<Query, BKUDDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,7 +29,7 @@ namespace Application.BUD.BKUDCQ
         _mapper = mapper;
       }
 
-      public async Task<BKUD> Handle(
+      public async Task<BKUDDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -40,7 +39,7 @@ namespace Application.BUD.BKUDCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<BKUDDTO>(result);
       }
     }
   }

@@ -14,7 +14,7 @@ namespace Application.BUD.SP2DDetRCQ
 {
   public class Create
   {
-    public class Command : IRequest<SP2DDetR>
+    public class Command : IRequest<SP2DDetRDTO>
     {
       public long IdSP2D { get; set; }
       public long IdKeg { get; set; }
@@ -35,7 +35,7 @@ namespace Application.BUD.SP2DDetRCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, SP2DDetR>
+    public class Handler : IRequestHandler<Command, SP2DDetRDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -46,7 +46,7 @@ namespace Application.BUD.SP2DDetRCQ
         _mapper = mapper;
       }
 
-      public async Task<SP2DDetR> Handle(
+      public async Task<SP2DDetRDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<SP2DDetR>(request);
@@ -59,7 +59,7 @@ namespace Application.BUD.SP2DDetRCQ
             x => x.IdSP2DDetR == added.IdSP2DDetR, x => x.SP2D, x => x.Kegiatan,
             x => x.Rekening);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<SP2DDetRDTO>(result.SingleOrDefault());
       }
     }
   }

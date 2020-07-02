@@ -12,7 +12,7 @@ namespace Application.BUD.DPCQ
 {
   public class Create
   {
-    public class Command : IRequest<DP>
+    public class Command : IRequest<DPDTO>
     {
       public string NoDP { get; set; }
       public int? IdxKode { get; set; }
@@ -31,7 +31,7 @@ namespace Application.BUD.DPCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DP>
+    public class Handler : IRequestHandler<Command, DPDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -42,7 +42,7 @@ namespace Application.BUD.DPCQ
         _mapper = mapper;
       }
 
-      public async Task<DP> Handle(
+      public async Task<DPDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DP>(request);
@@ -50,7 +50,7 @@ namespace Application.BUD.DPCQ
         if (!await _context.DP.InsertAsync(added))
           throw new ApiException("Problem saving changes");
 
-        return added;
+        return _mapper.Map<DPDTO>(added);
       }
     }
   }

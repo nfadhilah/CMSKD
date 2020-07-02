@@ -15,8 +15,8 @@ namespace Domain.BUD
     public long IdSP2DDetB { get; set; }
     [InnerJoin("SP2DDETB", "IDSP2DDETB", "IDSP2DDETB")]
     public SP2DDetB SP2DDetB { get; set; }
-    public long KdDana { get; set; }
-    [InnerJoin("JDANA", "KDDANA", "KDDANA")]
+    public long IdJDana { get; set; }
+    [InnerJoin("JDANA", "IDJDANA", "IDJDANA")]
     public JDana JDana { get; set; }
     public decimal? Nilai { get; set; }
     public DateTime? DateCreate { get; set; }

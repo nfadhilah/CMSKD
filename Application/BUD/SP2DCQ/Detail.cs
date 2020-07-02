@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.BUD;
 using Domain.DM;
 using Domain.MA;
 using MediatR;
@@ -14,12 +13,12 @@ namespace Application.BUD.SP2DCQ
 {
   public class Detail
   {
-    public class Query : IRequest<SP2D>
+    public class Query : IRequest<SP2DDTO>
     {
       public long IdSP2D { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, SP2D>
+    public class Handler : IRequestHandler<Query, SP2DDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -30,7 +29,7 @@ namespace Application.BUD.SP2DCQ
         _mapper = mapper;
       }
 
-      public async Task<SP2D> Handle(
+      public async Task<SP2DDTO> Handle(
       Query request, CancellationToken cancellationToken)
       {
         var result =
@@ -41,7 +40,7 @@ namespace Application.BUD.SP2DCQ
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-        return result;
+        return _mapper.Map<SP2DDTO>(result);
       }
     }
   }

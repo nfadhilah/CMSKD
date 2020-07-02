@@ -15,7 +15,7 @@ namespace Application.BUD.BKUDCQ
 {
   public class Create
   {
-    public class Command : IRequest<BKUD>
+    public class Command : IRequest<BKUDDTO>
     {
       public long? IdKas { get; set; }
       public long IdSTS { get; set; }
@@ -38,7 +38,7 @@ namespace Application.BUD.BKUDCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, BKUD>
+    public class Handler : IRequestHandler<Command, BKUDDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -49,7 +49,7 @@ namespace Application.BUD.BKUDCQ
         _mapper = mapper;
       }
 
-      public async Task<BKUD> Handle(
+      public async Task<BKUDDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<BKUD>(request);
@@ -61,7 +61,7 @@ namespace Application.BUD.BKUDCQ
           .FindAllAsync<DaftUnit, STS>(
             x => x.IdBKUD == added.IdBKUD, x => x.Unit, x => x.STS);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<BKUDDTO>(result.SingleOrDefault());
       }
     }
   }

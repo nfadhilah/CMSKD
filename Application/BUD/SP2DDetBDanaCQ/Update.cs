@@ -2,9 +2,11 @@
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,9 +19,8 @@ namespace Application.BUD.SP2DDetBDanaCQ
     {
       private readonly IMapper _mapper;
 
-      public long IdSP2DDetBDana { get; set; }
       public long IdSP2DDetB { get; set; }
-      public long KdDana { get; set; }
+      public long IdJDana { get; set; }
       public decimal? Nilai { get; set; }
 
       public DTO()
@@ -43,15 +44,13 @@ namespace Application.BUD.SP2DDetBDanaCQ
       public Validator()
       {
         RuleFor(d => d.IdSP2DDetB).NotEmpty();
-        RuleFor(d => d.KdDana).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
       }
     }
 
-    public class Command : SP2DDetBDana, IRequest
-    {
-    }
+    public class Command : SP2DDetBDana, IRequest<SP2DDetBDanaDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, SP2DDetBDanaDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -62,7 +61,7 @@ namespace Application.BUD.SP2DDetBDanaCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<SP2DDetBDanaDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -76,7 +75,12 @@ namespace Application.BUD.SP2DDetBDanaCQ
         if (!_context.SP2DDetBDana.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.SP2DDetBDana
+          .FindAllAsync<SP2DDetB, JDana>(
+            x => x.IdSP2DDetBDana == updated.IdSP2DDetBDana, x => x.SP2DDetB,
+            x => x.JDana);
+
+        return _mapper.Map<SP2DDetBDanaDTO>(result.SingleOrDefault());
       }
     }
   }

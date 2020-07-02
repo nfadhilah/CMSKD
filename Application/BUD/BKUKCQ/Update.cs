@@ -2,10 +2,12 @@
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,11 +55,9 @@ namespace Application.BUD.BKUKCQ
       }
     }
 
-    public class Command : BKUK, IRequest
-    {
-    }
+    public class Command : BKUK, IRequest<BKUKDTO> { }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, BKUKDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -68,7 +68,7 @@ namespace Application.BUD.BKUKCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<BKUKDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -82,7 +82,11 @@ namespace Application.BUD.BKUKCQ
         if (!_context.BKUK.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.BKUK
+          .FindAllAsync<DaftUnit, SP2D>(
+            x => x.IdBKUK == updated.IdBKUK, x => x.Unit, x => x.SP2D);
+
+        return _mapper.Map<BKUKDTO>(result.SingleOrDefault());
       }
     }
   }

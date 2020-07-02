@@ -13,7 +13,7 @@ namespace Application.BUD.DPDetCQ
 {
   public class Create
   {
-    public class Command : IRequest<DPDet>
+    public class Command : IRequest<DPDetDTO>
     {
       public long IdDP { get; set; }
       public long IdSP2D { get; set; }
@@ -29,7 +29,7 @@ namespace Application.BUD.DPDetCQ
       }
     }
 
-    public class Handler : IRequestHandler<Command, DPDet>
+    public class Handler : IRequestHandler<Command, DPDetDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -40,7 +40,7 @@ namespace Application.BUD.DPDetCQ
         _mapper = mapper;
       }
 
-      public async Task<DPDet> Handle(
+      public async Task<DPDetDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var added = _mapper.Map<DPDet>(request);
@@ -51,7 +51,7 @@ namespace Application.BUD.DPDetCQ
         var result = await _context.DPDet
           .FindAllAsync<SP2D>(x => x.IdDPDet == added.IdDPDet, x => x.SP2D);
 
-        return result.SingleOrDefault();
+        return _mapper.Map<DPDetDTO>(result.SingleOrDefault());
       }
     }
   }

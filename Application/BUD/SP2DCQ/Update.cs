@@ -2,6 +2,8 @@
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.BUD;
+using Domain.DM;
+using Domain.MA;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -63,11 +65,11 @@ namespace Application.BUD.SP2DCQ
       }
     }
 
-    public class Command : SP2D, IRequest
+    public class Command : SP2D, IRequest<SP2DDTO>
     {
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, SP2DDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
@@ -78,7 +80,7 @@ namespace Application.BUD.SP2DCQ
         _mapper = mapper;
       }
 
-      public async Task<Unit> Handle(
+      public async Task<SP2DDTO> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
@@ -92,7 +94,12 @@ namespace Application.BUD.SP2DCQ
         if (!_context.SP2D.Update(updated))
           throw new ApiException("Problem saving changes");
 
-        return Unit.Value;
+        var result = await _context.SP2D
+          .FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd>(
+            x => x.IdSPD == updated.IdSP2D, x => x.Unit, x => x.Bend, x => x.SPD,
+            x => x.Phk3, x => x.JabTtd);
+
+        return _mapper.Map<SP2DDTO>(result);
       }
     }
   }

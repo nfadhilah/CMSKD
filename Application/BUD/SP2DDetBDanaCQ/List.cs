@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.BUD;
 using Domain.DM;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.BUD.SP2DDetBDanaCQ
 {
@@ -20,17 +21,19 @@ namespace Application.BUD.SP2DDetBDanaCQ
     {
       public long? IdSP2DDetBDana { get; set; }
       public long? IdSP2DDetB { get; set; }
-      public long? KdDana { get; set; }
+      public long? IdJDana { get; set; }
       public decimal? Nilai { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -44,8 +47,8 @@ namespace Application.BUD.SP2DDetBDanaCQ
         if (request.IdSP2DDetB.HasValue)
           parameters.Add(d => d.IdSP2DDetB == request.IdSP2DDetB);
 
-        if (request.KdDana.HasValue)
-          parameters.Add(d => d.KdDana == request.KdDana);
+        if (request.IdJDana.HasValue)
+          parameters.Add(d => d.IdJDana == request.IdJDana);
 
         if (request.Nilai.HasValue)
           parameters.Add(d => d.Nilai == request.Nilai);
@@ -60,12 +63,13 @@ namespace Application.BUD.SP2DDetBDanaCQ
           .FindAllAsync<SP2DDetB, JDana>(
             predicate, x => x.SP2DDetB, x => x.JDana);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<SP2DDetBDanaDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }

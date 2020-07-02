@@ -1,4 +1,6 @@
-﻿using Application.Helpers;
+﻿using Application.CommonDTO;
+using Application.Helpers;
+using AutoMapper;
 using Domain.BUD;
 using Domain.DM;
 using MediatR;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
 
 namespace Application.BUD.SP2DDetRCQ
 {
@@ -28,10 +29,12 @@ namespace Application.BUD.SP2DDetRCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
 
-      public Handler(IDbContext context)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
+        _mapper = mapper;
       }
 
       public async Task<PaginationWrapper> Handle(
@@ -54,7 +57,6 @@ namespace Application.BUD.SP2DDetRCQ
         if (request.Nilai.HasValue)
           parameters.Add(d => d.Nilai == request.Nilai);
 
-
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
         var totalItemsCount = _context.SP2DDetR.FindAll(predicate).Count();
@@ -66,12 +68,13 @@ namespace Application.BUD.SP2DDetRCQ
             predicate, x => x.SP2D, x => x.Kegiatan,
             x => x.Rekening);
 
-        return new PaginationWrapper(result, new Pagination
-        {
-          CurrentPage = request.CurrentPage,
-          PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
-        });
+        return new PaginationWrapper(
+          _mapper.Map<IEnumerable<SP2DDetRDTO>>(result), new Pagination
+          {
+            CurrentPage = request.CurrentPage,
+            PageSize = request.PageSize,
+            TotalItemsCount = totalItemsCount
+          });
       }
     }
   }
