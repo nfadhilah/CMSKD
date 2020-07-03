@@ -9,6 +9,7 @@ namespace Application.DM.BendCQ
     public long IdPeg { get; set; }
     public string NIP { get; set; }
     public string Nama { get; set; }
+    public string Jabatan { get; set; }
     public string IdBank { get; set; }
     public string KdBank { get; set; }
     public string NmBank { get; set; }

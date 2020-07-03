@@ -14,6 +14,7 @@ namespace Application.DM.BendCQ
         .ForMember(d => d.NPWPBend, opt => opt.MapFrom(s => s.NPWPBend.Trim()))
         .ForMember(d => d.Nama, opt => opt.MapFrom(s => s.Peg.Nama.Trim()))
         .ForMember(d => d.NIP, opt => opt.MapFrom(s => s.Peg.NIP.Trim()))
+        .ForMember(d => d.Jabatan, opt => opt.MapFrom(s => s.Peg.Jabatan.Trim()))
         .ForMember(d => d.KdBank, opt => opt.MapFrom(s => s.Bank.KdBank.Trim()))
         .ForMember(d => d.NmBank,
           opt => opt.MapFrom(s => s.Bank.NmBank.Trim()))
