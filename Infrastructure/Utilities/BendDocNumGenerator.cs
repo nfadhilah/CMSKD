@@ -21,7 +21,8 @@ namespace Infrastructure.Utilities
     }
 
     public async Task<string> GetBendDocNumber(
-      long idUnit, long idBend, string kdSet, int kdStatus, string tableName, string column)
+      long idUnit, long idBend, string kdSet, int kdStatus, string tableName,
+      string column)
     {
       var unit = _context.DaftUnit.Find(x => x.IdUnit == idUnit);
 
@@ -52,7 +53,8 @@ namespace Infrastructure.Utilities
 
       var formatDict = BuildFormatDict(values, unit, bend, statTrs);
 
-      var generatedNum = await GetLastNumber(idUnit, column, formatDict, tableName, webSet);
+      var generatedNum =
+        await GetLastNumber(idUnit, column, formatDict, tableName, webSet);
 
       foreach (var (_, (key, value)) in formatDict.Where(f =>
         f.Key != "Number"))
@@ -64,7 +66,8 @@ namespace Infrastructure.Utilities
     }
 
     public async Task<string> GetRegNumber(
-      long idUnit, string tableName, string orderColumnName = "NOREG", int padding = 5)
+      long idUnit, string tableName, string orderColumnName = "NOREG",
+      int padding = 5)
     {
       var cmd = $@"SELECT TOP (1) CAST(t.NOREG AS INT) + 1
 FROM dbo.{tableName} t
@@ -72,12 +75,17 @@ WHERE t.IDUNIT = @IdUnit
 ORDER BY t.NOREG DESC
 ";
 
-      var lastNumber = await _context.Connection.QuerySingleOrDefaultAsync<int?>(cmd, new { IdUnit = idUnit }) ?? 1;
+      var lastNumber =
+        await _context.Connection.QuerySingleOrDefaultAsync<int?>(cmd,
+          new { IdUnit = idUnit }) ?? 1;
 
-      return lastNumber.ToString().PadLeft(padding, '0'); ;
+      return lastNumber.ToString().PadLeft(padding, '0');
+      ;
     }
 
-    private static Dictionary<string, KeyValuePair<string, string>> BuildFormatDict(IEnumerable<Group> values, DaftUnit unit, Bend bend, StatTrs statTrs)
+    private static Dictionary<string, KeyValuePair<string, string>>
+      BuildFormatDict(
+        IEnumerable<Group> values, DaftUnit unit, Bend bend, StatTrs statTrs)
     {
       var formatDict = new Dictionary<string, KeyValuePair<string, string>>();
 
@@ -97,7 +105,7 @@ ORDER BY t.NOREG DESC
             break;
           case "JENIS":
             formatDict["JnsTransaksi"] =
-                new KeyValuePair<string, string>(v.Value, statTrs.LblStatus);
+              new KeyValuePair<string, string>(v.Value, statTrs.LblStatus);
             break;
           case "SKPD":
             {
@@ -123,7 +131,8 @@ ORDER BY t.NOREG DESC
     }
 
     private async Task<string> GetLastNumber(
-      long idUnit, string column, Dictionary<string, KeyValuePair<string, string>> formatDict,
+      long idUnit, string column,
+      Dictionary<string, KeyValuePair<string, string>> formatDict,
       string tableName, WebSet webSet)
     {
       try

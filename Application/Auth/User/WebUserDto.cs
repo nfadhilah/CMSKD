@@ -5,7 +5,7 @@
     public string UserId { get; set; }
     public long? IdUnit { get; set; }
     public int KdTahap { get; set; }
-    public string NIP { get; set; }
+    public long? IdPeg { get; set; }
     public long GroupId { get; set; }
     public string Nama { get; set; }
     public string Email { get; set; }

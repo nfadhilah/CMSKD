@@ -79,6 +79,7 @@ namespace Application.Auth.User
           Token = token,
           Image = null,
           KdTahap = user.KdTahap,
+          IdPeg = user.IdPeg,
           UnitId = user.IdUnit?.ToString() ?? "",
           KdUnit = user.DaftUnit?.KdUnit.Trim() ?? "",
           NmUnit = user.DaftUnit?.NmUnit.Trim() ?? ""

@@ -14,7 +14,7 @@ namespace Domain.Auth
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }
     public int KdTahap { get; set; }
-    public string NIP { get; set; }
+    public long? IdPeg { get; set; }
     public string Pwd { get; set; }
     public long GroupId { get; set; }
     [LeftJoin("WEBGROUP", "GROUPID", "GROUPID")]
