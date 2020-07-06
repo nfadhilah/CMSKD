@@ -117,7 +117,7 @@ namespace Persistence
     {
       MicroOrmConfig.SqlProvider = SqlProvider.MSSQL;
       Connection = new SqlConnection(connectionString);
-      // Connection.Open();
+      Connection.Open();
     }
 
     public IDbConnection Connection { get; }
@@ -231,6 +231,11 @@ namespace Persistence
     {
       Dispose(true);
       GC.SuppressFinalize(this);
+    }
+
+    ~DbContext()
+    {
+      Dispose(false);
     }
   }
 }
