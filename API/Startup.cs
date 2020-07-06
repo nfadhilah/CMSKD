@@ -23,6 +23,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
 using System.Text;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 
 namespace API
@@ -117,7 +118,7 @@ namespace API
           var policy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().Build();
 
-          // opt.Filters.Add(new AuthorizeFilter(policy));
+          opt.Filters.Add(new AuthorizeFilter(policy));
         })
         .AddFluentValidation(opt =>
           {
