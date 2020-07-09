@@ -27,6 +27,7 @@ namespace Application.MA.SPDCQ
       public int? IdxKode { get; set; }
       public string Keterangan { get; set; }
       public DateTime? TglValid { get; set; }
+      public bool IsValid { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -68,7 +69,9 @@ namespace Application.MA.SPDCQ
 
         if (!string.IsNullOrWhiteSpace(request.Keterangan))
           parameters.Add(d => d.Keterangan.Contains(request.Keterangan));
-        ;
+
+        if (request.IsValid)
+          parameters.Add(d => d.TglValid != null);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

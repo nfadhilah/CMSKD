@@ -15,6 +15,8 @@ namespace Application.TUBEND.BeritaCQ
     public DateTime TglBA { get; set; }
     public long IdKontrak { get; set; }
     public string NoKontrak { get; set; }
+    public long IdPhk3 { get; set; }
+    public string NmPhk3 { get; set; }
     public string Urai_Berita { get; set; }
     public DateTime? TglValid { get; set; }
     public string KdStatus { get; set; }

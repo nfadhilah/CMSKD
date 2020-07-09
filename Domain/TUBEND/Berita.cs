@@ -23,6 +23,8 @@ namespace Domain.TUBEND
     public long IdKontrak { get; set; }
     [LeftJoin("KONTRAK", "IDKONTRAK", "IDKONTRAK")]
     public Kontrak Kontrak { get; set; }
+    [NotMapped]
+    public DaftPhk3 Phk3 { get; set; }
     public string Urai_Berita { get; set; }
     public DateTime? TglValid { get; set; }
     public string KdStatus { get; set; }
