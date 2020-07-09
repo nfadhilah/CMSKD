@@ -73,7 +73,7 @@ FROM dbo.SPP s
           new { NoSPP = "%" + queryParams.NoSPP } + "%");
 
       if (!string.IsNullOrWhiteSpace(queryParams.KdStatus))
-        builder.Where("s.KDSTATUS = @KdStatus", queryParams.KdStatus);
+        builder.Where("s.KDSTATUS = @KdStatus", new { queryParams.KdStatus });
 
       if (queryParams.IdPhk3.HasValue)
         builder.Where("s.IDPHK3 = @IdPhk3", new { queryParams.IdPhk3 });
