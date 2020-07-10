@@ -18,6 +18,7 @@ namespace Application.DM.DaftPhk3CQ
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
+      public long? IdUnit { get; set; }
       public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
       public int? IdJUsaha { get; set; }
@@ -38,6 +39,9 @@ namespace Application.DM.DaftPhk3CQ
         Query request, CancellationToken cancellationToken)
       {
         var parameters = new List<Expression<Func<DaftPhk3, bool>>>();
+
+        if (request.IdUnit.HasValue)
+          parameters.Add(d => d.IdUnit == request.IdUnit);
 
         if (!string.IsNullOrWhiteSpace(request.NmPhk3))
           parameters.Add(d => d.NmPhk3.Contains(request.NmPhk3));

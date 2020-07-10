@@ -10,7 +10,8 @@ namespace Domain.DM
   public class DaftPhk3
   {
     [Key, Identity]
-    public int IdPhk3 { get; set; }
+    public long IdPhk3 { get; set; }
+    public long? IdUnit { get; set; }
     public string NmPhk3 { get; set; }
     public string NmInst { get; set; }
     public int IdBank { get; set; }

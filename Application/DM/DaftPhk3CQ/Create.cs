@@ -15,6 +15,7 @@ namespace Application.DM.DaftPhk3CQ
   {
     public class Command : IRequest<DaftPhk3DTO>
     {
+      public long? IdUnit { get; set; }
       public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
       public int IdBank { get; set; }

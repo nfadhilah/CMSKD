@@ -19,6 +19,7 @@ namespace Application.DM.DaftPhk3CQ
     {
       private readonly IMapper _mapper;
 
+      public long? IdUnit { get; set; }
       public string NmPhk3 { get; set; }
       public string NmInst { get; set; }
       public int IdBank { get; set; }
