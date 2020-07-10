@@ -1,10 +1,10 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.DM.DaftPhk3CQ
 {
@@ -12,7 +12,7 @@ namespace Application.DM.DaftPhk3CQ
   {
     public class Command : IRequest
     {
-      public int IdPhk3 { get; set; }
+      public long IdPhk3 { get; set; }
     }
 
     public class Handler : IRequestHandler<Command>

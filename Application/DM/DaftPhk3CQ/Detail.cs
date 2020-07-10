@@ -14,7 +14,7 @@ namespace Application.DM.DaftPhk3CQ
   {
     public class Query : IRequest<DaftPhk3DTO>
     {
-      public int IdPhk3 { get; set; }
+      public long IdPhk3 { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, DaftPhk3DTO>
