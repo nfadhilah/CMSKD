@@ -107,6 +107,7 @@ namespace Persistence
     DPRepository DP { get; }
     DPDetRepository DPDet { get; }
     WebSetRepository WebSet { get; }
+    SPPBARepository SPPBA { get; }
   }
 
   public class DbContext : IDbContext
@@ -214,6 +215,7 @@ namespace Persistence
     public DPRepository DP => new DPRepository(Connection);
     public DPDetRepository DPDet => new DPDetRepository(Connection);
     public WebSetRepository WebSet => new WebSetRepository(Connection);
+    public SPPBARepository SPPBA => new SPPBARepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
