@@ -35,6 +35,7 @@ namespace Application.TUBEND.BPKCQ
       public int? StCair { get; set; }
       public string NoRef { get; set; }
       public DateTime? DateCreate { get; set; }
+      public bool? IsValid { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -94,6 +95,9 @@ namespace Application.TUBEND.BPKCQ
 
         if (request.TglValid.HasValue)
           parameters.Add(d => d.TglValid == request.TglValid);
+
+        if (request.IsValid.HasValue)
+          parameters.Add(d => d.TglValid != null);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
