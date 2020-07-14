@@ -24,6 +24,7 @@ namespace Application.MA.DPARCQ
       public int? IdXKode { get; set; }
       public long? IdKeg { get; set; }
       public long? IdRek { get; set; }
+      public long? IdUnit { get; set; }
       public Decimal? Nilai { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
@@ -61,6 +62,8 @@ namespace Application.MA.DPARCQ
           parameters.Add(d => d.DateCreate == request.DateCreate);
         if (request.DateUpdate.HasValue)
           parameters.Add(d => d.DateUpdate == request.DateUpdate);
+        if (request.IdUnit.HasValue)
+          parameters.Add(d => d.DPA.IdUnit == request.IdUnit);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
