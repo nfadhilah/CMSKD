@@ -115,7 +115,8 @@ FROM dbo.SPP s
       if (queryParams.IdKeg.HasValue)
       {
         builder.LeftJoin("SPPDETR as sr ON s.IDSPP = sr.IDSPP").Where(
-          "sr.IDKEG = @IdKeg OR sr.IDKEG IS NULL",
+          @"(ISNULL(sr.IDKEG, '') = ISNULL(@IdKeg, '')
+          OR ISNULL(@IdKeg, '') = '')",
           new { queryParams.IdKeg });
       }
 
