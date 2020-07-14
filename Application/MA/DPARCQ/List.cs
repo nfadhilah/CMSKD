@@ -67,8 +67,6 @@ namespace Application.MA.DPARCQ
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.DPAR.FindAll(predicate).Count();
-
         var result = await _context.DPAR
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdDPAR)
@@ -79,7 +77,7 @@ namespace Application.MA.DPARCQ
         {
           CurrentPage = request.CurrentPage,
           PageSize = request.PageSize,
-          TotalItemsCount = totalItemsCount
+          TotalItemsCount = result.Count()
         });
       }
     }
