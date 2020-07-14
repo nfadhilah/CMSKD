@@ -7,8 +7,8 @@ namespace Application.TUBEND.SPPBPKCQ
   {
     public MappingProfile()
     {
-      CreateMap<Create.Command, Berita>();
-      CreateMap<Update.Command, Berita>();
+      CreateMap<Create.Command, SPPBPK>();
+      CreateMap<Update.Command, SPPBPK>();
       CreateMap<SPPBPK, SPPBPKDTO>()
         .ForMember(s => s.NoSPP, opt => opt.MapFrom(s => s.SPP.NoSPP.Trim()))
         .ForMember(s => s.NoBPK,
