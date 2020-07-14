@@ -109,6 +109,7 @@ namespace Persistence
     WebSetRepository WebSet { get; }
     SPPBARepository SPPBA { get; }
     SPPBPKRepository SPPBPK { get; }
+    TahapRepository Tahap { get; }
   }
 
   public class DbContext : IDbContext
@@ -218,6 +219,7 @@ namespace Persistence
     public WebSetRepository WebSet => new WebSetRepository(Connection);
     public SPPBARepository SPPBA => new SPPBARepository(Connection);
     public SPPBPKRepository SPPBPK => new SPPBPKRepository(Connection);
+    public TahapRepository Tahap => new TahapRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
