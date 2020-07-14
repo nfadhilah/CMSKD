@@ -11,14 +11,14 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.TUBEND.SPPBACQ
+namespace Application.TUBEND.SPPBPKCQ
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
       public long? IdSPP { get; set; }
-      public long? IdBerita { get; set; }
+      public long? IdBPK { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -35,22 +35,22 @@ namespace Application.TUBEND.SPPBACQ
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<SPPBA, bool>>>();
+        var parameters = new List<Expression<Func<SPPBPK, bool>>>();
 
         if (request.IdSPP.HasValue)
           parameters.Add(s => s.IdSPP == request.IdSPP);
 
-        if (request.IdBerita.HasValue)
-          parameters.Add(s => s.IdBerita == request.IdBerita);
+        if (request.IdBPK.HasValue)
+          parameters.Add(s => s.IdBPK == request.IdBPK);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
         var result = await
-          _context.SPPBA.FindAllAsync<SPP, Berita>(predicate, x => x.SPP,
-            x => x.Berita);
+          _context.SPPBPK.FindAllAsync<SPP, BPK>(predicate, x => x.SPP,
+            x => x.BPK);
 
         return new PaginationWrapper(
-          _mapper.Map<IEnumerable<SPPBADTO>>(result), new Pagination
+          _mapper.Map<IEnumerable<SPPBPKDTO>>(result), new Pagination
           {
             CurrentPage = request.CurrentPage,
             PageSize = request.PageSize,
