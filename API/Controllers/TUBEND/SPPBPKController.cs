@@ -24,13 +24,13 @@ namespace API.Controllers.TUBEND
     /// <summary>
     /// Bulk Insert ke Table SPPBPK sekaligus bulk insert ke Table SPPDETR
     /// </summary>
-    /// <param name="id">IdSPP</param>
+    /// <param name="idSPP">IdSPP</param>
     /// <param name="dto">idBPKList diisi dengan list dari IdBPK eg: [1, 2, 3, 4]</param>
     /// <returns></returns>
-    [HttpPost("{id}/bulk")]
-    public async Task<IActionResult> BulkInsert(long id, BulkInsert.DTO dto)
+    [HttpPost("SPP/{idSPP}/bulk")]
+    public async Task<IActionResult> BulkInsert(long idSPP, BulkInsert.DTO dto)
     {
-      var command = dto.MapDTO(new BulkInsert.Command { IdSPP = id });
+      var command = dto.MapDTO(new BulkInsert.Command { IdSPP = idSPP });
       return Ok(await Mediator.Send(command));
     }
 
