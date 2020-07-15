@@ -20,6 +20,7 @@ namespace Application.TUBEND.SPPBPKCQ
     {
       private readonly IMapper _mapper;
 
+      public long IdSPP { get; set; }
       public IEnumerable<long> IdBPKList { get; set; }
 
       public DTO()
@@ -47,6 +48,7 @@ namespace Application.TUBEND.SPPBPKCQ
     {
       public Validator()
       {
+        RuleFor(x => x.IdSPP).NotEmpty();
         RuleFor(x => x.IdBPKList).NotEmpty();
       }
     }
