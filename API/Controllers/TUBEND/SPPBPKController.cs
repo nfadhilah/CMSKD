@@ -21,6 +21,10 @@ namespace API.Controllers.TUBEND
       return CreatedAtRoute("GetSPPBPK", new { id = request.IdSPPBPK }, request);
     }
 
+    [HttpPost("bulk")]
+    public async Task<IActionResult> BulkInsert(BulkInsert.Command command) =>
+      Ok(await Mediator.Send(command));
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
