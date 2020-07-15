@@ -23,6 +23,8 @@ using Persistence;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 
@@ -100,6 +102,13 @@ namespace API
             new string[] { }
           }
         });
+
+        var apiXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var appXmlFile = $"{typeof(MappingProfile).Assembly.GetName().Name}.xml";
+        var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
+        var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
+        opt.IncludeXmlComments(apiXmlPath);
+        opt.IncludeXmlComments(appXmlPath);
       });
 
       services.AddCors(opt =>

@@ -21,9 +21,18 @@ namespace API.Controllers.TUBEND
       return CreatedAtRoute("GetSPPBPK", new { id = request.IdSPPBPK }, request);
     }
 
-    [HttpPost("bulk")]
-    public async Task<IActionResult> BulkInsert(BulkInsert.Command command) =>
-      Ok(await Mediator.Send(command));
+    /// <summary>
+    /// Bulk Insert ke Table SPPBPK sekaligus bulk insert ke Table SPPDETR
+    /// </summary>
+    /// <param name="id">IdSPP</param>
+    /// <param name="dto">idBPKList diisi dengan list dari IdBPK eg: [1, 2, 3, 4]</param>
+    /// <returns></returns>
+    [HttpPost("{id}/bulk")]
+    public async Task<IActionResult> BulkInsert(long id, BulkInsert.DTO dto)
+    {
+      var command = dto.MapDTO(new BulkInsert.Command { IdSPP = id });
+      return Ok(await Mediator.Send(command));
+    }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
