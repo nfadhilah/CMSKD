@@ -1,5 +1,4 @@
-﻿using Application.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.TUBEND;
 using FluentValidation;
@@ -13,39 +12,17 @@ using System.Threading.Tasks;
 
 namespace Application.TUBEND.SPPBPKCQ
 {
-  public class BulkInsert
+  public class BulkDelete
   {
-    public class DTO : IMapDTO<Command>
-    {
-      private readonly IMapper _mapper;
-
-      public long IdSPP { get; set; }
-      public IEnumerable<long> IdBPKList { get; set; }
-
-      public DTO()
-      {
-        var config = new MapperConfiguration(opt =>
-          opt.CreateMap<DTO, Command>().ForMember(x => x.IdBPKList,
-            o => o.MapFrom(s => s.IdBPKList)));
-
-        _mapper = config.CreateMapper();
-      }
-
-      public Command MapDTO(Command destination)
-      {
-        return _mapper.Map(this, destination);
-      }
-    }
-
     public class Command : IRequest<IEnumerable<SPPBPKDTO>>
     {
       public long IdSPP { get; set; }
       public List<long> IdBPKList { get; set; }
     }
 
-    public class Validator : AbstractValidator<DTO>
+    public class Validation : AbstractValidator<Command>
     {
-      public Validator()
+      public Validation()
       {
         RuleFor(x => x.IdSPP).NotEmpty();
         RuleFor(x => x.IdBPKList).NotEmpty();
@@ -70,10 +47,11 @@ namespace Application.TUBEND.SPPBPKCQ
 
         try
         {
-          var sppBPKList = request.IdBPKList
-            .Select(idBPK => new SPPBPK { IdBPK = idBPK, IdSPP = request.IdSPP });
+          await _context.SPPBPK.BulkDeleteAsync("IDBPK", request.IdBPKList,
+            transaction);
 
-          await _context.SPPBPK.BulkInsertAsync(sppBPKList, transaction);
+          await _context.SPPDetR.DeleteAsync(x => x.IdSPP == request.IdSPP,
+            transaction);
 
           var bpkSPPDet =
             await _context.SPPBPK.PopulateSPPDetR(request.IdSPP, transaction);
@@ -101,7 +79,6 @@ namespace Application.TUBEND.SPPBPKCQ
         catch (Exception e)
         {
           transaction.Rollback();
-
           throw new ApiException(e.Message);
         }
       }

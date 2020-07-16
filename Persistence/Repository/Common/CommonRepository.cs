@@ -1,8 +1,12 @@
 ﻿using Dapper;
 using MicroOrm.Dapper.Repositories;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Persistence.Repository.Common
 {
@@ -14,6 +18,17 @@ namespace Persistence.Repository.Common
       IDbConnection connection, ISqlGenerator<T> sqlGenerator) : base(
       connection, sqlGenerator)
     { }
+
+    private string GetTableName()
+    {
+      var att = typeof(T).GetCustomAttributes(
+        typeof(TableAttribute), true
+      ).FirstOrDefault();
+
+      if (att == null) throw new Exception($"Table attribute not found in class {nameof(T)}");
+
+      return (att as TableAttribute)?.Name;
+    }
 
     protected SqlBuilder.Template PaginatedQueryBuilder(
       SqlBuilder.Template baseQuery, uint offset, uint limit,
@@ -31,6 +46,17 @@ namespace Persistence.Repository.Common
       }
 
       return query;
+    }
+
+    public async Task BulkDeleteAsync(
+      string keyColumn, IEnumerable<long> ids,
+      IDbTransaction transaction = null)
+    {
+      var tableName = GetTableName();
+
+      await Connection.ExecuteAsync(
+        $"DELETE FROM {tableName} WHERE {keyColumn} IN @Ids",
+        new { Ids = ids }, transaction);
     }
   }
 }

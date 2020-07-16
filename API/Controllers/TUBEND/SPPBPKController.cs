@@ -43,5 +43,14 @@ namespace API.Controllers.TUBEND
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
       Ok(await Mediator.Send(new Delete.Command { IdSPPBPK = id }));
+
+    /// <summary>
+    /// Bulk delete SPPBPK chaining dengan Bulk update SPPDETR
+    /// </summary>
+    /// <param name="command">idBPKList diisi dengan list dari IdBPK yang akan dihapus eg: [1, 2, 3, 4]</param>
+    /// <returns></returns>
+    [HttpDelete("bulk")]
+    public async Task<IActionResult> BulkDelete(BulkDelete.Command command) =>
+      Ok(await Mediator.Send(command));
   }
 }
