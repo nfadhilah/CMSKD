@@ -148,7 +148,7 @@ FROM dbo.SPP s
             if (kontrak != null) spp.Kontrak = kontrak;
             return spp;
           }, cmd.Parameters,
-          splitOn: "IDUNIT, IDBEND, IDSPD, IDPHK3").Distinct()
+          splitOn: "IDUNIT, IDBEND, IDSPD, IDPHK3, IDKONTRAK").Distinct()
         .ToList();
     }
   }
