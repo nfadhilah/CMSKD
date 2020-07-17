@@ -21,6 +21,11 @@ namespace Persistence.Repository.Common
       connection, sqlGenerator)
     { }
 
+    /// <author>Mono</author>
+    /// <summary>
+    /// Get Table attribute name from class 
+    /// </summary>
+    /// <returns></returns>
     private string GetTableName()
     {
       var att = typeof(T).GetCustomAttributes(
@@ -33,6 +38,12 @@ namespace Persistence.Repository.Common
       return (att as TableAttribute)?.Name;
     }
 
+    /// <author>Mono</author>
+    /// <summary>
+    /// Get property name from lambda expression eg: (table => table.ColumnName)
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
     private static string GetPropertyName(
       Expression<Func<T, object>> key)
     {
@@ -55,6 +66,15 @@ namespace Persistence.Repository.Common
       return ((PropertyInfo)memberExpression.Member).Name;
     }
 
+    /// <author>Mono</author>
+    /// <summary>
+    /// This implementation is specific for MSSQL Server version >= 2012
+    /// </summary>
+    /// <param name="baseQuery"></param>
+    /// <param name="offset"></param>
+    /// <param name="limit"></param>
+    /// <param name="orderBy"></param>
+    /// <returns></returns>
     protected SqlBuilder.Template PaginatedQueryBuilder(
       SqlBuilder.Template baseQuery, uint offset, uint limit,
       List<string> orderBy)
@@ -73,6 +93,12 @@ namespace Persistence.Repository.Common
       return query;
     }
 
+    /// <author>Mono</author>
+    /// <summary>Bulk Delete</summary>
+    /// <param name="key">PK Column Name</param>
+    /// <param name="ids">Deleted Id</param>
+    /// <param name="transaction">DB Transaction</param>
+    /// <returns></returns>
     public async Task BulkDeleteAsync(
       Expression<Func<T, object>> key, IEnumerable<long> ids,
       IDbTransaction transaction = null)
