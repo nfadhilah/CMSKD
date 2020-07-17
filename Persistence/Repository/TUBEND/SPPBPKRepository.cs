@@ -13,7 +13,7 @@ namespace Persistence.Repository.TUBEND
     public SPPBPKRepository(IDbConnection connection) : base(connection) { }
     public SPPBPKRepository(IDbConnection connection, ISqlGenerator<SPPBPK> sqlGenerator) : base(connection, sqlGenerator) { }
 
-    public async Task<IEnumerable<dynamic>> PopulateSPPDetR(
+    public async Task<IEnumerable<dynamic>> PopulateSPPDetRAsync(
       long idSPP, IDbTransaction transaction = null)
     {
       return await Connection.QueryAsync(@"SELECT b2.IDREK as IdRek,

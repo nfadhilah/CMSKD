@@ -31,7 +31,7 @@ namespace Application.TUBEND.SPPCQ
       public int IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
-      public string NoKontrak { get; set; }
+      public long? IdKontrak { get; set; }
       public string Keperluan { get; set; }
       public string Penolakan { get; set; }
       public DateTime? TglValid { get; set; }

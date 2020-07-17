@@ -23,6 +23,7 @@ namespace Persistence.Repository.TUBEND
     public int? IdxKode { get; set; }
     public string NoReg { get; set; }
     public string KetOtor { get; set; }
+    public long? IdKontrak { get; set; }
     public string NoKontrak { get; set; }
     public string Keperluan { get; set; }
     public string Penolakan { get; set; }
@@ -51,7 +52,8 @@ namespace Persistence.Repository.TUBEND
        d.*,
        b.*,
        s3.*,
-       d2.*
+       d2.*,
+       k.*
 FROM dbo.SPP s
     INNER JOIN dbo.DAFTUNIT d
         ON d.IDUNIT = s.IDUNIT
@@ -59,14 +61,19 @@ FROM dbo.SPP s
         ON b.IDBEND = s.IDBEND
     INNER JOIN dbo.SPD s3
         ON s3.IDSPD = s.IDSPD
+    LEFT JOIN dbo.KONTRAK as k
+        ON k.IDKONTRAK = s.IDKONTRAK
     LEFT JOIN dbo.DAFTPHK3 d2
         ON d2.IDPHK3 = s.IDPHK3 /**leftjoin**/ /**where**/");
 
       if (queryParams.IdUnit.HasValue)
         builder.Where("s.IDUNIT = @IdUnit", new { queryParams.IdUnit });
 
+      if (queryParams.IdKontrak.HasValue)
+        builder.Where("s.IDKONTRAK = @IdKontrak", new { queryParams.IdKontrak });
+
       if (!string.IsNullOrWhiteSpace(queryParams.NoKontrak))
-        builder.Where("s.NOKONTRAK = @NoKontrak", new { queryParams.NoKontrak });
+        builder.Where("k.NOKONTRAK = @NoKontrak", new { queryParams.NoKontrak });
 
       if (!string.IsNullOrWhiteSpace(queryParams.NoSPP))
         builder.Where("s.NOSPP LIKE @NoSPP",
@@ -101,7 +108,7 @@ FROM dbo.SPP s
           new { NoReg = "%" + queryParams.NoReg + "%" });
 
       if (!string.IsNullOrWhiteSpace(queryParams.KetOtor))
-        builder.Where("s.KETOTOR LIKE KetOtor",
+        builder.Where("s.KETOTOR LIKE @KetOtor",
           new { KetOtor = "%" + queryParams.KetOtor + "%" });
 
       if (!string.IsNullOrWhiteSpace(queryParams.Keperluan))
@@ -130,14 +137,15 @@ FROM dbo.SPP s
         new List<string> { "s.NOSPP ASC" });
 
       return Connection
-        .Query<SPP, DaftUnit, Bend, SPD, DaftPhk3, SPP>(
+        .Query<SPP, DaftUnit, Bend, SPD, DaftPhk3, Kontrak, SPP>(
           paginatedQuery.RawSql,
-          (spp, unit, bend, spd, phk3) =>
+          (spp, unit, bend, spd, phk3, kontrak) =>
           {
             spp.Unit = unit;
             spp.Bendahara = bend;
             spp.SPD = spd;
             if (phk3 != null) spp.Phk3 = phk3;
+            if (kontrak != null) spp.Kontrak = kontrak;
             return spp;
           }, cmd.Parameters,
           splitOn: "IDUNIT, IDBEND, IDSPD, IDPHK3").Distinct()

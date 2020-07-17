@@ -35,7 +35,9 @@ namespace Domain.TUBEND
     public ZKode ZKode { get; set; }
     public string NoReg { get; set; }
     public string KetOtor { get; set; }
-    public string NoKontrak { get; set; }
+    [LeftJoin("KONTRAK", "IDKONTRAK", "IDKONTRAK")]
+    public Kontrak Kontrak { get; set; }
+    public int IdKontrak { get; set; }
     public string Keperluan { get; set; }
     public string Penolakan { get; set; }
     public DateTime? TglValid { get; set; }

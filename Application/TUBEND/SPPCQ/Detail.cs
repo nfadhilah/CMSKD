@@ -2,6 +2,7 @@
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using Domain.MA;
+using Domain.TUBEND;
 using MediatR;
 using Persistence;
 using System.Linq;
@@ -33,10 +34,10 @@ namespace Application.TUBEND.SPPCQ
       Query request, CancellationToken cancellationToken)
       {
         var result = await _context.SPP
-          .FindAllAsync<DaftUnit, StatTrs, Bend, SPD, DaftPhk3, ZKode>(
+          .FindAllAsync<DaftUnit, StatTrs, Bend, SPD, DaftPhk3, Kontrak>(
             x => x.IdSPP == request.IdSPP, x => x.Unit,
             x => x.StatTrs, x => x.Bendahara, x => x.SPD, x => x.Phk3,
-            x => x.ZKode);
+            x => x.Kontrak);
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

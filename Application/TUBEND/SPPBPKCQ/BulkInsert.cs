@@ -76,7 +76,7 @@ namespace Application.TUBEND.SPPBPKCQ
           await _context.SPPBPK.BulkInsertAsync(sppBPKList, transaction);
 
           var bpkSPPDet =
-            await _context.SPPBPK.PopulateSPPDetR(request.IdSPP, transaction);
+            await _context.SPPBPK.PopulateSPPDetRAsync(request.IdSPP, transaction);
 
           var sppDetRList = bpkSPPDet.Select(bpkDet => new SPPDetR
           {
