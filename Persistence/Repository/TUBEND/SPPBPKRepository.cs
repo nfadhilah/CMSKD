@@ -23,12 +23,9 @@ namespace Persistence.Repository.TUBEND
 FROM dbo.SPPBPK s
     LEFT JOIN dbo.BPK b
         ON b.IDBPK = s.IDBPK
-    LEFT JOIN dbo.BPKDETR b2
+    INNER JOIN dbo.BPKDETR b2
         ON b.IDBPK = b2.IDBPK
-WHERE s.IDSPP = @IdSPP
-      AND b2.IDREK IS NOT NULL
-      AND b2.IDKEG IS NOT NULL
-      AND b2.IDNOJETRA IS NOT NULL
+WHERE s.IDSPP = 13
 GROUP BY b2.IDREK,
          b2.IDKEG,
 		 b2.IDNOJETRA;", new { IdSPP = idSPP }, transaction);
