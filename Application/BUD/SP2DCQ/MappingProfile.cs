@@ -14,7 +14,8 @@ namespace Application.BUD.SP2DCQ
         .ForMember(d => d.NmUnit, opt => opt.MapFrom(s => s.Unit.NmUnit.Trim()))
         .ForMember(d => d.NoSPD, opt => opt.MapFrom(s => s.SPD.NoSPD.Trim()))
         .ForMember(d => d.TglSPD, opt => opt.MapFrom(s => s.SPD.TglSPD))
-        .ForMember(d => d.KeteranganSPD, opt => opt.MapFrom(s => s.SPD.Keterangan))
+        .ForMember(d => d.KeteranganSPD, opt => opt.MapFrom(s => s.SPD.Keterangan.Trim()))
+        .ForMember(d => d.NoKontrak, opt => opt.MapFrom(s => s.Kontrak.NoKontrak.Trim()))
         .ForMember(d => d.KdUnit,
           opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()));
     }

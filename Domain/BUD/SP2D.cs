@@ -1,5 +1,6 @@
 ﻿using Domain.DM;
 using Domain.MA;
+using Domain.TUBEND;
 using MicroOrm.Dapper.Repositories.Attributes;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
@@ -33,7 +34,9 @@ namespace Domain.BUD
     public int? IdxKode { get; set; }
     public string NoReg { get; set; }
     public string KetOtor { get; set; }
-    public string NoKontrak { get; set; }
+    [LeftJoin("KONTRAK", "IDKONTRAK", "IDKONTRAK")]
+    public Kontrak Kontrak { get; set; }
+    public long? IdKontrak { get; set; }
     public string Keperluan { get; set; }
     public string Penolakan { get; set; }
     public DateTime? TglValid { get; set; }

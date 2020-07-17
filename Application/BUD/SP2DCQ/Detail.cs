@@ -2,6 +2,7 @@
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using Domain.MA;
+using Domain.TUBEND;
 using MediatR;
 using Persistence;
 using System.Linq;
@@ -33,9 +34,9 @@ namespace Application.BUD.SP2DCQ
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.SP2D.FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd>(
+          (await _context.SP2D.FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd, Kontrak>(
             x => x.IdSP2D == request.IdSP2D, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.Phk3, x => x.JabTtd)).SingleOrDefault();
+            x => x.Phk3, x => x.JabTtd, x => x.Kontrak)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

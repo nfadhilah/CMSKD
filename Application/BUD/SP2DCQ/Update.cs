@@ -4,6 +4,7 @@ using AutoWrapper.Wrappers;
 using Domain.BUD;
 using Domain.DM;
 using Domain.MA;
+using Domain.TUBEND;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -32,7 +33,7 @@ namespace Application.BUD.SP2DCQ
       public int? IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
-      public string NoKontrak { get; set; }
+      public long? IdKontrak { get; set; }
       public string Keperluan { get; set; }
       public string Penolakan { get; set; }
       public DateTime? TglValid { get; set; }
@@ -95,9 +96,9 @@ namespace Application.BUD.SP2DCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.SP2D
-          .FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd>(
+          .FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd, Kontrak>(
             x => x.IdSPD == updated.IdSP2D, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.Phk3, x => x.JabTtd);
+            x => x.Phk3, x => x.JabTtd, x => x.Kontrak);
 
         return _mapper.Map<SP2DDTO>(result);
       }

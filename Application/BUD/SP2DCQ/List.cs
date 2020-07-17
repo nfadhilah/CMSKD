@@ -4,6 +4,7 @@ using AutoMapper;
 using Domain.BUD;
 using Domain.DM;
 using Domain.MA;
+using Domain.TUBEND;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
@@ -32,6 +33,7 @@ namespace Application.BUD.SP2DCQ
       public int? IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
+      public long? IdKontrak { get; set; }
       public string NoKontrak { get; set; }
       public string Keperluan { get; set; }
       public string Penolakan { get; set; }
@@ -60,8 +62,11 @@ namespace Application.BUD.SP2DCQ
         if (request.IdUnit.HasValue)
           parameters.Add(d => d.IdUnit == request.IdUnit);
 
+        if (request.IdKontrak.HasValue)
+          parameters.Add(d => d.IdKontrak == request.IdKontrak);
+
         if (!string.IsNullOrWhiteSpace(request.NoKontrak))
-          parameters.Add(d => d.NoKontrak.Contains(request.NoKontrak));
+          parameters.Add(d => d.Kontrak.NoKontrak.Contains(request.NoKontrak));
 
         if (!string.IsNullOrWhiteSpace(request.NoSPM))
           parameters.Add(d => d.NoSPM.Contains(request.NoSPM));
@@ -121,9 +126,9 @@ namespace Application.BUD.SP2DCQ
         var result = await _context.SP2D
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.NoSPM)
-          .FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd>(
+          .FindAllAsync<DaftUnit, Bend, SPD, DaftPhk3, JabTtd, Kontrak>(
             predicate, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.Phk3, x => x.JabTtd);
+            x => x.Phk3, x => x.JabTtd, x => x.Kontrak);
 
         return new PaginationWrapper(_mapper.Map<IEnumerable<SP2DDTO>>(result),
           new Pagination

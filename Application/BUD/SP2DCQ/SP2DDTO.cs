@@ -22,6 +22,7 @@ namespace Application.BUD.SP2DCQ
     public int? IdxKode { get; set; }
     public string NoReg { get; set; }
     public string KetOtor { get; set; }
+    public long? IdKontrak { get; set; }
     public string NoKontrak { get; set; }
     public string Keperluan { get; set; }
     public string Penolakan { get; set; }
