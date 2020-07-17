@@ -30,6 +30,7 @@ namespace Application.TUBEND.SPMCQ
       public int? IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
+      public long? IdKontrak { get; set; }
       public string NoKontrak { get; set; }
       public string Keperluan { get; set; }
       public string Penolakan { get; set; }
@@ -57,8 +58,11 @@ namespace Application.TUBEND.SPMCQ
         if (request.IdUnit.HasValue)
           parameters.Add(d => d.IdUnit == request.IdUnit);
 
+        if (request.IdKontrak.HasValue)
+          parameters.Add(d => d.IdUnit == request.IdKontrak);
+
         if (!string.IsNullOrWhiteSpace(request.NoKontrak))
-          parameters.Add(d => d.NoKontrak.Contains(request.NoKontrak));
+          parameters.Add(d => d.Kontrak.NoKontrak.Contains(request.NoKontrak));
 
         if (!string.IsNullOrWhiteSpace(request.NoSPM))
           parameters.Add(d => d.NoSPM.Contains(request.NoSPM));
@@ -104,21 +108,19 @@ namespace Application.TUBEND.SPMCQ
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.SPM.FindAll(predicate).Count();
-
         var result = await _context.SPM
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.NoSPM)
-          .FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3>(
+          .FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3, Kontrak>(
             predicate, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.SPP, x => x.Phk3);
+            x => x.SPP, x => x.Phk3, x => x.Kontrak);
 
         return new PaginationWrapper(_mapper.Map<IEnumerable<SPMDTO>>(result),
           new Pagination
           {
             CurrentPage = request.CurrentPage,
             PageSize = request.PageSize,
-            TotalItemsCount = totalItemsCount
+            TotalItemsCount = result.Count()
           });
       }
     }

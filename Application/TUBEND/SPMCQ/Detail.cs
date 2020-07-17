@@ -34,9 +34,9 @@ namespace Application.TUBEND.SPMCQ
       Query request, CancellationToken cancellationToken)
       {
         var result =
-          (await _context.SPM.FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3>(
+          (await _context.SPM.FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3, Kontrak>(
             x => x.IdSPM == request.IdSPM, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.SPP, x => x.Phk3)).SingleOrDefault();
+            x => x.SPP, x => x.Phk3, x => x.Kontrak)).SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int)HttpStatusCode.NotFound);

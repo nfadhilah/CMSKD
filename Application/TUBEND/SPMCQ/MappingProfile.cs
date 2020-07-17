@@ -15,6 +15,7 @@ namespace Application.TUBEND.SPMCQ
         .ForMember(d => d.NoSPD, opt => opt.MapFrom(s => s.SPD.NoSPD.Trim()))
         .ForMember(d => d.TglSPD, opt => opt.MapFrom(s => s.SPD.TglSPD))
         .ForMember(d => d.NmPhk3, opt => opt.MapFrom(s => s.Phk3.NmPhk3.Trim()))
+        .ForMember(d => d.NoKontrak, opt => opt.MapFrom(s => s.Kontrak.NoKontrak.Trim()))
         .ForMember(d => d.NmInstPhk3,
           opt => opt.MapFrom(s => s.Phk3.NmInst.Trim()));
     }

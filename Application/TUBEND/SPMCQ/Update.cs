@@ -31,7 +31,7 @@ namespace Application.TUBEND.SPMCQ
       public int IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
-      public string NoKontrak { get; set; }
+      public long? IdKontrak { get; set; }
       public string Keperluan { get; set; }
       public string Penolakan { get; set; }
       public DateTime? TglValid { get; set; }
@@ -98,9 +98,9 @@ namespace Application.TUBEND.SPMCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.SPM
-          .FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3>(
+          .FindAllAsync<DaftUnit, Bend, SPD, SPP, DaftPhk3, Kontrak>(
             x => x.IdSPM == updated.IdSPM, x => x.Unit, x => x.Bend, x => x.SPD,
-            x => x.SPP, x => x.Phk3);
+            x => x.SPP, x => x.Phk3, x => x.Kontrak);
 
         return _mapper.Map<SPMDTO>(result.SingleOrDefault());
       }
