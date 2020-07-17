@@ -37,7 +37,7 @@ namespace Domain.TUBEND
     public string KetOtor { get; set; }
     [LeftJoin("KONTRAK", "IDKONTRAK", "IDKONTRAK")]
     public Kontrak Kontrak { get; set; }
-    public int IdKontrak { get; set; }
+    public long? IdKontrak { get; set; }
     public string Keperluan { get; set; }
     public string Penolakan { get; set; }
     public DateTime? TglValid { get; set; }
