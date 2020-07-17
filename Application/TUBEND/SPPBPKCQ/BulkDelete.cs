@@ -47,7 +47,7 @@ namespace Application.TUBEND.SPPBPKCQ
 
         try
         {
-          await _context.SPPBPK.BulkDeleteAsync("IDBPK", request.IdBPKList,
+          await _context.SPPBPK.BulkDeleteAsync(x => x.IdBPK, request.IdBPKList,
             transaction);
 
           await _context.SPPDetR.DeleteAsync(x => x.IdSPP == request.IdSPP,
