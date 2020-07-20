@@ -1,11 +1,7 @@
-﻿using Application.TUBEND.SPPCQ;
+﻿using Application.TUBEND.SPMCQ;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Create = Application.TUBEND.SPMCQ.Create;
-using Delete = Application.TUBEND.SPMCQ.Delete;
-using Detail = Application.TUBEND.SPMCQ.Detail;
-using List = Application.TUBEND.SPMCQ.List;
-using Update = Application.TUBEND.SPMCQ.Update;
+
 
 namespace API.Controllers.TUBEND
 {
