@@ -25,7 +25,7 @@ FROM dbo.SPPBPK s
         ON b.IDBPK = s.IDBPK
     INNER JOIN dbo.BPKDETR b2
         ON b.IDBPK = b2.IDBPK
-WHERE s.IDSPP = 13
+WHERE s.IDSPP = @IdSPP
 GROUP BY b2.IDREK,
          b2.IDKEG,
 		 b2.IDNOJETRA;", new { IdSPP = idSPP }, transaction);
