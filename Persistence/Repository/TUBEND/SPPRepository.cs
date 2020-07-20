@@ -120,7 +120,7 @@ FROM dbo.SPP s
         builder.Where("s.PENOLAKAN LIKE @Penolakan",
           new { Penolakan = "%" + queryParams.Penolakan + "%" });
 
-      if (!queryParams.IsValid.HasValue)
+      if (queryParams.IsValid.HasValue)
         builder.Where("s.TGLVALID IS NOT NULL");
 
       if (queryParams.IdKeg.HasValue)
