@@ -32,6 +32,7 @@ namespace Application.TUBEND.SPPCQ
       public DateTime? Status { get; set; }
       public DateTime? DateCreate { get; set; }
       public long? IdKeg { get; set; }
+      public bool? IsValid { get; set; }
     }
 
     public class Handler : RequestHandler<Query, PaginationWrapper>

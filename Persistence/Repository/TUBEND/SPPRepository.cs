@@ -32,6 +32,7 @@ namespace Persistence.Repository.TUBEND
     public DateTime? Status { get; set; }
     public DateTime? DateCreate { get; set; }
     public long? IdKeg { get; set; }
+    public bool? IsValid { get; set; }
   }
 
   public class SPPRepository : CommonRepository<SPP>
@@ -118,6 +119,9 @@ FROM dbo.SPP s
       if (!string.IsNullOrWhiteSpace(queryParams.Penolakan))
         builder.Where("s.PENOLAKAN LIKE @Penolakan",
           new { Penolakan = "%" + queryParams.Penolakan + "%" });
+
+      if (!queryParams.IsValid.HasValue)
+        builder.Where("s.TGLVALID IS NOT NULL");
 
       if (queryParams.IdKeg.HasValue)
       {
