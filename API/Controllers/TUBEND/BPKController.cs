@@ -14,6 +14,10 @@ namespace API.Controllers.TUBEND
     public async Task<IActionResult> Get(long id) =>
       Ok(await Mediator.Send(new Detail.Query { IdBPK = id }));
 
+    [HttpGet("lastDocNo")]
+    public async Task<IActionResult> Get([FromQuery] GetLastDocNumber.Query query) =>
+      Ok(await Mediator.Send(query));
+
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
     {
