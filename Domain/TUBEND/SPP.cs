@@ -42,7 +42,7 @@ namespace Domain.TUBEND
     public string Penolakan { get; set; }
     public DateTime? TglValid { get; set; }
     public DateTime? TglSPP { get; set; }
-    public DateTime? Status { get; set; }
+    public string Status { get; set; }
     public DateTime? DateCreate { get; set; }
     [UpdatedAt]
     public DateTime? DateUpdate { get; set; }

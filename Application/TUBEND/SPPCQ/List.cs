@@ -29,7 +29,7 @@ namespace Application.TUBEND.SPPCQ
       public string Penolakan { get; set; }
       public DateTime? TglValid { get; set; }
       public DateTime? TglSPP { get; set; }
-      public DateTime? Status { get; set; }
+      public string Status { get; set; }
       public DateTime? DateCreate { get; set; }
       public long? IdKeg { get; set; }
       public bool? IsValid { get; set; }
