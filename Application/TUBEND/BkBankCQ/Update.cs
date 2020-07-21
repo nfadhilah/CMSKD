@@ -26,6 +26,7 @@ namespace Application.TUBEND.BkBankCQ
       public string KdStatus { get; set; }
       public DateTime? TglBuku { get; set; }
       public string Uraian { get; set; }
+      public DateTime? TglValid { get; set; }
 
       public DTO()
       {
