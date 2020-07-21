@@ -21,6 +21,16 @@ namespace API.Controllers.TUBEND
       return CreatedAtRoute("GetBkBank", new { id = request.IdBkBank }, request);
     }
 
+    /// <summary>
+    /// Post BKBANK dan BKBANKDET
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPost("header-detail")]
+    public async Task<IActionResult> CreateHeaderDetail(
+      CreateHeaderDetail.Command command) => Ok(await Mediator.Send(command));
+
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
@@ -31,5 +41,14 @@ namespace API.Controllers.TUBEND
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
       Ok(await Mediator.Send(new Delete.Command { IdBkBank = id }));
+
+    /// <summary>
+    /// Delete BKBANK dan BKBANKDET
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id}/header-detail")]
+    public async Task<IActionResult> DeleteHeaderDetail(long id) =>
+      Ok(await Mediator.Send(new DeleteHeaderDetail.Command { IdBkBank = id }));
   }
 }

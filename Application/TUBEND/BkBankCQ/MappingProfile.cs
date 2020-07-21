@@ -8,6 +8,7 @@ namespace Application.TUBEND.BkBankCQ
     public MappingProfile()
     {
       CreateMap<Create.Command, BkBank>();
+      CreateMap<CreateHeaderDetail.Command, BkBank>();
       CreateMap<Update.Command, BkBank>();
       CreateMap<BkBank, BKBankDTO>()
         .ForMember(d => d.KdUnit, opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()))
