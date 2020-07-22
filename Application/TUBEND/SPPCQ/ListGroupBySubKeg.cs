@@ -13,6 +13,7 @@ namespace Application.TUBEND.SPPCQ
   {
     public class DTO
     {
+      public long IdSubKegUnit { get; set; }
       public string Kode { get; set; }
       public long IdUnit { get; set; }
       public string NmKegUnit { get; set; }
@@ -51,7 +52,8 @@ namespace Application.TUBEND.SPPCQ
         Query request, CancellationToken cancellationToken)
       {
         var result = await _context.Connection.QueryAsync<DTO>(
-          @"SELECT RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG) AS Kode,
+          @"SELECT k.IDKEGUNIT as IdSubKegUnit, 
+       RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG) AS Kode,
        k.IDUNIT as IdUnit,
        m3.NMKEGUNIT as NmKegUnit,
        m.NMKEGUNIT as NmSubKegUnit,
