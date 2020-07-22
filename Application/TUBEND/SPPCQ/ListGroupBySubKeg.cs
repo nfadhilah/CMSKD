@@ -82,7 +82,7 @@ FROM dbo.KEGUNIT k
         ON k.IDKEG = s.IDKEG
 WHERE k.IDUNIT = @IdUnit
       AND k.KDTAHAP = @KdTahap
-GROUP BY k.IDUNIT,
+GROUP BY k.IDKEGUNIT, k.IDUNIT,
          m3.NMKEGUNIT,
          m.NMKEGUNIT,
          RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG);",
