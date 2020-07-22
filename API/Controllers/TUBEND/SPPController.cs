@@ -10,6 +10,10 @@ namespace API.Controllers.TUBEND
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(query));
 
+    [HttpGet("group-by-subkeg")]
+    public async Task<IActionResult> Get([FromQuery] ListGroupBySubKeg.Query query) =>
+      Ok(await Mediator.Send(query));
+
     [HttpGet("lastDocNo")]
     public async Task<IActionResult> Get([FromQuery] GetLastDocNumber.Query query) =>
       Ok(await Mediator.Send(query));
