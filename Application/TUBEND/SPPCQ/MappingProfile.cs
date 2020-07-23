@@ -9,6 +9,7 @@ namespace Application.TUBEND.SPPCQ
     {
       CreateMap<Create.Command, SPP>();
       CreateMap<Update.Command, SPP>();
+      CreateMap<CreateSPPLS.Command, SPP>();
       CreateMap<SPP, SPPDTO>()
         .ForMember(d => d.KdUnit, opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()))
         .ForMember(d => d.NmUnit, opt => opt.MapFrom(s => s.Unit.NmUnit.Trim()))

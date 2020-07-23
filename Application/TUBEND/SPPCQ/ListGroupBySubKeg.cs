@@ -88,7 +88,6 @@ GROUP BY k.IDKEGUNIT, k.IDUNIT,
          RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG);",
           new { request.IdUnit, request.KdTahap });
 
-
         return result;
       }
     }

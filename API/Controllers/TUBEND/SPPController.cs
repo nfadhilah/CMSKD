@@ -34,6 +34,10 @@ namespace API.Controllers.TUBEND
       return CreatedAtRoute("GetSPP", new { id = request.IdSPP }, request);
     }
 
+    [HttpPost("ls")]
+    public async Task<IActionResult> CreateLS(CreateSPPLS.Command command) =>
+      Ok(await Mediator.Send(command));
+
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
