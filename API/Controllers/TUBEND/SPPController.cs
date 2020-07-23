@@ -35,7 +35,7 @@ namespace API.Controllers.TUBEND
     }
 
     [HttpPost("ls")]
-    public async Task<IActionResult> CreateLS(CreateSPPLS.Command command) =>
+    public async Task<IActionResult> CreateSPPLS(CreateSPPLS.Command command) =>
       Ok(await Mediator.Send(command));
 
     [HttpPut("{id}")]
@@ -48,5 +48,9 @@ namespace API.Controllers.TUBEND
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
       Ok(await Mediator.Send(new Delete.Command { IdSPP = id }));
+
+    [HttpDelete("{id}/ls")]
+    public async Task<IActionResult> DeleteSPPLS(long id) =>
+      Ok(await Mediator.Send(new DeleteSPPLS.Command { IdSPP = id }));
   }
 }
