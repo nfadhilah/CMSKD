@@ -30,12 +30,12 @@ namespace Application.TUBEND.SPPCQ
     {
       public long IdUnit { get; set; }
       public string NoSPP { get; set; }
-      public string KdStatus { get; set; }
+      // public string KdStatus { get; set; }
       public int KdBulan { get; set; }
       public long? IdBend { get; set; }
       public long IdSPD { get; set; }
       public long? IdPhk3 { get; set; }
-      public int IdxKode { get; set; }
+      // public int IdxKode { get; set; }
       public string NoReg { get; set; }
       public string KetOtor { get; set; }
       public long? IdKontrak { get; set; }
@@ -54,10 +54,10 @@ namespace Application.TUBEND.SPPCQ
       {
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.NoSPP).NotEmpty();
-        RuleFor(d => d.KdStatus).NotEmpty();
+        // RuleFor(d => d.KdStatus).NotEmpty();
         RuleFor(d => d.KdBulan).NotEmpty();
         RuleFor(d => d.IdSPD).NotEmpty();
-        RuleFor(d => d.IdxKode).NotEmpty();
+        // RuleFor(d => d.IdxKode).NotEmpty();
         RuleFor(d => d.IdBeritaList).NotEmpty();
       }
     }
@@ -82,6 +82,9 @@ namespace Application.TUBEND.SPPCQ
         {
           // Insert SPP
           var spp = _mapper.Map<SPP>(request);
+
+          spp.KdStatus = "24";
+          spp.IdxKode = 2;
 
           if (await _context.SPP.FindAsync(x => x.NoSPP == request.NoSPP,
                 transaction) !=
