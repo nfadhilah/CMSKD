@@ -1,4 +1,5 @@
-﻿using Application.TUBEND.SPPBACQ;
+﻿using Application.Interfaces;
+using Application.TUBEND.SPPBACQ;
 using Application.TUBEND.SPPDetRCQ;
 using AutoMapper;
 using AutoWrapper.Wrappers;
@@ -12,16 +13,20 @@ using Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.TUBEND.SPPCQ
 {
-  public class CreateSPPLS
+  public class UpdateSPPLS
   {
-    public class Command : IRequest<SPPLSResultDTO>
+    public class DTO : IMapDTO<Command>
     {
+      private readonly IMapper _mapper;
+
       public long IdUnit { get; set; }
+
       public string NoSPP { get; set; }
       // public string KdStatus { get; set; }
       public int KdBulan { get; set; }
@@ -39,9 +44,24 @@ namespace Application.TUBEND.SPPCQ
       public string Status { get; set; }
       public DateTime? DateCreate { get; set; }
       public IEnumerable<long> IdBeritaList { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt =>
+        {
+          opt.CreateMap<DTO, Command>();
+        });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
     }
 
-    public class Validator : AbstractValidator<Command>
+    public class Validator : AbstractValidator<DTO>
     {
       public Validator()
       {
@@ -53,6 +73,11 @@ namespace Application.TUBEND.SPPCQ
         // RuleFor(d => d.IdxKode).NotEmpty();
         RuleFor(d => d.IdBeritaList).NotEmpty();
       }
+    }
+
+    public class Command : SPP, IRequest<SPPLSResultDTO>
+    {
+      public IEnumerable<long> IdBeritaList { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, SPPLSResultDTO>
@@ -73,19 +98,19 @@ namespace Application.TUBEND.SPPCQ
 
         try
         {
-          // Insert SPP
-          var spp = _mapper.Map<SPP>(request);
+          var spp =
+            await _context.SPP.FindByIdAsync(request.IdSPP, transaction);
 
-          spp.KdStatus = "24";
-          spp.IdxKode = 2;
+          if (spp == null)
+            throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
-          if (await _context.SPP.FindAsync(x => x.NoSPP == request.NoSPP,
-                transaction) !=
-              null)
-            throw new ApiException("No. SPP sudah terpakai di daftar SPP");
+          if (spp.TglValid.HasValue)
+            throw new ApiException(
+              "Data tidak bisa diubah karena sudah valid");
 
+          _mapper.Map(request, spp);
 
-          await _context.SPP.InsertAsync(spp, transaction);
+          await _context.SPP.UpdateAsync(spp, transaction);
 
           // Delete Insert SPPBA
           await _context.SPPBA.DeleteAsync(x => x.IdSPP == spp.IdSPP,

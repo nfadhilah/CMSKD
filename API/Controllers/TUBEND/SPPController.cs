@@ -45,6 +45,13 @@ namespace API.Controllers.TUBEND
       return Ok(await Mediator.Send(command));
     }
 
+    [HttpPut("{id}/ls")]
+    public async Task<IActionResult> UpdateSPPLS(long id, UpdateSPPLS.DTO dto)
+    {
+      var command = dto.MapDTO(new UpdateSPPLS.Command { IdSPP = id });
+      return Ok(await Mediator.Send(command));
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
       Ok(await Mediator.Send(new Delete.Command { IdSPP = id }));
