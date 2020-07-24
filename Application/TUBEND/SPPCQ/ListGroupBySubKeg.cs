@@ -52,7 +52,7 @@ namespace Application.TUBEND.SPPCQ
         Query request, CancellationToken cancellationToken)
       {
         var result = await _context.Connection.QueryAsync<DTO>(
-          @"SELECT k.IDKEGUNIT as IdSubKegUnit, 
+          @"SELECT k.IDKEG as IdSubKegUnit, 
        RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG) AS Kode,
        k.IDUNIT as IdUnit,
        m3.NMKEGUNIT as NmKegUnit,
@@ -82,7 +82,7 @@ FROM dbo.KEGUNIT k
         ON k.IDKEG = s.IDKEG
 WHERE k.IDUNIT = @IdUnit
       AND k.KDTAHAP = @KdTahap
-GROUP BY k.IDKEGUNIT, k.IDUNIT,
+GROUP BY k.IDKEG, k.IDUNIT,
          m3.NMKEGUNIT,
          m.NMKEGUNIT,
          RTRIM(d.KDURUS) + RTRIM(m2.NUPRGRM) + RTRIM(m3.NUKEG) + RTRIM(m.NUKEG);",

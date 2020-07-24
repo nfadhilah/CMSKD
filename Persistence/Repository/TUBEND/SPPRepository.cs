@@ -49,7 +49,7 @@ namespace Persistence.Repository.TUBEND
     {
       var builder = new SqlBuilder();
 
-      var cmd = builder.AddTemplate(@"SELECT s.*,
+      var cmd = builder.AddTemplate(@"SELECT DISTINCT s.*,
        d.*,
        b.*,
        s3.*,
