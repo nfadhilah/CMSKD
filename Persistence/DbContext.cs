@@ -8,6 +8,8 @@ using Persistence.Repository.TUBEND;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using Domain.PM;
+using Persistence.Repository.PM;
 
 namespace Persistence
 {
@@ -110,6 +112,9 @@ namespace Persistence
     SPPBARepository SPPBA { get; }
     SPPBPKRepository SPPBPK { get; }
     TahapRepository Tahap { get; }
+    JPekerjaanRepository JPekerjaan { get; }
+    PaketRUPRepository PaketRup { get; }
+    PaketRUPDetRepository PaketRupDet { get; }
   }
 
   public class DbContext : IDbContext
@@ -140,7 +145,10 @@ namespace Persistence
     public JUsahaRepository JUsaha => new JUsahaRepository(Connection);
     public ProfilRepository Profil => new ProfilRepository(Connection);
     public DaftBankRepository DaftBank => new DaftBankRepository(Connection);
-    public DaftFungsiRepository DaftFungsi => new DaftFungsiRepository(Connection);
+
+    public DaftFungsiRepository DaftFungsi =>
+      new DaftFungsiRepository(Connection);
+
     public BkBKasRepository BkBKas => new BkBKasRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
     public ZKodeRepository ZKode => new ZKodeRepository(Connection);
@@ -155,13 +163,19 @@ namespace Persistence
     public DPADanaRRepository DPADanaR => new DPADanaRRepository(Connection);
     public DPABlnRRepository DPABlnR => new DPABlnRRepository(Connection);
     public PgrmUnitRepository PgrmUnit => new PgrmUnitRepository(Connection);
-    public DaftRekeningRepository DaftRekening => new DaftRekeningRepository(Connection);
+
+    public DaftRekeningRepository DaftRekening =>
+      new DaftRekeningRepository(Connection);
+
     public PajakRepository Pajak => new PajakRepository(Connection);
     public JTahunRepository JTahun => new JTahunRepository(Connection);
     public MPgrmRepository MPgrm => new MPgrmRepository(Connection);
     public MKegiatanRepository MKegiatan => new MKegiatanRepository(Connection);
     public KegUnitRepository KegUnit => new KegUnitRepository(Connection);
-    public UrusanUnitRepository UrusanUnit => new UrusanUnitRepository(Connection);
+
+    public UrusanUnitRepository UrusanUnit =>
+      new UrusanUnitRepository(Connection);
+
     public GolonganRepository Golongan => new GolonganRepository(Connection);
     public SifatKegRepository SifatKeg => new SifatKegRepository(Connection);
     public StruRekRepository StruRek => new StruRekRepository(Connection);
@@ -178,29 +192,48 @@ namespace Persistence
     public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
     public KontrakRepository Kontrak => new KontrakRepository(Connection);
     public BeritaRepository Berita => new BeritaRepository(Connection);
-    public BeritaDetRRepository BeritaDetR => new BeritaDetRRepository(Connection);
+
+    public BeritaDetRRepository BeritaDetR =>
+      new BeritaDetRRepository(Connection);
+
     public SPDRepository SPD => new SPDRepository(Connection);
     public SPDDetBRepository SPDDetB => new SPDDetBRepository(Connection);
     public SPDDetRRepository SPDDetR => new SPDDetRRepository(Connection);
     public SPPRepository SPP => new SPPRepository(Connection);
     public SPPDetBRepository SPPDetB => new SPPDetBRepository(Connection);
     public SPPDetRRepository SPPDetR => new SPPDetRRepository(Connection);
-    public SPPDetBDanaRepository SPPDetBDana => new SPPDetBDanaRepository(Connection);
-    public SPPDetRDanaRepository SPPDetRDana => new SPPDetRDanaRepository(Connection);
+
+    public SPPDetBDanaRepository SPPDetBDana =>
+      new SPPDetBDanaRepository(Connection);
+
+    public SPPDetRDanaRepository SPPDetRDana =>
+      new SPPDetRDanaRepository(Connection);
+
     public SPPDetRPRepository SPPDetRP => new SPPDetRPRepository(Connection);
     public JTrnlKasRepository JTrnlKas => new JTrnlKasRepository(Connection);
     public BkBankRepository BkBank => new BkBankRepository(Connection);
     public BkBankDetRepository BkBankDet => new BkBankDetRepository(Connection);
     public TBPLRepository TBPL => new TBPLRepository(Connection);
     public TBPLDetRepository TBPLDet => new TBPLDetRepository(Connection);
-    public TBPLDetKegRepository TBPLDetKeg => new TBPLDetKegRepository(Connection);
+
+    public TBPLDetKegRepository TBPLDetKeg =>
+      new TBPLDetKegRepository(Connection);
+
     public BPKRepository BPK => new BPKRepository(Connection);
     public BPKDetRRepository BPKDetR => new BPKDetRRepository(Connection);
-    public BPKDetRDanaRepository BPKDetRDana => new BPKDetRDanaRepository(Connection);
-    public BPKPajakStrRepository BPKPajakStr => new BPKPajakStrRepository(Connection);
+
+    public BPKDetRDanaRepository BPKDetRDana =>
+      new BPKDetRDanaRepository(Connection);
+
+    public BPKPajakStrRepository BPKPajakStr =>
+      new BPKPajakStrRepository(Connection);
+
     public BPKDetRPRepository BPKDetRP => new BPKDetRPRepository(Connection);
     public BkPajakRepository BkPajak => new BkPajakRepository(Connection);
-    public BkPajakDetStrRepository BkPajakDetStr => new BkPajakDetStrRepository(Connection);
+
+    public BkPajakDetStrRepository BkPajakDetStr =>
+      new BkPajakDetStrRepository(Connection);
+
     public STSRepository STS => new STSRepository(Connection);
     public STSDetRRepository STSDetR => new STSDetRRepository(Connection);
     public STSDetDRepository STSDetD => new STSDetDRepository(Connection);
@@ -208,10 +241,16 @@ namespace Persistence
     public SPMRepository SPM => new SPMRepository(Connection);
     public SP2DRepository SP2D => new SP2DRepository(Connection);
     public SP2DDetRRepository SP2DDetR => new SP2DDetRRepository(Connection);
-    public SP2DDetRDanaRepository SP2DDetRDana => new SP2DDetRDanaRepository(Connection);
+
+    public SP2DDetRDanaRepository SP2DDetRDana =>
+      new SP2DDetRDanaRepository(Connection);
+
     public SP2DDetRPRepository SP2DDetRP => new SP2DDetRPRepository(Connection);
     public SP2DDetBRepository SP2DDetB => new SP2DDetBRepository(Connection);
-    public SP2DDetBDanaRepository SP2DDetBDana => new SP2DDetBDanaRepository(Connection);
+
+    public SP2DDetBDanaRepository SP2DDetBDana =>
+      new SP2DDetBDanaRepository(Connection);
+
     public BKUDRepository BKUD => new BKUDRepository(Connection);
     public BKUKRepository BKUK => new BKUKRepository(Connection);
     public DPRepository DP => new DPRepository(Connection);
@@ -220,6 +259,14 @@ namespace Persistence
     public SPPBARepository SPPBA => new SPPBARepository(Connection);
     public SPPBPKRepository SPPBPK => new SPPBPKRepository(Connection);
     public TahapRepository Tahap => new TahapRepository(Connection);
+
+    public JPekerjaanRepository JPekerjaan =>
+      new JPekerjaanRepository(Connection);
+
+    public PaketRUPRepository PaketRup => new PaketRUPRepository(Connection);
+
+    public PaketRUPDetRepository PaketRupDet =>
+      new PaketRUPDetRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
@@ -230,6 +277,7 @@ namespace Persistence
           Connection?.Dispose();
         }
       }
+
       _disposed = true;
     }
 
