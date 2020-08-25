@@ -40,7 +40,9 @@ namespace Application.Auth.RoleMenu
       {
         var result =
           await _context.WebOtor.FindAllAsync<WebRole, WebGroup>(
-            x => x.GroupId == _userAccessor.GetCurrentRoleId(), x => x.WebRole,
+            x => x.GroupId == _userAccessor.GetCurrentRoleId() &&
+                 x.WebRole.IdApp == _userAccessor.GetCurrentAppId(),
+            x => x.WebRole,
             x => x.WebGroup);
 
         return _mapper.Map<IEnumerable<WebOtorDto>>(result);
