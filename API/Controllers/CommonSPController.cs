@@ -14,7 +14,6 @@ namespace API.Controllers
   public class CommonSpController : BaseController
   {
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Get(CommonSpParams dto)
     {
       var parameters = new DynamicParameters();
