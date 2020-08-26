@@ -26,6 +26,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 
 namespace API
@@ -74,7 +76,7 @@ namespace API
       services.AddSwaggerGen(opt =>
       {
         opt.SwaggerDoc("v1",
-          new OpenApiInfo { Title = "SIPKD API", Version = "v1" });
+          new OpenApiInfo {Title = "SIPKD API", Version = "v1"});
 
         opt.CustomSchemaIds(x => x.FullName);
 
@@ -103,8 +105,10 @@ namespace API
           }
         });
 
-        var apiXmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var appXmlFile = $"{typeof(MappingProfile).Assembly.GetName().Name}.xml";
+        var apiXmlFile =
+          $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var appXmlFile =
+          $"{typeof(MappingProfile).Assembly.GetName().Name}.xml";
         var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
         var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
         opt.IncludeXmlComments(apiXmlPath);
@@ -135,7 +139,16 @@ namespace API
             opt.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
             ValidatorOptions.LanguageManager.Culture = new CultureInfo("id-ID");
           }
-        );
+        ).AddNewtonsoftJson(opt =>
+        {
+          opt.SerializerSettings.ReferenceLoopHandling =
+            ReferenceLoopHandling.Ignore;
+
+          opt.SerializerSettings.Formatting = Formatting.Indented;
+
+          opt.SerializerSettings.ContractResolver =
+            new CamelCasePropertyNamesContractResolver();
+        });
 
       services.AddMediatR(typeof(List.Handler).Assembly);
 
