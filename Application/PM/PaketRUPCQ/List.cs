@@ -21,7 +21,9 @@ namespace Application.PM.PaketRUPCQ
       public long? IdRUP { get; set; }
       public long? IdUnit { get; set; }
       public long? IdKeg { get; set; }
+      public long? IdSubKeg { get; set; }
       public decimal? NilaiPagu { get; set; }
+      public long? IdProgram { get; set; }
       public DateTime? TglValid { get; set; }
     }
 
@@ -48,13 +50,19 @@ namespace Application.PM.PaketRUPCQ
           parameters.Add(x => x.IdUnit == request.IdUnit);
 
         if (request.IdKeg.HasValue)
-          parameters.Add(x => x.IdKeg == request.IdKeg);
+          parameters.Add(x => x.Keg.IdKegInduk == request.IdKeg);
+
+        if (request.IdSubKeg.HasValue)
+          parameters.Add(x => x.IdKeg == request.IdSubKeg);
 
         if (request.NilaiPagu.HasValue)
           parameters.Add(x => x.NilaiPagu == request.NilaiPagu);
 
         if (request.TglValid.HasValue)
           parameters.Add(x => x.TglValid == request.TglValid);
+
+        if (request.IdProgram.HasValue)
+          parameters.Add(x => x.Keg.IdPrgrm == request.IdProgram);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

@@ -7,7 +7,7 @@
     public string KdUnit { get; set; }
     public string NmUnit { get; set; }
     public long IdKeg { get; set; }
-    public string NuKeg { get; set; }
-    public string NmKeg { get; set; }
+    public string NuSubKeg { get; set; }
+    public string NmSubKeg { get; set; }
   }
 }

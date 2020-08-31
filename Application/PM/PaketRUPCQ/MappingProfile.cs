@@ -12,9 +12,9 @@ namespace Application.PM.PaketRUPCQ
       CreateMap<PaketRUP, PaketRUPDTO>()
         .ForMember(d => d.KdUnit, opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()))
         .ForMember(d => d.NmUnit, opt => opt.MapFrom(s => s.Unit.NmUnit.Trim()))
-        .ForMember(d => d.NuKeg,
+        .ForMember(d => d.NuSubKeg,
           opt => opt.MapFrom(s => s.Keg.NuKeg.Trim()))
-        .ForMember(d => d.NmKeg,
+        .ForMember(d => d.NmSubKeg,
           opt => opt.MapFrom(s => s.Keg.NmKegUnit.Trim()));
     }
   }
