@@ -14,9 +14,7 @@ namespace Persistence.Repository.MA
 
     public KegUnitRepository(
       IDbConnection connection, ISqlGenerator<KegUnit> sqlGenerator) : base(
-      connection, sqlGenerator)
-    {
-    }
+      connection, sqlGenerator) { }
 
     public async Task<IEnumerable<dynamic>> GetTreeKegUnit(
       long idUnit, string kdTahap)
@@ -35,14 +33,19 @@ FROM
            TRIM(d.NMURUS) AS NmUrus,
            TRIM(d.KDURUS) + TRIM(m2.NUPRGRM) AS NuPrgrm,
            TRIM(m2.NMPRGRM) AS NmPrgrm,
-           TRIM(d.KDURUS) + TRIM(m2.NUPRGRM) + TRIM(m.NUKEG) AS NuKeg,
-           TRIM(m.NMKEGUNIT) AS NmKegUnit,
-           m.IDKEG AS IdKeg
+           TRIM(d.KDURUS) + TRIM(m2.NUPRGRM) + TRIM(m3.NUKEG) AS NuKeg,
+           TRIM(m3.NMKEGUNIT) AS NmKegUnit,
+           TRIM(d.KDURUS) + TRIM(m2.NUPRGRM) + TRIM(m3.NUKEG) + TRIM(m.NUKEG) AS NuSubKeg,
+           TRIM(m.NMKEGUNIT) AS NmSubKegUnit,
+           m3.IDKEG AS IdKeg,
+           m.IDKEG AS IdSubKeg
     FROM dbo.KEGUNIT k
         LEFT JOIN dbo.DAFTUNIT d2
             ON d2.IDUNIT = k.IDUNIT
         LEFT JOIN dbo.MKEGIATAN m
             ON m.IDKEG = k.IDKEG
+        LEFT JOIN dbo.MKEGIATAN m3
+            ON m.IDKEGINDUK = m3.IDKEG
         LEFT JOIN dbo.MPGRM m2
             ON m2.IDPRGRM = m.IDPRGRM
         LEFT JOIN dbo.DAFTURUS d
@@ -68,9 +71,17 @@ FROM
            a.NuKeg,
            a.NmKegUnit,
            a.IdKeg,
+           'H'
+    UNION ALL
+    SELECT 4,
+           a.NuSubKeg,
+           a.NmSubKegUnit,
+           a.IdSubKeg,
            'D'
-) AS c(Lvl, Kode, Label, IdKeg, [Type]);",
-        new { IdUnit = idUnit, KdTahap = kdTahap });
+) AS c(Lvl, Kode, Label, IdKeg, [Type])
+ORDER BY c.Lvl,
+         c.Kode;",
+        new {IdUnit = idUnit, KdTahap = kdTahap});
 
       return await Connection.QueryAsync(cmd.RawSql, cmd.Parameters);
     }
