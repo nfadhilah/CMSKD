@@ -24,6 +24,7 @@ namespace Application.MA.DPACQ
       public DateTime? TglValid { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
+      public string KdTahap { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -32,6 +33,7 @@ namespace Application.MA.DPACQ
       {
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.NoDPA).NotEmpty();
+        RuleFor(d => d.KdTahap).NotEmpty();
       }
     }
 

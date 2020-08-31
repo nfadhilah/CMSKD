@@ -27,6 +27,7 @@ namespace Application.MA.DPACQ
       public DateTime? TglValid { get; set; }
       public DateTime? DateCreate { get; set; }
       public DateTime? DateUpdate { get; set; }
+      public string KdTahap { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -61,6 +62,8 @@ namespace Application.MA.DPACQ
           parameters.Add(d => d.DateCreate == request.DateCreate);
         if (request.DateUpdate.HasValue)
           parameters.Add(d => d.DateUpdate == request.DateUpdate);
+        if (!string.IsNullOrWhiteSpace(request.KdTahap))
+          parameters.Add(d => d.KdTahap == request.KdTahap);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 

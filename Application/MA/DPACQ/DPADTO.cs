@@ -15,5 +15,6 @@ namespace Application.MA.DPACQ
     public DateTime? TglValid { get; set; }
     public DateTime? DateCreate { get; set; }
     public DateTime? DateUpdate { get; set; }
+    public string KdTahap { get; set; }
   }
 }

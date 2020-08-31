@@ -25,6 +25,7 @@ namespace Application.MA.DPACQ
       public DateTime? TglDPA { get; set; }
       public string NoSah { get; set; }
       public string Keterangan { get; set; }
+      public string KdTahap { get; set; }
       public DateTime? TglValid { get; set; }
 
       public DTO()
@@ -49,12 +50,11 @@ namespace Application.MA.DPACQ
       {
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.NoDPA).NotEmpty();
+        RuleFor(d => d.KdTahap).NotEmpty();
       }
     }
 
-    public class Command : DPA, IRequest<DPADTO>
-    {
-    }
+    public class Command : DPA, IRequest<DPADTO> { }
 
     public class Handler : IRequestHandler<Command, DPADTO>
     {
@@ -74,7 +74,7 @@ namespace Application.MA.DPACQ
           await _context.DPA.FindByIdAsync(request.IdDPA);
 
         if (updated == null)
-          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
+          throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
@@ -82,7 +82,8 @@ namespace Application.MA.DPACQ
           throw new ApiException("Problem saving changes");
 
         var result =
-          await _context.DPA.FindAllAsync<DaftUnit>(x => x.IdDPA == updated.IdDPA,
+          await _context.DPA.FindAllAsync<DaftUnit>(
+            x => x.IdDPA == updated.IdDPA,
             x => x.DaftUnit);
 
         return _mapper.Map<DPADTO>(result.Single());
