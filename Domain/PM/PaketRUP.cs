@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.DM;
@@ -31,5 +32,8 @@ namespace Domain.PM
 
     [UpdatedAt]
     public DateTime? DateUpdate { get; set; }
+
+    [LeftJoin("PAKETRUPDET", "IDRUP", "IDRUP")]
+    public List<PaketRUPDet> PaketRupDet { get; set; }
   }
 }

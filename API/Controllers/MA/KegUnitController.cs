@@ -14,15 +14,20 @@ namespace API.Controllers.MA
     public async Task<IActionResult> Get([FromQuery] Tree.Query query) =>
       Ok(await Mediator.Send(query));
 
+    [HttpGet("induk")]
+    public async Task<IActionResult> Get([FromQuery] Induk.Query query) =>
+      Ok(await Mediator.Send(query));
+
     [HttpGet("{id}", Name = "GetKegUnit")]
     public async Task<IActionResult> Get(long id) =>
-      Ok(await Mediator.Send(new Detail.Query { IdKegUnit = id }));
+      Ok(await Mediator.Send(new Detail.Query {IdKegUnit = id}));
 
     [HttpPost]
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
-      return CreatedAtRoute("GetKegUnit", new { id = request.IdKegUnit }, request);
+      return CreatedAtRoute("GetKegUnit", new {id = request.IdKegUnit},
+        request);
     }
 
     [HttpPut("{id}")]
@@ -35,6 +40,6 @@ namespace API.Controllers.MA
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id) =>
-      Ok(await Mediator.Send(new Delete.Command { IdKegUnit = id }));
+      Ok(await Mediator.Send(new Delete.Command {IdKegUnit = id}));
   }
 }

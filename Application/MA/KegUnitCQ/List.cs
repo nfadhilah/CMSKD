@@ -26,6 +26,7 @@ namespace Application.MA.KegUnitCQ
       public int? NoPrior { get; set; }
       public long? IdSifatKeg { get; set; }
       public long? IdPeg { get; set; }
+      public long? IdKegInduk { get; set; }
       public DateTime? TglAkhir { get; set; }
       public DateTime? TglAwal { get; set; }
       public Decimal? TargetP { get; set; }
@@ -124,10 +125,12 @@ namespace Application.MA.KegUnitCQ
           parameters.Add(d => d.DateCreate == request.DateCreate);
         if (request.DateUpdate.HasValue)
           parameters.Add(d => d.DateUpdate == request.DateUpdate);
+        if (request.IdKegInduk.HasValue)
+          parameters.Add(d => d.MKegiatan.IdKegInduk == request.IdKegInduk);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.KegUnit.FindAll(predicate).Count();
+        var totalItemsCount = _context.KegUnit.FindAll().Count();
 
         var result = await _context.KegUnit
           .SetLimit(request.Limit, request.Offset)

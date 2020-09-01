@@ -16,6 +16,33 @@ namespace Persistence.Repository.MA
       IDbConnection connection, ISqlGenerator<KegUnit> sqlGenerator) : base(
       connection, sqlGenerator) { }
 
+
+    public async Task<IEnumerable<dynamic>> GetGroupKegUnitByKegInduk(
+      long idUnit, long idPrgrm, string kdTahap)
+    {
+      var query = @"
+SELECT m2.IDPRGRM AS IdPrgrm,
+	   m2.IDKEG AS IdKeg,
+       RTRIM(m2.NUKEG) AS NuKeg,
+       m2.NMKEGUNIT AS NmKegUnit
+FROM dbo.KEGUNIT k
+    LEFT JOIN dbo.MKEGIATAN m
+        ON m.IDKEG = k.IDKEG
+    LEFT JOIN dbo.MKEGIATAN m2
+        ON m2.IDKEG = m.IDKEGINDUK
+WHERE k.IDUNIT = @IdUnit
+      AND k.IDPRGRM = @IdPrgrm
+      AND k.KDTAHAP = @KdTahap
+GROUP BY m2.IDPRGRM,
+		 m2.IDKEG,
+         m2.NUKEG,
+         m2.NMKEGUNIT;";
+
+      return await Connection.QueryAsync(query,
+        new {IdUnit = idUnit, IdPrgrm = idPrgrm, KdTahap = kdTahap});
+    }
+
+
     public async Task<IEnumerable<dynamic>> GetTreeKegUnit(
       long idUnit, string kdTahap)
     {

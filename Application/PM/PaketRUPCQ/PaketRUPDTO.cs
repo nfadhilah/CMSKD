@@ -9,5 +9,6 @@
     public long IdKeg { get; set; }
     public string NuSubKeg { get; set; }
     public string NmSubKeg { get; set; }
+    public decimal? NilaiPagu { get; set; }
   }
 }

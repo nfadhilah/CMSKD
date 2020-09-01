@@ -12,7 +12,6 @@ namespace API.Controllers.PM
   public class PaketRUPController : BaseController
   {
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> Get([FromQuery] List.Query query) =>
       Ok(await Mediator.Send(query));
 
