@@ -36,9 +36,11 @@ namespace Application.PM.PaketRUPCQ
       {
         var result =
           (await _context.PaketRup
-            .FindAllAsync<DaftUnit, MKegiatan>(x => x.IdRUP == request.IdRUP,
+            .FindAllAsync<DaftUnit, MKegiatan, JPekerjaan, JDana, DaftPhk3>(
+              x => x.IdRUP == request.IdRUP,
               c => c.Unit,
-              c => c.Keg)).SingleOrDefault();
+              c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3))
+          .SingleOrDefault();
 
         if (result == null)
           throw new ApiException("Not found", (int) HttpStatusCode.NotFound);

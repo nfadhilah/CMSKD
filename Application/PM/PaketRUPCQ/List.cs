@@ -71,8 +71,10 @@ namespace Application.PM.PaketRUPCQ
         var result = await _context.PaketRup
           .SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdRUP)
-          .FindAllAsync<DaftUnit, MKegiatan>(predicate, c => c.Unit,
-            c => c.Keg);
+          .FindAllAsync<DaftUnit, MKegiatan, JPekerjaan, JDana, DaftPhk3>(
+            predicate,
+            c => c.Unit,
+            c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3);
 
         return new PaginationWrapper(
           _mapper.Map<IEnumerable<PaketRUPDTO>>(result),

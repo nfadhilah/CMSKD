@@ -27,6 +27,16 @@ namespace Application.PM.PaketRUPCQ
       public long IdKeg { get; set; }
       public decimal? NilaiPagu { get; set; }
       public DateTime? TglValid { get; set; }
+      public string KodeRUP { get; set; }
+      public string NmPaket { get; set; }
+      public string Lokasi { get; set; }
+      public string Volume { get; set; }
+      public string UraiPaket { get; set; }
+      public long? IdJnsPekerjaan { get; set; }
+      public DateTime? AwalPekerjaan { get; set; }
+      public DateTime? AkhirPekerjaan { get; set; }
+      public long IdJDana { get; set; }
+      public long IdPhk3 { get; set; }
 
       public DTO()
       {
@@ -50,6 +60,8 @@ namespace Application.PM.PaketRUPCQ
       {
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.IdKeg).NotEmpty();
+        RuleFor(d => d.IdJDana).NotEmpty();
+        RuleFor(d => d.KodeRUP).NotEmpty();
       }
     }
 
@@ -81,9 +93,10 @@ namespace Application.PM.PaketRUPCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.PaketRup
-          .FindAllAsync<DaftUnit, MKegiatan>(x => x.IdRUP == updated.IdRUP,
+          .FindAllAsync<DaftUnit, MKegiatan, JPekerjaan, JDana, DaftPhk3>(
+            x => x.IdRUP == updated.IdRUP,
             c => c.Unit,
-            c => c.Keg);
+            c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3);
 
         return _mapper.Map<PaketRUPDTO>(result.SingleOrDefault());
       }

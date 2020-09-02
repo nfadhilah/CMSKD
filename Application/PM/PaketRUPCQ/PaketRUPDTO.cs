@@ -1,4 +1,6 @@
-﻿namespace Application.PM.PaketRUPCQ
+﻿using System;
+
+namespace Application.PM.PaketRUPCQ
 {
   public class PaketRUPDTO
   {
@@ -10,5 +12,22 @@
     public string NuSubKeg { get; set; }
     public string NmSubKeg { get; set; }
     public decimal? NilaiPagu { get; set; }
+    public DateTime? TglValid { get; set; }
+    public string KodeRUP { get; set; }
+    public string NmPaket { get; set; }
+    public string Lokasi { get; set; }
+    public string Volume { get; set; }
+    public string UraiPaket { get; set; }
+    public long? IdJnsPekerjaan { get; set; }
+    public string UraianJnsPekerjaan { get; set; }
+    public DateTime? AwalPekerjaan { get; set; }
+    public DateTime? AkhirPekerjaan { get; set; }
+    public long IdJDana { get; set; }
+    public string KdDana { get; set; }
+    public string NmDana { get; set; }
+    public long IdPhk3 { get; set; }
+    public string NmPhk3 { get; set; }
+    public string NmInstPhk3 { get; set; }
+    public string NPWPPhk3 { get; set; }
   }
 }
