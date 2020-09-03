@@ -11,12 +11,13 @@ using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
 
-namespace Application.DM.JPekerjaanCQ
+namespace Application.DM.MetodePengadaanCQ
 {
   public class List
   {
     public class Query : PaginationQuery, IRequest<PaginationWrapper>
     {
+      public string Kode { get; set; }
       public string Uraian { get; set; }
     }
 
@@ -32,18 +33,21 @@ namespace Application.DM.JPekerjaanCQ
       public async Task<PaginationWrapper> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var parameters = new List<Expression<Func<JPekerjaan, bool>>>();
+        var parameters = new List<Expression<Func<MetodePengadaan, bool>>>();
 
         if (!string.IsNullOrWhiteSpace(request.Uraian))
           parameters.Add(d => d.Uraian.Contains(request.Uraian));
 
+        if (!string.IsNullOrWhiteSpace(request.Kode))
+          parameters.Add(d => d.Uraian.Contains(request.Kode));
+
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
-        var totalItemsCount = _context.JPekerjaan.FindAll().Count();
+        var totalItemsCount = _context.MetodePengadaan.FindAll().Count();
 
-        var result = await _context.JPekerjaan
+        var result = await _context.MetodePengadaan
           .SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.IdJnsPekerjaan)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, d => d.Kode)
           .FindAllAsync(predicate);
 
         return new PaginationWrapper(result, new Pagination

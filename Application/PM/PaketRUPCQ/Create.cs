@@ -28,7 +28,9 @@ namespace Application.PM.PaketRUPCQ
       public string Lokasi { get; set; }
       public string Volume { get; set; }
       public string UraiPaket { get; set; }
+      public StatusRUP Status { get; set; }
       public long? IdJnsPekerjaan { get; set; }
+      public long? IdMetodePengadaan { get; set; }
       public DateTime? AwalPekerjaan { get; set; }
       public DateTime? AkhirPekerjaan { get; set; }
       public long IdJDana { get; set; }
@@ -66,10 +68,12 @@ namespace Application.PM.PaketRUPCQ
           throw new ApiException("Problem saving changes");
 
         var result = await _context.PaketRup
-          .FindAllAsync<DaftUnit, MKegiatan, JPekerjaan, JDana, DaftPhk3>(
+          .FindAllAsync<DaftUnit, MKegiatan, JPekerjaan, JDana, DaftPhk3,
+            MetodePengadaan>(
             x => x.IdRUP == added.IdRUP,
             c => c.Unit,
-            c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3);
+            c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3,
+            c => c.MetodePengadaan);
 
         return _mapper.Map<PaketRUPDTO>(result.SingleOrDefault());
       }

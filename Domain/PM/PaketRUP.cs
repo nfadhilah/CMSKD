@@ -33,9 +33,15 @@ namespace Domain.PM
     public string Volume { get; set; }
     public string UraiPaket { get; set; }
     public long? IdJnsPekerjaan { get; set; }
+    public StatusRUP Status { get; set; }
 
     [LeftJoin("JPEKERJAAN", "IDJNSPEKERJAAN", "IDJNSPEKERJAAN")]
     public JPekerjaan JnsPekerjaan { get; set; }
+
+    public long? IdMetodePengadaan { get; set; }
+
+    [LeftJoin("METODEPENGADAAN", "IDMETODEPENGADAAN", "IDMETODEPENGADAAN")]
+    public MetodePengadaan MetodePengadaan { get; set; }
 
     public DateTime? AwalPekerjaan { get; set; }
     public DateTime? AkhirPekerjaan { get; set; }

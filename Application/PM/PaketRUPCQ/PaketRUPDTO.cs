@@ -18,8 +18,12 @@ namespace Application.PM.PaketRUPCQ
     public string Lokasi { get; set; }
     public string Volume { get; set; }
     public string UraiPaket { get; set; }
+    public int Status { get; set; }
+    public string LblStatus { get; set; }
     public long? IdJnsPekerjaan { get; set; }
     public string UraianJnsPekerjaan { get; set; }
+    public long? IdMetodePengadaan { get; set; }
+    public string UraianMetodePengadaan { get; set; }
     public DateTime? AwalPekerjaan { get; set; }
     public DateTime? AkhirPekerjaan { get; set; }
     public long IdJDana { get; set; }

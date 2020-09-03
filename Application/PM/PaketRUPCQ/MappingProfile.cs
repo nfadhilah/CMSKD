@@ -18,12 +18,15 @@ namespace Application.PM.PaketRUPCQ
           opt => opt.MapFrom(s => s.UraiPaket.Trim()))
         .ForMember(d => d.KdUnit, opt => opt.MapFrom(s => s.Unit.KdUnit.Trim()))
         .ForMember(d => d.NmUnit, opt => opt.MapFrom(s => s.Unit.NmUnit.Trim()))
+        .ForMember(d => d.LblStatus, opt => opt.MapFrom(s => s.Status))
         .ForMember(d => d.NuSubKeg,
           opt => opt.MapFrom(s => s.Keg.NuKeg.Trim()))
         .ForMember(d => d.NmSubKeg,
           opt => opt.MapFrom(s => s.Keg.NmKegUnit.Trim()))
         .ForMember(d => d.UraianJnsPekerjaan,
           opt => opt.MapFrom(s => s.JnsPekerjaan.Uraian.Trim()))
+        .ForMember(d => d.UraianMetodePengadaan,
+          opt => opt.MapFrom(s => s.MetodePengadaan.Uraian.Trim()))
         .ForMember(d => d.KdDana,
           opt => opt.MapFrom(s => s.JDana.KdDana.Trim()))
         .ForMember(d => d.NmDana,

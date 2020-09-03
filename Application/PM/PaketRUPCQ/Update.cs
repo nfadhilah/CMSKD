@@ -32,6 +32,7 @@ namespace Application.PM.PaketRUPCQ
       public string Lokasi { get; set; }
       public string Volume { get; set; }
       public string UraiPaket { get; set; }
+      public StatusRUP Status { get; set; }
       public long? IdJnsPekerjaan { get; set; }
       public DateTime? AwalPekerjaan { get; set; }
       public DateTime? AkhirPekerjaan { get; set; }
