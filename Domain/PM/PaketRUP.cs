@@ -50,9 +50,9 @@ namespace Domain.PM
     [InnerJoin("JDANA", "IDJDANA", "IDJDANA")]
     public JDana JDana { get; set; }
 
-    public long IdPhk3 { get; set; }
+    public long? IdPhk3 { get; set; }
 
-    [InnerJoin("DAFTPHK3", "IDPHK3", "IDPHK3")]
+    [LeftJoin("DAFTPHK3", "IDPHK3", "IDPHK3")]
     public DaftPhk3 Phk3 { get; set; }
 
     [UpdatedAt]

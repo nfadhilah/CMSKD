@@ -37,7 +37,7 @@ namespace Application.PM.PaketRUPCQ
       public DateTime? AwalPekerjaan { get; set; }
       public DateTime? AkhirPekerjaan { get; set; }
       public long IdJDana { get; set; }
-      public long IdPhk3 { get; set; }
+      public long? IdPhk3 { get; set; }
 
       public DTO()
       {

@@ -34,7 +34,7 @@ namespace Application.PM.PaketRUPCQ
       public DateTime? AwalPekerjaan { get; set; }
       public DateTime? AkhirPekerjaan { get; set; }
       public long IdJDana { get; set; }
-      public long IdPhk3 { get; set; }
+      public long? IdPhk3 { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -75,6 +75,7 @@ namespace Application.PM.PaketRUPCQ
             c => c.Keg, c => c.JnsPekerjaan, c => c.JDana, c => c.Phk3,
             c => c.MetodePengadaan);
 
+        // return _mapper.Map<PaketRUPDTO>(result.SingleOrDefault());
         return _mapper.Map<PaketRUPDTO>(result.SingleOrDefault());
       }
     }
