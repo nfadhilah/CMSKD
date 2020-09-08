@@ -6,6 +6,9 @@ namespace Application.PM.PaketRUPCQ
   {
     public long IdRUP { get; set; }
     public long IdUnit { get; set; }
+    public int JnsRUP { get; set; }
+    public int TipeSwakelola { get; set; }
+    public string UraiTipeSwakelola { get; set; }
     public string KdUnit { get; set; }
     public string NmUnit { get; set; }
     public long IdKeg { get; set; }

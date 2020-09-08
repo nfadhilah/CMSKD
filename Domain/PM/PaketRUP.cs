@@ -15,6 +15,9 @@ namespace Domain.PM
     public long IdRUP { get; set; }
 
     public long IdUnit { get; set; }
+    public JnsRUP JnsRUP { get; set; }
+    public int TipeSwakelola { get; set; }
+    public string UraiTipeSwakelola { get; set; }
 
     [InnerJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit Unit { get; set; }

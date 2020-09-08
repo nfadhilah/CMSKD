@@ -20,6 +20,9 @@ namespace Application.PM.PaketRUPCQ
     public class Command : IRequest<PaketRUPDTO>
     {
       public long IdUnit { get; set; }
+      public JnsRUP JnsRUP { get; set; }
+      public int TipeSwakelola { get; set; }
+      public string UraiTipeSwakelola { get; set; }
       public long IdKeg { get; set; }
       public decimal? NilaiPagu { get; set; }
       public DateTime? TglValid { get; set; }
@@ -41,6 +44,9 @@ namespace Application.PM.PaketRUPCQ
     {
       public Validator()
       {
+        RuleFor(d => d.JnsRUP).NotEmpty();
+        RuleFor(d => d.TipeSwakelola).NotEmpty();
+        RuleFor(d => d.UraiTipeSwakelola).NotEmpty();
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.IdKeg).NotEmpty();
         RuleFor(d => d.IdJDana).NotEmpty();
