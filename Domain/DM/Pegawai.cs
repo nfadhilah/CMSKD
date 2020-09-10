@@ -11,13 +11,18 @@ namespace Domain.DM
   {
     [Key, Identity]
     public long IdPeg { get; set; }
+
     public string NIP { get; set; }
     public long IdUnit { get; set; }
+
     [LeftJoin("DAFTUNIT", "IDUNIT", "IDUNIT")]
     public DaftUnit DaftUnit { get; set; }
+
     public string KdGol { get; set; }
-    [LeftJoin("GOLONGAN", "IDGOL", "IDGOL")]
+
+    [LeftJoin("GOLONGAN", "KDGOL", "KDGOL")]
     public Golongan Golongan { get; set; }
+
     public string Nama { get; set; }
     public string Alamat { get; set; }
     public string Jabatan { get; set; }
