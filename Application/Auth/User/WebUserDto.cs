@@ -4,10 +4,14 @@
   {
     public string UserId { get; set; }
     public long? IdUnit { get; set; }
+    public string NmUnit { get; set; }
     public int KdTahap { get; set; }
     public long? IdPeg { get; set; }
     public long GroupId { get; set; }
+    public string NmGroup { get; set; }
     public string Nama { get; set; }
+    public string NmPegawai { get; set; }
+    public string NIPPegawai { get; set; }
     public string Email { get; set; }
     public int? BlokId { get; set; }
     public bool Transecure { get; set; }
