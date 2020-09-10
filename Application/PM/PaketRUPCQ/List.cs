@@ -8,6 +8,7 @@ using Application.CommonDTO;
 using Application.Helpers;
 using AutoMapper;
 using Domain.DM;
+using Domain.PM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
@@ -25,6 +26,9 @@ namespace Application.PM.PaketRUPCQ
       public decimal? NilaiPagu { get; set; }
       public long? IdProgram { get; set; }
       public DateTime? TglValid { get; set; }
+      public JnsRUP? JnsRUP { get; set; }
+      public int? TipeSwakelola { get; set; }
+      public string UraiTipeSwakelola { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -63,6 +67,16 @@ namespace Application.PM.PaketRUPCQ
 
         if (request.IdProgram.HasValue)
           parameters.Add(x => x.Keg.IdPrgrm == request.IdProgram);
+
+        if (request.JnsRUP.HasValue)
+          parameters.Add(x => x.JnsRUP == request.JnsRUP);
+
+        if (request.TipeSwakelola.HasValue)
+          parameters.Add(x => x.TipeSwakelola == request.TipeSwakelola);
+
+        if (!string.IsNullOrWhiteSpace(request.UraiTipeSwakelola))
+          parameters.Add(x =>
+            x.UraiTipeSwakelola.Contains(request.UraiTipeSwakelola));
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
