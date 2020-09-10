@@ -68,12 +68,16 @@ FROM dbo.WEBUSER w
       return user;
     }
 
-    public async Task<WebUser> GetUserWithRoleAsync(string userId, long idApp)
+    public async Task<WebUser> GetUserWithRelation(
+      string userId, long? idApp = null)
     {
-      const string cmd = @"SELECT DISTINCT
+      var builder = new SqlBuilder();
+
+      var cmd = builder.AddTemplate(@"SELECT DISTINCT
        w.*,
        w2.*,
-       d.*
+       d.*,
+       p.*
 FROM dbo.WEBUSER w
     INNER JOIN dbo.WEBGROUP w2
         ON w.GROUPID = w2.GROUPID
@@ -83,21 +87,30 @@ FROM dbo.WEBUSER w
         ON w4.ROLEID = w3.ROLEID
     LEFT JOIN dbo.DAFTUNIT d
         ON d.IDUNIT = w.IDUNIT
-WHERE w4.IDAPP = @IdApp
-      AND w.USERID = @UserId;";
+    LEFT JOIN PEGAWAI p
+        ON p.IDPEG = w.IDPEG
+/**where**/;");
+
+      if (!string.IsNullOrWhiteSpace(userId))
+        builder.Where("w.USERID = @UserId", new {UserId = userId});
+
+      if (idApp.HasValue)
+        builder.Where("w4.IDAPP = @IdApp", new {IdApp = idApp});
 
       var user =
-        (await Connection.QueryAsync<WebUser, WebGroup, DaftUnit, WebUser>(cmd,
-          (webUser, webGroup, unit) =>
-          {
-            webUser.WebGroup = webGroup;
-            if (unit != null) webUser.DaftUnit = unit;
-            return webUser;
-          }, new {UserId = userId, IdApp = idApp}, splitOn: "GROUPID, IDUNIT"))
+        (await Connection
+          .QueryAsync<WebUser, WebGroup, DaftUnit, Pegawai, WebUser>(
+            cmd.RawSql,
+            (webUser, webGroup, unit, pegawai) =>
+            {
+              webUser.WebGroup = webGroup;
+              if (unit != null) webUser.DaftUnit = unit;
+              if (pegawai != null) webUser.Pegawai = pegawai;
+              return webUser;
+            }, new {UserId = userId, IdApp = idApp},
+            splitOn: "GROUPID, IDUNIT, IDPEG"))
         .Distinct()
         .ToList().FirstOrDefault();
-
-      Connection.Close();
 
       return user;
     }

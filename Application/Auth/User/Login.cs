@@ -50,11 +50,13 @@ namespace Application.Auth.User
         Command request, CancellationToken cancellationToken)
       {
         var user =
-          await _context.WebUser.GetUserWithRoleAsync(request.UserName, request.AppId);
+          await _context.WebUser.GetUserWithRelation(request.UserName,
+            request.AppId);
 
         if (user == null)
-          throw new ApiException("Login gagal. Harap cek username dan password anda.",
-            (int)HttpStatusCode.Unauthorized);
+          throw new ApiException(
+            "Login gagal. Harap cek username dan password anda.",
+            (int) HttpStatusCode.Unauthorized);
 
         if (user.BlokId > 3)
           throw new ApiException(
@@ -66,8 +68,9 @@ namespace Application.Auth.User
 
           _context.WebUser.Update(user);
 
-          throw new ApiException("Login gagal. Harap cek username dan password anda.",
-            (int)HttpStatusCode.Unauthorized);
+          throw new ApiException(
+            "Login gagal. Harap cek username dan password anda.",
+            (int) HttpStatusCode.Unauthorized);
         }
 
         var token = _jwtGenerator.CreateToken(user, request.AppId);

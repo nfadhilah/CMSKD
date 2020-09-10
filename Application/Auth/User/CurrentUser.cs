@@ -41,19 +41,21 @@ namespace Application.Auth.User
         Query request, CancellationToken cancellationToken)
       {
         var user =
-          await _context.WebUser.GetUserWithRoleAsync(
+          await _context.WebUser.GetUserWithRelation(
             _userAccessor.GetCurrentUsername(),
             _userAccessor.GetCurrentAppId());
 
         if (user == null)
-          throw new ApiException("Login gagal. Harap cek username dan password anda.",
-            (int)HttpStatusCode.Unauthorized);
+          throw new ApiException(
+            "Login gagal. Harap cek username dan password anda.",
+            (int) HttpStatusCode.Unauthorized);
 
         if (user.BlokId > 3)
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
-        var token = _jwtGenerator.CreateToken(user, _userAccessor.GetCurrentAppId());
+        var token =
+          _jwtGenerator.CreateToken(user, _userAccessor.GetCurrentAppId());
 
         return new Profile
         {

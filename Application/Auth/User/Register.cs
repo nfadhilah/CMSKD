@@ -45,13 +45,16 @@ namespace Application.Auth.User
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
       private readonly IPasswordHasher _passwordHasher;
+      private readonly IUserAccessor _userAccessor;
 
       public Handler(
-        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher)
+        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher,
+        IUserAccessor userAccessor)
       {
         _context = context;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
+        _userAccessor = userAccessor;
       }
 
       public async Task<WebUserDto> Handle(
@@ -69,7 +72,10 @@ namespace Application.Auth.User
         if (!await _context.WebUser.InsertAsync(model))
           throw new ApiException("Tambah data gagal");
 
-        return _mapper.Map<WebUserDto>(model);
+        var result =
+          await _context.WebUser.GetUserWithRelation(model.UserId);
+
+        return _mapper.Map<WebUserDto>(result);
       }
     }
   }
