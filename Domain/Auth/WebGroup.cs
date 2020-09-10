@@ -8,6 +8,7 @@ namespace Domain.Auth
   {
     [Key]
     public long GroupId { get; set; }
+
     public string NmGroup { get; set; }
     public string Ket { get; set; }
   }
