@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System;
+using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.Auth;
@@ -69,7 +70,12 @@ namespace Application.Auth.User
         var model = _mapper.Map<WebUser>(request);
 
         model.Pwd = _passwordHasher.Create(request.Pwd);
-        model.AuthorizedBy = _userAccessor.GetCurrentUsername();
+
+        if (model.IsAuthorized.HasValue && model.IsAuthorized.Value)
+        {
+          model.AuthorizedBy = _userAccessor.GetCurrentUsername();
+          model.AuthorizedDate = DateTime.Now;
+        }
 
         if (!await _context.WebUser.InsertAsync(model))
           throw new ApiException("Tambah data gagal");

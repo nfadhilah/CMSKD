@@ -94,7 +94,12 @@ namespace Application.Auth.User
         _mapper.Map(request, updated);
 
         updated.Pwd = _passwordHasher.Create(request.Pwd);
-        updated.AuthorizedBy = _userAccessor.GetCurrentUsername();
+
+        if (updated.IsAuthorized.HasValue && updated.IsAuthorized.Value)
+        {
+          updated.AuthorizedBy = _userAccessor.GetCurrentUsername();
+          updated.AuthorizedDate = DateTime.Now;
+        }
 
         if (!await _context.WebUser.InsertAsync(updated))
           throw new ApiException("Tambah data gagal");

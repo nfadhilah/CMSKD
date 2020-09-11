@@ -39,10 +39,8 @@ namespace Domain.Auth
     public bool StUpdate { get; set; }
     public bool StDelete { get; set; }
     public string Ket { get; set; }
-    public bool IsAuthorized { get; set; }
+    public bool? IsAuthorized { get; set; }
     public string AuthorizedBy { get; set; }
-
-    [UpdatedAt]
-    public DateTime AuthorizedDate { get; set; }
+    public DateTime? AuthorizedDate { get; set; }
   }
 }
