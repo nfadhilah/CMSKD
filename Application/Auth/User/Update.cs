@@ -7,6 +7,7 @@ using Application.BUD.BKUDCQ;
 using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.Auth;
 using Domain.BUD;
 using Domain.DM;
 using Domain.TUBEND;
@@ -22,13 +23,20 @@ namespace Application.Auth.User
     {
       private readonly IMapper _mapper;
 
-      public long? IdKas { get; set; }
-      public long IdSTS { get; set; }
-      public long? IdBKas { get; set; }
       public long? IdUnit { get; set; }
-      public DateTime? TglKas { get; set; }
-      public DateTime? TglValid { get; set; }
-      public string Uraian { get; set; }
+      public int KdTahap { get; set; }
+      public long? IdPeg { get; set; }
+      public string Pwd { get; set; }
+      public long GroupId { get; set; }
+      public string Nama { get; set; }
+      public string Email { get; set; }
+      public int? BlokId { get; set; }
+      public bool Transecure { get; set; }
+      public bool StInsert { get; set; }
+      public bool StUpdate { get; set; }
+      public bool StDelete { get; set; }
+      public string Ket { get; set; }
+      public bool IsAuthorized { get; set; }
 
       public DTO()
       {
@@ -50,45 +58,51 @@ namespace Application.Auth.User
     {
       public Validator()
       {
-        RuleFor(d => d.IdUnit).NotEmpty();
-        RuleFor(d => d.IdSTS).NotEmpty();
-        RuleFor(d => d.IdKas).NotEmpty();
-        RuleFor(d => d.IdBKas).NotEmpty();
+        RuleFor(x => x.Nama).NotEmpty();
+        RuleFor(x => x.Pwd).NotEmpty().MinimumLength(6);
       }
     }
 
-    public class Command : BKUD, IRequest<BKUDDTO> { }
+    public class Command : WebUser, IRequest<WebUserDto> { }
 
-    public class Handler : IRequestHandler<Command, BKUDDTO>
+    public class Handler : IRequestHandler<Command, WebUserDto>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
+      private readonly IPasswordHasher _passwordHasher;
+      private readonly IUserAccessor _userAccessor;
 
-      public Handler(IDbContext context, IMapper mapper)
+      public Handler(
+        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher,
+        IUserAccessor userAccessor)
       {
         _context = context;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
+        _userAccessor = userAccessor;
       }
 
-      public async Task<BKUDDTO> Handle(
+      public async Task<WebUserDto> Handle(
         Command request, CancellationToken cancellationToken)
       {
         var updated =
-          await _context.BKUD.FindByIdAsync(request.IdBKUD);
+          await _context.WebUser.FindByIdAsync(request.UserId);
 
         if (updated == null)
           throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 
-        if (!_context.BKUD.Update(updated))
-          throw new ApiException("Problem saving changes");
+        updated.Pwd = _passwordHasher.Create(request.Pwd);
+        updated.AuthorizedBy = _userAccessor.GetCurrentUsername();
 
-        var result = await _context.BKUD
-          .FindAllAsync<DaftUnit, STS>(
-            x => x.IdBKUD == updated.IdBKUD, x => x.Unit, x => x.STS);
+        if (!await _context.WebUser.InsertAsync(updated))
+          throw new ApiException("Tambah data gagal");
 
-        return _mapper.Map<BKUDDTO>(result.SingleOrDefault());
+        var result =
+          await _context.WebUser.GetUserWithRelation(updated.UserId);
+
+        return _mapper.Map<WebUserDto>(result);
       }
     }
   }

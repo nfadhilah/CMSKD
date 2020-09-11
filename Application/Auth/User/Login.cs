@@ -62,6 +62,10 @@ namespace Application.Auth.User
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
+        if (!user.IsAuthorized)
+          throw new ApiException("User anda belum di otorisasi",
+            (int) HttpStatusCode.Unauthorized);
+
         if (!_passwordHasher.Validate(user.Pwd, request.Password))
         {
           user.BlokId = ++user.BlokId;

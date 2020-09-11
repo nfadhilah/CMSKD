@@ -28,6 +28,7 @@ namespace Application.Auth.User
       public bool StUpdate { get; set; }
       public bool StDelete { get; set; }
       public string Ket { get; set; }
+      public bool IsAuthorized { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -68,6 +69,7 @@ namespace Application.Auth.User
         var model = _mapper.Map<WebUser>(request);
 
         model.Pwd = _passwordHasher.Create(request.Pwd);
+        model.AuthorizedBy = _userAccessor.GetCurrentUsername();
 
         if (!await _context.WebUser.InsertAsync(model))
           throw new ApiException("Tambah data gagal");

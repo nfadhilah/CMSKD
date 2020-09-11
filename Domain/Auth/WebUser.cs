@@ -1,7 +1,9 @@
-﻿using Domain.DM;
+﻿using System;
+using Domain.DM;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MicroOrm.Dapper.Repositories.Attributes;
 
 namespace Domain.Auth
 {
@@ -37,5 +39,10 @@ namespace Domain.Auth
     public bool StUpdate { get; set; }
     public bool StDelete { get; set; }
     public string Ket { get; set; }
+    public bool IsAuthorized { get; set; }
+    public string AuthorizedBy { get; set; }
+
+    [UpdatedAt]
+    public DateTime AuthorizedDate { get; set; }
   }
 }
