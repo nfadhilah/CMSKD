@@ -62,7 +62,7 @@ namespace Application.Auth.User
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
-        if (!user.IsAuthorized)
+        if (!user.IsAuthorized.HasValue || !user.IsAuthorized.Value)
           throw new ApiException("User anda belum di otorisasi",
             (int) HttpStatusCode.Unauthorized);
 
