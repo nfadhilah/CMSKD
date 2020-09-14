@@ -18,6 +18,8 @@ namespace Application.Auth.User
           opt => opt.MapFrom(s => s.Pegawai.NIP.Trim()));
       CreateMap<Register.Command, WebUser>()
         .ForMember(d => d.Pwd, opt => opt.Ignore());
+      CreateMap<Update.Command, WebUser>()
+        .ForMember(d => d.Pwd, opt => opt.Ignore());
     }
   }
 }

@@ -93,7 +93,8 @@ namespace Application.Auth.User
 
         _mapper.Map(request, updated);
 
-        updated.Pwd = _passwordHasher.Create(request.Pwd);
+        if (!string.IsNullOrWhiteSpace(request.Pwd))
+          updated.Pwd = _passwordHasher.Create(request.Pwd);
 
         if (updated.IsAuthorized.HasValue && updated.IsAuthorized.Value)
         {
@@ -101,7 +102,7 @@ namespace Application.Auth.User
           updated.AuthorizedDate = DateTime.Now;
         }
 
-        if (!await _context.WebUser.InsertAsync(updated))
+        if (!await _context.WebUser.UpdateAsync(updated))
           throw new ApiException("Tambah data gagal");
 
         var result =
