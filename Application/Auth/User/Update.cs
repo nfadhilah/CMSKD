@@ -59,7 +59,7 @@ namespace Application.Auth.User
       public Validator()
       {
         RuleFor(x => x.Nama).NotEmpty();
-        RuleFor(x => x.Pwd).NotEmpty().MinimumLength(6);
+        // RuleFor(x => x.Pwd).NotEmpty().MinimumLength(6);
       }
     }
 
