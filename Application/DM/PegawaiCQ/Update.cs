@@ -54,12 +54,9 @@ namespace Application.DM.PegawaiCQ
         RuleFor(d => d.IdUnit).NotEmpty();
         RuleFor(d => d.KdGol).NotEmpty();
         RuleFor(d => d.Nama).NotEmpty();
-        RuleFor(d => d.Alamat).NotEmpty();
         RuleFor(d => d.Jabatan).NotEmpty();
         RuleFor(d => d.PDDK).NotEmpty();
         RuleFor(d => d.NPWP).NotEmpty();
-        RuleFor(d => d.StAktif).NotEmpty();
-        RuleFor(d => d.DateCreate).NotEmpty();
       }
     }
 
