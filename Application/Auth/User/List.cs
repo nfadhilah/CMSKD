@@ -14,6 +14,7 @@ namespace Application.Auth.User
     {
       public long? IdUnit { get; set; }
       public long? GroupId { get; set; }
+      public List<string> ExcludedRoleName { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, IEnumerable<WebUserDto>>
@@ -36,7 +37,7 @@ namespace Application.Auth.User
         var result = await _context.WebUser.GetUsers(
           _userAccessor.GetCurrentAppId(),
           request.IdUnit,
-          request.GroupId);
+          request.GroupId, request.ExcludedRoleName);
 
         return _mapper.Map<IEnumerable<WebUserDto>>(result);
       }

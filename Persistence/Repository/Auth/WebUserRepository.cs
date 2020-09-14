@@ -20,7 +20,8 @@ namespace Persistence.Repository.Auth
 
 
     public async Task<IEnumerable<WebUser>> GetUsers(
-      long? idApp, long? idUnit, long? groupId)
+      long? idApp, long? idUnit, long? groupId,
+      List<string> excludedRoleName = null)
     {
       var builder = new SqlBuilder();
 
@@ -50,6 +51,10 @@ FROM dbo.WEBUSER w
 
       if (groupId.HasValue)
         builder.Where("w.GROUPID = @GroupId", new {IdUnit = groupId});
+
+      if (excludedRoleName != null && excludedRoleName.Any())
+        builder.Where("w2.NMGROUP NOT IN @ExcludedRoleName",
+          new {ExcludedRoleName = excludedRoleName});
 
       var user =
         (await Connection
