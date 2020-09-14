@@ -14,7 +14,10 @@ namespace Application.Auth.WebGroupCQ
 {
   public class List
   {
-    public class Query : IRequest<IEnumerable<WebGroup>> { }
+    public class Query : IRequest<IEnumerable<WebGroup>>
+    {
+      public List<string> ExcludedRoleName { get; set; }
+    }
 
     public class Handler : IRequestHandler<Query, IEnumerable<WebGroup>>
     {
@@ -32,7 +35,7 @@ namespace Application.Auth.WebGroupCQ
         Query request, CancellationToken cancellationToken)
       {
         return await _context.WebGroup.GetListWebGroup(
-          _userAccessor.GetCurrentAppId());
+          _userAccessor.GetCurrentAppId(), request.ExcludedRoleName);
       }
     }
   }

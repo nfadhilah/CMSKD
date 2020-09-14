@@ -3,6 +3,7 @@ using Domain.Auth;
 using MicroOrm.Dapper.Repositories;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Persistence.Repository.Common;
@@ -18,7 +19,8 @@ namespace Persistence.Repository.Auth
       connection, sqlGenerator) { }
 
 
-    public async Task<IEnumerable<WebGroup>> GetListWebGroup(long? idApp)
+    public async Task<IEnumerable<WebGroup>> GetListWebGroup(
+      long? idApp, List<string> excludedRoleName = null)
     {
       var builder = new SqlBuilder();
 
@@ -31,6 +33,10 @@ ON w3.ROLEID = w2.ROLEID
 
       if (idApp.HasValue)
         builder.Where("w3.IDAPP = @IdApp", new {IdApp = idApp});
+
+      if (excludedRoleName != null && excludedRoleName.Any())
+        builder.Where("w.NMGROUP NOT IN @ExcludedRoleName",
+          new {ExcludedRoleName = excludedRoleName});
 
       return await Connection.QueryAsync<WebGroup>(query.RawSql,
         query.Parameters);
