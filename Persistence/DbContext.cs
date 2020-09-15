@@ -116,6 +116,7 @@ namespace Persistence
     PaketRUPRepository PaketRup { get; }
     PaketRUPDetRepository PaketRupDet { get; }
     MetodePengadaanRepository MetodePengadaan { get; }
+    UserKegiatanRepository UserKegiatan { get; }
   }
 
   public class DbContext : IDbContext
@@ -271,6 +272,9 @@ namespace Persistence
 
     public MetodePengadaanRepository MetodePengadaan =>
       new MetodePengadaanRepository(Connection);
+
+    public UserKegiatanRepository UserKegiatan =>
+      new UserKegiatanRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
