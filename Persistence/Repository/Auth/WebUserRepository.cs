@@ -50,7 +50,7 @@ FROM dbo.WEBUSER w
         builder.Where("w.IDUNIT = @IdUnit", new {IdUnit = idUnit});
 
       if (groupId.HasValue)
-        builder.Where("w.GROUPID = @GroupId", new {IdUnit = groupId});
+        builder.Where("w.GROUPID = @GroupId", new {GroupId = groupId});
 
       if (excludedRoleName != null && excludedRoleName.Any())
         builder.Where("w2.NMGROUP NOT IN @ExcludedRoleName",
