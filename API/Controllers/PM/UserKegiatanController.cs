@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.PM
 {
+  [Route("api/user")]
   public class UserKegiatanController : BaseController
   {
     [HttpGet("{userId}/kegiatan")]
