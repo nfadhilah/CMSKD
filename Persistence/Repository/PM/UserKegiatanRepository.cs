@@ -59,5 +59,74 @@ LEFT JOIN MKEGIATAN as m ON u.IDKEG = m.IDKEG
         "DELETE FROM USERKEG WHERE USERID = @UserId AND IDKEG IN @ListIdKeg",
         new {UserId = userId, ListIdKeg = listIdKeg});
     }
+
+    public async Task<IEnumerable<dynamic>> GetTreeUserKegiatan(
+      long idUnit, int kdTahap, bool? isSelected = null)
+    {
+      var builder = new SqlBuilder();
+
+      var cmd = builder.AddTemplate(
+        @"SELECT DISTINCT b.Lvl, b.Kode, b.Label, b.IdKeg, b.UserId, b.PPK, b.IsSelected, b.[Type]  FROM
+(
+	SELECT m.IDKEG,
+		   RTRIM(d.KDURUS) AS KDURUS,
+		   d.NMURUS,
+		   RTRIM(d.KDURUS) + RTRIM(m3.NUPRGRM) AS NUPRGRM,
+		   m3.NMPRGRM,
+		   RTRIM(d.KDURUS) + RTRIM(m3.NUPRGRM) + RTRIM(m2.NUKEG) AS NUKEG,
+		   m2.NMKEGUNIT,
+		   RTRIM(d.KDURUS) + RTRIM(m3.NUPRGRM) + RTRIM(m2.NUKEG) + RTRIM(m.NUKEG) AS NUSUBKEG,
+		   m.NMKEGUNIT AS NMSUBKEG,
+		   w.USERID,
+		   p.NIP AS NIPPPK,
+		   p.NAMA AS PPK,
+		   CASE WHEN u.USERID IS NULL THEN 0 ELSE 1
+		   END AS ISSELECTED
+	FROM dbo.KEGUNIT k
+		LEFT JOIN dbo.USERKEGIATAN u
+			ON u.IDKEG = k.IDKEG
+		LEFT JOIN dbo.MKEGIATAN m
+			ON m.IDKEG = k.IDKEG
+		LEFT JOIN dbo.MKEGIATAN m2
+			ON m2.IDKEG = m.IDKEGINDUK
+		LEFT JOIN dbo.WEBUSER w
+			ON w.USERID = u.USERID
+		LEFT JOIN dbo.WEBGROUP w2
+			ON w2.GROUPID = w.GROUPID
+		LEFT JOIN dbo.MPGRM m3
+				ON m3.IDPRGRM = m.IDPRGRM
+			LEFT JOIN dbo.DAFTURUS d
+				ON d.IDURUS = m3.IDURUS
+		LEFT JOIN dbo.PEGAWAI p
+			ON p.IDPEG = w.IDPEG
+	/**where**/
+) AS a
+CROSS APPLY
+(
+	SELECT 1, a.KDURUS, a.NMURUS, NULL, NULL, NULL, NULL, 'H'
+	UNION ALL 
+	SELECT 2, a.NUPRGRM, a.NMPRGRM, NULL, NULL, NULL, NULL,  'H'
+	UNION ALL
+	SELECT 3, a.NUKEG, a.NMKEGUNIT, NULL, NULL, NULL, NULL, 'H'
+	UNION ALL
+	SELECT 4, a.NUSUBKEG, a.NMSUBKEG, a.IDKEG, a.USERID, a.PPK, a.ISSELECTED, 'D'
+) AS b (Lvl, Kode, Label, IdKeg, UserId, PPK, IsSelected, [Type])
+ORDER BY b.Kode");
+
+      builder.Where("k.IDUNIT = @IdUnit AND k.KDTAHAP = @KdTahap",
+        new {IdUnit = idUnit, KdTahap = kdTahap});
+
+      switch (isSelected)
+      {
+        case true:
+          builder.Where("w.USERID IS NOT NULL");
+          break;
+        case false:
+          builder.Where("w.USERID IS NULL");
+          break;
+      }
+
+      return await Connection.QueryAsync(cmd.RawSql, cmd.Parameters);
+    }
   }
 }
