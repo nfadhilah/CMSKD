@@ -7,7 +7,7 @@
     public string Label { get; set; }
     public long? IdKeg { get; set; }
     public string UserId { get; set; }
-    public string PPK { get; set; }
+    public string Nama { get; set; }
     public int? IsSelected { get; set; }
     public string Type { get; set; }
   }

@@ -16,6 +16,7 @@ namespace Application.PM.UserKegiatanCQ
     {
       public long IdUnit { get; set; }
       public int KdTahap { get; set; }
+      public string UserId { get; set; }
       public bool? IsSelected { get; set; }
     }
 
@@ -38,7 +39,7 @@ namespace Application.PM.UserKegiatanCQ
 
         var result =
           await _context.UserKegiatan.GetTreeUserKegiatan(request.IdUnit,
-            request.KdTahap,
+            request.KdTahap, request.UserId,
             request.IsSelected);
 
         return _mapper.Map<IEnumerable<UserKegiatanTreeDTO>>(result);

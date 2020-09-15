@@ -61,12 +61,12 @@ LEFT JOIN MKEGIATAN as m ON u.IDKEG = m.IDKEG
     }
 
     public async Task<IEnumerable<dynamic>> GetTreeUserKegiatan(
-      long idUnit, int kdTahap, bool? isSelected = null)
+      long idUnit, int kdTahap, string userId, bool? isSelected = null)
     {
       var builder = new SqlBuilder();
 
       var cmd = builder.AddTemplate(
-        @"SELECT DISTINCT b.Lvl, b.Kode, b.Label, b.IdKeg, b.UserId, b.PPK, b.IsSelected, b.[Type]  FROM
+        @"SELECT DISTINCT b.Lvl, b.Kode, b.Label, b.IdKeg, b.UserId, b.PPK as Nama, b.IsSelected, b.[Type]  FROM
 (
 	SELECT m.IDKEG,
 		   RTRIM(d.KDURUS) AS KDURUS,
@@ -115,6 +115,9 @@ ORDER BY b.Kode");
 
       builder.Where("k.IDUNIT = @IdUnit AND k.KDTAHAP = @KdTahap",
         new {IdUnit = idUnit, KdTahap = kdTahap});
+
+      if (!string.IsNullOrWhiteSpace(userId))
+        builder.Where("w.USERID = @UserId", new {UserId = userId});
 
       switch (isSelected)
       {
