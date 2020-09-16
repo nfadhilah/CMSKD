@@ -56,7 +56,7 @@ LEFT JOIN MKEGIATAN as m ON u.IDKEG = m.IDKEG
       string userId, List<long> listIdKeg)
     {
       return await Connection.ExecuteAsync(
-        "DELETE FROM USERKEG WHERE USERID = @UserId AND IDKEG IN @ListIdKeg",
+        "DELETE FROM USERKEGIATAN WHERE USERID = @UserId AND IDKEG IN @ListIdKeg",
         new {UserId = userId, ListIdKeg = listIdKeg});
     }
 
