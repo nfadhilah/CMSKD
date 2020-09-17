@@ -56,6 +56,14 @@ namespace Application.PM.UserKegiatanCQ
         if (!deleted.Any())
           throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
 
+        var isAssign =
+          await _context.UserKegiatan.GetListUserKegiatan(
+            listIdKeg: request.ListIdKeg, assignBy: request.UserId);
+
+        if (isAssign.Any())
+          throw new ApiException(
+            "Kegiatan tidak dapat dihapus karena sudah didelegasikan ke user lain.");
+
         await _context.UserKegiatan.DeleteByUserIdAndListIdKeg(request.UserId,
           request.ListIdKeg);
 

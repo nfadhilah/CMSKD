@@ -23,7 +23,7 @@ namespace Persistence.Repository.PM
       base(connection, sqlGenerator) { }
 
     public async Task<IEnumerable<UserKegiatan>> GetListUserKegiatan(
-      string userId, List<long> listIdKeg = null)
+      string userId = null, List<long> listIdKeg = null, string assignBy = null)
     {
       var builder = new SqlBuilder();
 
@@ -36,6 +36,9 @@ LEFT JOIN MKEGIATAN as m ON u.IDKEG = m.IDKEG
 
       if (!string.IsNullOrWhiteSpace(userId))
         builder.Where("u.USERID = @UserId", new {UserId = userId});
+
+      if (!string.IsNullOrWhiteSpace(assignBy))
+        builder.Where("u.ASSIGNBY = @AssignBy", new {AssignBy = assignBy});
 
       if (listIdKeg != null && listIdKeg.Any())
         builder.Where("u.IDKEG IN @ListIdKeg", new {ListIdKeg = listIdKeg});
@@ -61,7 +64,8 @@ LEFT JOIN MKEGIATAN as m ON u.IDKEG = m.IDKEG
     }
 
     public async Task<IEnumerable<dynamic>> GetTreeUserKegiatan(
-      long idUnit, int kdTahap, string userId, bool? isSelected = null)
+      long idUnit, int kdTahap, string userId, string targetUserId,
+      bool? isSelected = null)
     {
       var builder = new SqlBuilder();
 
@@ -119,10 +123,16 @@ ORDER BY b.Kode");
       if (!string.IsNullOrWhiteSpace(userId))
         builder.Where("w.USERID = @UserId", new {UserId = userId});
 
+      if (!string.IsNullOrWhiteSpace(targetUserId))
+        builder.Where(
+          "u.IDKEG NOT IN (SELECT u.IDKEG FROM dbo.USERKEGIATAN u WHERE u.USERID = @TargetUserId)",
+          new {TargetUserId = targetUserId});
+
       switch (isSelected)
       {
         case true:
-          builder.Where("w.USERID IS NOT NULL");
+          builder.Where(
+            "w.USERID IS NOT NULL");
           break;
         case false:
           builder.Where("w.USERID IS NULL");
