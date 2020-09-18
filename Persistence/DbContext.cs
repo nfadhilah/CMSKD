@@ -117,6 +117,10 @@ namespace Persistence
     PaketRUPDetRepository PaketRupDet { get; }
     MetodePengadaanRepository MetodePengadaan { get; }
     UserKegiatanRepository UserKegiatan { get; }
+    ProvinsiRepository Provinsi { get; }
+    KabKotaRepository KabKota { get; }
+    KecamatanRepository Kecamatan { get; }
+    KelurahanRepository Kelurahan { get; }
   }
 
   public class DbContext : IDbContext
@@ -275,6 +279,11 @@ namespace Persistence
 
     public UserKegiatanRepository UserKegiatan =>
       new UserKegiatanRepository(Connection);
+
+    public ProvinsiRepository Provinsi => new ProvinsiRepository(Connection);
+    public KabKotaRepository KabKota => new KabKotaRepository(Connection);
+    public KecamatanRepository Kecamatan => new KecamatanRepository(Connection);
+    public KelurahanRepository Kelurahan => new KelurahanRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {

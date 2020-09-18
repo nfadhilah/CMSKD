@@ -11,7 +11,6 @@ namespace API.Controllers.PM
 {
   public class KegiatanUserController : BaseController
   {
-    [AllowAnonymous]
     [HttpGet("tree")]
     public async Task<IActionResult> Get([FromQuery] Tree.Query query) =>
       Ok(await Mediator.Send(query));
