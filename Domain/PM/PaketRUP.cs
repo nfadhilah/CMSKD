@@ -32,6 +32,7 @@ namespace Domain.PM
 
     public string KodeRUP { get; set; }
     public string NmPaket { get; set; }
+    public string IdLokasi { get; set; }
     public string Lokasi { get; set; }
     public string Volume { get; set; }
     public string UraiPaket { get; set; }
@@ -63,5 +64,10 @@ namespace Domain.PM
 
     [UpdatedAt]
     public DateTime? DateUpdate { get; set; }
+
+    public bool? A { get; set; }
+    public bool? FD { get; set; }
+    public bool? U { get; set; }
+    public string CreatedBy { get; set; }
   }
 }

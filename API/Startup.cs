@@ -73,6 +73,12 @@ namespace API
           };
         });
 
+      services.AddAuthorization(opt =>
+      {
+        opt.AddPolicy("ManagerPaketRUP",
+          policy => policy.RequireRole("PPK, ADMINRUP"));
+      });
+
       services.AddSwaggerGen(opt =>
       {
         opt.SwaggerDoc("v1",
@@ -131,7 +137,7 @@ namespace API
           var policy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().Build();
 
-          // opt.Filters.Add(new AuthorizeFilter(policy));
+          opt.Filters.Add(new AuthorizeFilter(policy));
         })
         .AddFluentValidation(opt =>
           {

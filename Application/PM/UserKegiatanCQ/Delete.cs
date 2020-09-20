@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Dapper;
+using Domain.PM;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -49,9 +51,9 @@ namespace Application.PM.UserKegiatanCQ
       public async Task<Unit> Handle(
         Command request, CancellationToken cancellationToken)
       {
-        var deleted = await _context.UserKegiatan.GetListUserKegiatan(
+        var deleted = (await _context.UserKegiatan.GetListUserKegiatan(
           request.UserId,
-          request.ListIdKeg);
+          request.ListIdKeg)).ToList();
 
         if (!deleted.Any())
           throw new ApiException("Not found", (int) HttpStatusCode.NotFound);

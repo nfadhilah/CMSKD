@@ -20,6 +20,7 @@ namespace API.Controllers.PM
       Ok(await Mediator.Send(new Detail.Query {IdRUP = id}));
 
     [HttpPost]
+    [Authorize(Roles = "ManagerPaketRUP")]
     public async Task<IActionResult> Create(Create.Command command)
     {
       var request = await Mediator.Send(command);
