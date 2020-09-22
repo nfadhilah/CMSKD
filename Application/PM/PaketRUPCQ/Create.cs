@@ -52,8 +52,8 @@ namespace Application.PM.PaketRUPCQ
       public Validator()
       {
         RuleFor(d => d.JnsRUP).NotEmpty();
-        RuleFor(d => d.TipeSwakelola).NotEmpty();
-        RuleFor(d => d.UraiTipeSwakelola).NotEmpty();
+        // RuleFor(d => d.TipeSwakelola).NotEmpty();
+        // RuleFor(d => d.UraiTipeSwakelola).NotEmpty();
         RuleFor(d => d.IdLokasi).NotEmpty();
         RuleFor(d => d.Lokasi).NotEmpty();
         RuleFor(d => d.IdUnit).NotEmpty();
