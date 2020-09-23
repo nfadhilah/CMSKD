@@ -29,6 +29,11 @@ namespace Application.PM.PaketRUPCQ
       public JnsRUP? JnsRUP { get; set; }
       public int? TipeSwakelola { get; set; }
       public string UraiTipeSwakelola { get; set; }
+      public bool? IsDraft { get; set; }
+      public bool? IsDraftFinalized { get; set; }
+      public bool? IsAnnounced { get; set; }
+      public bool? IsRevised { get; set; }
+      public bool? IsCanceled { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -77,6 +82,21 @@ namespace Application.PM.PaketRUPCQ
         if (!string.IsNullOrWhiteSpace(request.UraiTipeSwakelola))
           parameters.Add(x =>
             x.UraiTipeSwakelola.Contains(request.UraiTipeSwakelola));
+
+        if (request.IsDraft.HasValue)
+          parameters.Add(x => x.A.Value);
+
+        if (request.IsDraftFinalized.HasValue)
+          parameters.Add(x => x.A.Value && x.FD.Value);
+
+        if (request.IsAnnounced.HasValue)
+          parameters.Add(x => x.A.Value && x.FD.Value && x.U.Value);
+
+        if (request.IsAnnounced.HasValue)
+          parameters.Add(x => !x.A.Value && x.FD.Value && x.U.Value);
+
+        if (request.IsCanceled.HasValue)
+          parameters.Add(x => !x.A.Value && !x.FD.Value && !x.U.Value);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
