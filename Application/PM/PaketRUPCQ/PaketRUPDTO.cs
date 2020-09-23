@@ -17,6 +17,7 @@ namespace Application.PM.PaketRUPCQ
     public decimal? NilaiPagu { get; set; }
     public DateTime? TglValid { get; set; }
     public string KodeRUP { get; set; }
+    public int IdLokasi { get; set; }
     public string NmPaket { get; set; }
     public string Lokasi { get; set; }
     public string Volume { get; set; }
