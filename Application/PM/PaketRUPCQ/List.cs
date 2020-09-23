@@ -92,7 +92,7 @@ namespace Application.PM.PaketRUPCQ
         if (request.IsAnnounced.HasValue)
           parameters.Add(x => x.A.Value && x.FD.Value && x.U.Value);
 
-        if (request.IsAnnounced.HasValue)
+        if (request.IsRevised.HasValue)
           parameters.Add(x => !x.A.Value && x.FD.Value && x.U.Value);
 
         if (request.IsCanceled.HasValue)
