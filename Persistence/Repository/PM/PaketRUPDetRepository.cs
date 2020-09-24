@@ -13,10 +13,14 @@ namespace Persistence.Repository.PM
   public class PaketRUPDetRepository : CommonRepository<PaketRUPDet>
   {
     public PaketRUPDetRepository(IDbConnection connection) :
-      base(connection) { }
+      base(connection)
+    {
+    }
 
     public PaketRUPDetRepository(
       IDbConnection connection, ISqlGenerator<PaketRUPDet> sqlGenerator) : base(
-      connection, sqlGenerator) { }
+      connection, sqlGenerator)
+    {
+    }
   }
 }

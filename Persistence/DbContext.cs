@@ -121,6 +121,7 @@ namespace Persistence
     KabKotaRepository KabKota { get; }
     KecamatanRepository Kecamatan { get; }
     KelurahanRepository Kelurahan { get; }
+    DiskusiPaketRepository DiskusiPaket { get; }
   }
 
   public class DbContext : IDbContext
@@ -284,6 +285,7 @@ namespace Persistence
     public KabKotaRepository KabKota => new KabKotaRepository(Connection);
     public KecamatanRepository Kecamatan => new KecamatanRepository(Connection);
     public KelurahanRepository Kelurahan => new KelurahanRepository(Connection);
+    public DiskusiPaketRepository DiskusiPaket => new DiskusiPaketRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
