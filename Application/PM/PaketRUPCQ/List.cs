@@ -84,23 +84,21 @@ namespace Application.PM.PaketRUPCQ
             x.UraiTipeSwakelola.Contains(request.UraiTipeSwakelola));
 
         if (request.IsDraft.HasValue)
-          parameters.Add(x => x.A.Value);
+          parameters.Add(x => x.A == true);
 
         if (request.IsDraftFinalized.HasValue)
-          parameters.Add(x => x.A.Value && x.FD.Value);
+          parameters.Add(x => x.A == true && x.FD == true);
 
         if (request.IsAnnounced.HasValue)
-          parameters.Add(x => x.A.Value && x.FD.Value && x.U.Value);
+          parameters.Add(x => x.A == true && x.FD == true && x.U == true);
 
         if (request.IsRevised.HasValue)
-          parameters.Add(x => !x.A.Value && x.FD.Value && x.U.Value);
+          parameters.Add(x => x.A == false && x.FD == true && x.U == true);
 
         if (request.IsCanceled.HasValue)
-          parameters.Add(x => !x.A.Value && !x.FD.Value && !x.U.Value);
+          parameters.Add(x => x.A == false && x.FD == false && x.U == false);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
-
-        var totalItemsCount = _context.PaketRup.FindAll().Count();
 
         var result = await _context.PaketRup
           .SetLimit(request.Limit, request.Offset)
@@ -116,7 +114,7 @@ namespace Application.PM.PaketRUPCQ
           {
             CurrentPage = request.CurrentPage,
             PageSize = request.PageSize,
-            TotalItemsCount = totalItemsCount
+            TotalItemsCount = result.Count()
           });
       }
     }
