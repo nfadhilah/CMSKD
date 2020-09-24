@@ -102,7 +102,7 @@ namespace Application.PM.PaketRUPCQ
         var userAct = await _context.UserKegiatan.GetListUserKegiatan(
           _userAccessor.GetCurrentUsername(), new List<long> {request.IdKeg});
 
-        if (!userAct.Any())
+        if (!userAct.Any() && _userAccessor.GetCurrentUserRole() != "PA")
           throw new ApiException(
             "User anda tidak memiliki otorisasi untuk kegiatan ini",
             (int) HttpStatusCode.Unauthorized);
