@@ -50,10 +50,7 @@ namespace Application.PM.PaketRUPCQ
 
       public DTO()
       {
-        var config = new MapperConfiguration(opt =>
-        {
-          opt.CreateMap<DTO, Command>();
-        });
+        var config = new MapperConfiguration(opt => { opt.CreateMap<DTO, Command>(); });
 
         _mapper = config.CreateMapper();
       }
@@ -80,7 +77,9 @@ namespace Application.PM.PaketRUPCQ
       }
     }
 
-    public class Command : PaketRUP, IRequest<PaketRUPDTO> { }
+    public class Command : PaketRUP, IRequest<PaketRUPDTO>
+    {
+    }
 
     public class Handler : IRequestHandler<Command, PaketRUPDTO>
     {
@@ -102,7 +101,7 @@ namespace Application.PM.PaketRUPCQ
         var userAct = await _context.UserKegiatan.GetListUserKegiatan(
           _userAccessor.GetCurrentUsername(), new List<long> {request.IdKeg});
 
-        if (!userAct.Any() && _userAccessor.GetCurrentUserRole() != "PA")
+        if (!userAct.Any() && _userAccessor.GetCurrentUserRole().ToUpper() != "PA")
           throw new ApiException(
             "User anda tidak memiliki otorisasi untuk kegiatan ini",
             (int) HttpStatusCode.Unauthorized);
