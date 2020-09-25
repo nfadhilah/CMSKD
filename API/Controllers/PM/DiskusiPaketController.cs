@@ -27,9 +27,9 @@ namespace API.Controllers.PM
     }
 
     [HttpDelete("{idDiskusi}")]
-    public async Task<IActionResult> Post(long idDiskusi)
+    public async Task<IActionResult> Post(long idRup, long idDiskusi)
     {
-      var command = new Delete.Command {IdDiskusiPaket = idDiskusi};
+      var command = new Delete.Command {IdDiskusiPaket = idDiskusi, };
       return Ok(await Mediator.Send(command));
     }
   }

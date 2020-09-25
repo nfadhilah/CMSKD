@@ -35,6 +35,12 @@ namespace Application.PM.PaketRUPCQ
         if (deleted == null)
           throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
 
+        if (deleted.FD.HasValue && deleted.FD.Value)
+          throw  new ApiException("Paket tidak dapat dihapus karena sudah final");
+
+        if (deleted.U.HasValue && deleted.U.Value)
+          throw  new ApiException("Paket tidak dapat dihapus karena sudah diumumkan");
+
         if (!_context.PaketRup.Delete(deleted))
           throw new ApiException("Problem saving changes");
 

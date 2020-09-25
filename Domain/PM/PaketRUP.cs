@@ -69,5 +69,11 @@ namespace Domain.PM
     public bool? FD { get; set; }
     public bool? U { get; set; }
     public string CreatedBy { get; set; }
+    public DateTime? AwalPemanfaatan { get; set; }
+    public DateTime? AkhirPemanfaatan { get; set; }
+    public DateTime? AwalPelaksanaanKontrak { get; set; }
+    public DateTime? AkhirPelaksanaanKontrak { get; set; }
+    public DateTime? AwalPemilihan { get; set; }
+    public DateTime? AkhirPemilihan { get; set; }
   }
 }

@@ -17,6 +17,7 @@ namespace Application.PM.DiskusiPaketCQ
     public class Command : IRequest
     {
       public long IdDiskusiPaket { get; set; }
+      public long IdRUP { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
