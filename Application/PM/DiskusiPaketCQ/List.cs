@@ -70,6 +70,8 @@ namespace Application.PM.DiskusiPaketCQ
         if (!string.IsNullOrWhiteSpace(request.Sender))
           parameters.Add(x => x.Sender == request.Sender);
 
+        parameters.Add(x => x.IdRUP == request.IdRUP);
+
         var predicate = PredicateBuilder.ComposeWithAnd(parameters);
 
         var result = await _context.DiskusiPaket
