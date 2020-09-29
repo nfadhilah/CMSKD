@@ -126,6 +126,7 @@ namespace API
         opt.AddPolicy("CorsPolicy", policy =>
         {
           policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()
+            .SetIsOriginAllowed(x => _ = true)
             .WithExposedHeaders("WWW-Authenticate");
           // .WithOrigins("http://localhost:3000")
           // .AllowCredentials();
@@ -137,7 +138,7 @@ namespace API
           var policy = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().Build();
 
-          //opt.Filters.Add(new AuthorizeFilter(policy));
+          opt.Filters.Add(new AuthorizeFilter(policy));
         })
         .AddFluentValidation(opt =>
           {
