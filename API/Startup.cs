@@ -1,4 +1,3 @@
-using Application.DM.DaftPhk3CQ;
 using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper;
@@ -26,6 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Application.Auth.WebUser;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -111,14 +111,14 @@ namespace API
           }
         });
 
-        var apiXmlFile =
-          $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var appXmlFile =
-          $"{typeof(MappingProfile).Assembly.GetName().Name}.xml";
-        var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
-        var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
-        opt.IncludeXmlComments(apiXmlPath);
-        opt.IncludeXmlComments(appXmlPath);
+        // var apiXmlFile =
+        //   $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        // var appXmlFile =
+        //   $"{typeof(MappingProfile).Assembly.GetName().Name}.xml";
+        // var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXmlFile);
+        // var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
+        // opt.IncludeXmlComments(apiXmlPath);
+        // opt.IncludeXmlComments(appXmlPath);
       });
 
       services.AddCors(opt =>
@@ -142,7 +142,7 @@ namespace API
         })
         .AddFluentValidation(opt =>
           {
-            opt.RegisterValidatorsFromAssemblyContaining<Create>();
+            opt.RegisterValidatorsFromAssemblyContaining<Login>();
             opt.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
             ValidatorOptions.LanguageManager.Culture = new CultureInfo("id-ID");
           }
@@ -157,9 +157,9 @@ namespace API
             new CamelCasePropertyNamesContractResolver();
         });
 
-      services.AddMediatR(typeof(List.Handler).Assembly);
+      services.AddMediatR(typeof(Login.Handler).Assembly);
 
-      services.AddAutoMapper(typeof(List.Handler).Assembly);
+      services.AddAutoMapper(typeof(Login.Handler).Assembly);
 
       services.AddScoped<IJwtGenerator, JwtGenerator>();
 
@@ -169,7 +169,7 @@ namespace API
 
       services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
-      services.AddSingleton<IBendDocNumGenerator, BendDocNumGenerator>();
+      // services.AddSingleton<IBendDocNumGenerator, BendDocNumGenerator>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

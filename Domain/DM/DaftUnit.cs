@@ -1,27 +1,25 @@
-﻿using MicroOrm.Dapper.Repositories.Attributes;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Domain.DM
 {
   [Table("DAFTUNIT")]
   public class DaftUnit
   {
-    [Key, Identity]
-    public long IdUnit { get; set; }
-    public long IdUrus { get; set; }
+    [Key]
+    public string UnitKey { get; set; }
+
+    public string KdLevel { get; set; }
     public string KdUnit { get; set; }
     public string NmUnit { get; set; }
-    public int KdLevel { get; set; }
-    public string Type { get; set; }
     public string AkroUnit { get; set; }
     public string Alamat { get; set; }
     public string Telepon { get; set; }
-    public int StAktif { get; set; }
-    [UpdatedAt]
-    public DateTime? DateCreate { get; set; }
-    [UpdatedAt]
-    public DateTime? DateUpdate { get; set; }
+    public string Type { get; set; }
   }
 }
