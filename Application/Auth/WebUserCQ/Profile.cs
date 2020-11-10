@@ -1,4 +1,4 @@
-﻿namespace Application.Auth.WebUser
+﻿namespace Application.Auth.WebUserCQ
 {
   public class Profile
   {

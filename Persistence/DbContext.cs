@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using Persistence.Repository.Auth;
+using Persistence.Repository.DM;
 
 namespace Persistence
 {
@@ -11,12 +12,16 @@ namespace Persistence
   {
     IDbConnection Connection { get; }
     WebUserRepository WebUser { get; }
+    WebGroupRepository WebGroup { get; }
+    WebRoleRepository WebRole { get; }
+    WebOtorRepository WebOtor { get; }
+    TahunRepository Tahun { get; }
   }
 
   public class DbContext : IDbContext
   {
     private bool _disposed;
-    private WebUserRepository _webUserRepository;
+
 
     public DbContext(string connectionString)
     {
@@ -26,7 +31,12 @@ namespace Persistence
     }
 
     public IDbConnection Connection { get; }
-    public WebUserRepository WebUser => _webUserRepository ??= new WebUserRepository(Connection);
+    public WebUserRepository WebUser => new WebUserRepository(Connection);
+    public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
+    public TahunRepository Tahun => new TahunRepository(Connection);
+    public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
+    public WebRoleRepository WebRole => new WebRoleRepository(Connection);
+
     protected virtual void Dispose(bool disposing)
     {
       if (!_disposed)

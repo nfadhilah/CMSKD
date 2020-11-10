@@ -20,13 +20,14 @@ namespace Infrastructure.Security
         Encoding.UTF8.GetBytes(config["TokenKey"]));
     }
 
-    public string CreateToken(WebUser user)
+    public string CreateToken(WebUser user, int appId)
     {
       var claims = new List<Claim>
       {
         new Claim(JwtRegisteredClaimNames.NameId, user.UserId.Trim()),
         new Claim(ClaimTypes.Role, user.WebGroup.NmGroup.ToUpper().Trim()),
-        new Claim("roleId", user.GroupId.ToString())
+        new Claim("roleId", user.GroupId),
+        new Claim("appId", appId.ToString())
       };
 
       var creds =

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Claims;
@@ -30,22 +31,16 @@ namespace Infrastructure.Security
       return role;
     }
 
-    public long GetCurrentRoleId()
+    public string GetCurrentRoleId()
     {
-      var roleIdClaim = _httpContextAccessor.HttpContext.User?.Claims
+      return _httpContextAccessor.HttpContext.User?.Claims
         ?.FirstOrDefault(x => x.Type == "roleId")?.Value;
-
-      long.TryParse(roleIdClaim, out var roleId);
-
-      return roleId;
     }
 
-    public long GetCurrentAppId()
+    public int GetCurrentAppId()
     {
-      var appIdClaim = _httpContextAccessor.HttpContext.User?.Claims
-        ?.FirstOrDefault(x => x.Type == "appId")?.Value;
-
-      long.TryParse(appIdClaim, out var appId);
+      var appId = int.Parse(
+        _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == "appId")?.Value ?? string.Empty);
 
       return appId;
     }

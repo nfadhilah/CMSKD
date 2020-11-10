@@ -25,7 +25,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Application.Auth.WebUser;
+using Application.Auth.WebUserCQ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -210,7 +210,7 @@ namespace API
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
-        endpoints.MapFallbackToController("Index", "Fallback");
+        // endpoints.MapFallbackToController("Index", "Fallback");
       });
     }
   }

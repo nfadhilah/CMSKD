@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Auth
+namespace Domain.DM
 {
-  [Table("WEBGROUP")]
-  public class WebGroup
+  [Table("TAHUN")]
+  public class Tahun
   {
-    [Key] public string GroupId { get; set; }
-    public string NmGroup { get; set; }
-    public string Ket { get; set; }
+    [Key]
+    public string KdTahun { get; set; }
+    public string NmTahun { get; set; }
   }
 }
