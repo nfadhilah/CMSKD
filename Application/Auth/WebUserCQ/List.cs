@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Application.CommonDTO;
 using Application.Helpers;
 using Application.Interfaces;
+using AutoMapper;
 using Domain.Auth;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
@@ -25,11 +26,13 @@ namespace Application.Auth.WebUserCQ
     public class Handler : IRequestHandler<Query, PaginationWrapper>
     {
       private readonly IDbContext _context;
+      private readonly IMapper _mapper;
       private readonly IUserAccessor _userAccessor;
 
-      public Handler(IDbContext context, IUserAccessor userAccessor)
+      public Handler(IDbContext context, IMapper mapper, IUserAccessor userAccessor)
       {
         _context = context;
+        _mapper = mapper;
         _userAccessor = userAccessor;
       }
 
@@ -45,11 +48,11 @@ namespace Application.Auth.WebUserCQ
         var totalItems = await _context.WebUser.CountAsync(predicate);
 
         var result = await _context.WebUser.SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.UserId).FindAllAsync(predicate);
+          .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.UserId).FindAllAsync<WebGroup>(predicate, x => x.WebGroup);
 
         return new PaginationWrapper
         {
-          Data = result,
+          Data = _mapper.Map<IEnumerable<WebUserDTO>>(result),
           Pagination = new Pagination
           {
             CurrentPage = request.CurrentPage,
