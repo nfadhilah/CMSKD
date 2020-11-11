@@ -8,16 +8,6 @@ using Persistence.Repository.DM;
 
 namespace Persistence
 {
-  public interface IDbContext : IDisposable
-  {
-    IDbConnection Connection { get; }
-    WebUserRepository WebUser { get; }
-    WebGroupRepository WebGroup { get; }
-    WebRoleRepository WebRole { get; }
-    WebOtorRepository WebOtor { get; }
-    TahunRepository Tahun { get; }
-  }
-
   public class DbContext : IDbContext
   {
     private bool _disposed;
@@ -34,6 +24,7 @@ namespace Persistence
     public WebUserRepository WebUser => new WebUserRepository(Connection);
     public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
+    public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
 
