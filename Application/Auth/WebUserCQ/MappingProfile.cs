@@ -13,6 +13,8 @@ namespace Application.Auth.WebUserCQ
       {
         CreateMap<WebUser, WebUserDTO>()
           .ForMember(d => d.NmGroup, opt => opt.MapFrom(s => s.WebGroup.NmGroup));
+        CreateMap<Create.Command, WebUser>();
+        CreateMap<Update.Command, WebUser>();
       }
     }
 }

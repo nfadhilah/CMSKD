@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,11 @@ using Persistence;
 
 namespace Application.Auth.WebUserCQ
 {
-  public class Create : IRequest<WebUserDTO>
+  public class Update
   {
-
-    public class Command : IRequest<WebUserDTO>
+    public class DTO : IMapDTO<Command>
     {
-      public string UserId { get; set; }
+      private readonly IMapper _mapper;
       public int KdTahap { get; set; }
       public string UnitKey { get; set; }
       public string NIP { get; set; }
@@ -33,13 +33,24 @@ namespace Application.Auth.WebUserCQ
       public int? StUpdate { get; set; }
       public int? StDelete { get; set; }
       public string Ket { get; set; }
+
+      public DTO()
+      {
+        var config = new MapperConfiguration(opt => { opt.CreateMap<DTO, Command>(); });
+
+        _mapper = config.CreateMapper();
+      }
+
+      public Command MapDTO(Command destination)
+      {
+        return _mapper.Map(this, destination);
+      }
     }
 
-    public class Validator : AbstractValidator<Command>
+    public class Validator : AbstractValidator<DTO>
     {
       public Validator()
       {
-        RuleFor(x => x.UserId).NotEmpty().MinimumLength(6);
         RuleFor(x => x.KdTahap).NotEmpty();
         RuleFor(x => x.UnitKey).NotEmpty();
         RuleFor(x => x.NIP).NotEmpty();
@@ -50,40 +61,52 @@ namespace Application.Auth.WebUserCQ
       }
     }
 
+    public class Command : WebUser, IRequest<WebUserDTO>
+    {
+    }
+
     public class Handler : IRequestHandler<Command, WebUserDTO>
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
-      private readonly IPasswordHasher _hasher;
+      private readonly IPasswordHasher _passwordHasher;
+      private readonly IUserAccessor _userAccessor;
 
-      public Handler(IDbContext context, IMapper mapper, IPasswordHasher hasher)
+      public Handler(
+        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher,
+        IUserAccessor userAccessor)
       {
         _context = context;
         _mapper = mapper;
-        _hasher = hasher;
+        _passwordHasher = passwordHasher;
+        _userAccessor = userAccessor;
       }
 
       public async Task<WebUserDTO> Handle(
-      Command request, CancellationToken cancellationToken)
+        Command request, CancellationToken cancellationToken)
       {
-        var existingUser =
-          await _context.WebUser.FindAsync(x => x.UserId == request.UserId);
+        var updated =
+          await _context.WebUser.FindByIdAsync(request.UserId);
 
-        if (existingUser != null) throw new ApiException("User sudah terpakai");
+        if (updated == null)
+          throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
 
-        var added = _mapper.Map<WebUser>(request);
+        _mapper.Map(request, updated);
 
-        added.Pwd = _hasher.Create(request.Pwd);
-        added.DigitalIdPwd = _hasher.Create(request.DigitalIdPwd);
+        if (!string.IsNullOrWhiteSpace(request.Pwd))
+        {
+          updated.Pwd = _passwordHasher.Create(request.Pwd);
+          updated.DigitalIdPwd = _passwordHasher.Create(request.DigitalIdPwd);
+        }
 
-        if (!await _context.WebUser.InsertAsync(added))
+        if (!await _context.WebUser.UpdateAsync(updated))
           throw new ApiException("Tambah data gagal");
 
-        var result = await _context.WebUser.FindAsync<WebGroup>(x => x.UserId == added.UserId, x => x.WebGroup);
+        var result =
+          await _context.WebUser.FindAsync<WebGroup>(x => x.UserId == request.UserId, x => x.WebGroup);
 
         return _mapper.Map<WebUserDTO>(result);
       }
     }
-
   }
 }

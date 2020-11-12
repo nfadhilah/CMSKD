@@ -24,6 +24,7 @@ namespace Domain.Auth
       [InnerJoin("WEBGROUP", "GROUPID", "GROUPID")]
       public WebGroup WebGroup { get; set; }
       public string Pwd { get; set; }
+      public string DigitalIdPwd { get; set; }
       public string Nama { get; set; }
       public int? BlokId { get; set; }
       public int? TranSecure { get; set; }
