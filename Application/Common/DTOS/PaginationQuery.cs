@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Application.CommonDTO
+namespace Application.Common.DTOS
 {
   public class PaginationQuery
   {

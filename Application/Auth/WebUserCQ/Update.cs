@@ -33,6 +33,7 @@ namespace Application.Auth.WebUserCQ
       public int? StUpdate { get; set; }
       public int? StDelete { get; set; }
       public string Ket { get; set; }
+      public string Photo { get; set; }
 
       public DTO()
       {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.CommonDTO;
+using Application.Common.DTOS;
 using AutoMapper;
 using Domain.Auth;
 using MediatR;

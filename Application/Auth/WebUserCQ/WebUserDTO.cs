@@ -16,5 +16,6 @@ namespace Application.Auth.WebUserCQ
     public string NIP { get; set; }
     public string Nama { get; set; }
     public int BlokId { get; set; }
+    public string Photo { get; set; }
   }
 }

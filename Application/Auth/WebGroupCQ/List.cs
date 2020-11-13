@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Auth.WebUserCQ;
-using Application.CommonDTO;
+using Application.Common.DTOS;
 using Application.Helpers;
 using Application.Interfaces;
 using AutoMapper;

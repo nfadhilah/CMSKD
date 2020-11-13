@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
+using Persistence.Repository.TU;
 
 namespace Persistence
 {
@@ -25,6 +26,7 @@ namespace Persistence
     public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
+    public SP2DRepository SP2D => new SP2DRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
 

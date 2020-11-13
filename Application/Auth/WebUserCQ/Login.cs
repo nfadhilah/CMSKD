@@ -78,7 +78,7 @@ namespace Application.Auth.WebUserCQ
           UserName = user.UserId.Trim(),
           DisplayName = user.Nama.Trim(),
           Token = token,
-          Image = null,
+          Image = user.Photo,
           KdTahap = user.KdTahap,
           UnitKey = user.UnitKey ?? "",
           KdUnit = user.DaftUnit?.KdUnit ?? "",

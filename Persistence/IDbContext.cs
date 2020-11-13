@@ -2,6 +2,7 @@
 using System.Data;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
+using Persistence.Repository.TU;
 
 namespace Persistence
 {
@@ -14,5 +15,6 @@ namespace Persistence
     WebOtorRepository WebOtor { get; }
     TahunRepository Tahun { get; }
     PegawaiRepository Pegawai { get; }
+    SP2DRepository SP2D { get; }
   }
 }

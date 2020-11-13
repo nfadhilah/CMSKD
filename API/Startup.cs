@@ -26,6 +26,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using Application.Auth.WebUserCQ;
+using Application.Common.DTOS;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -168,6 +169,8 @@ namespace API
       services.AddSingleton(typeof(ISqlGenerator<>), typeof(SqlGenerator<>));
 
       services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+      services.Configure<FileSettings>(Configuration.GetSection(FileSettings.Section));
 
       // services.AddSingleton<IBendDocNumGenerator, BendDocNumGenerator>();
     }
