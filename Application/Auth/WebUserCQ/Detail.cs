@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoWrapper.Wrappers;
+using Domain.Auth;
 using MediatR;
 using Persistence;
 
@@ -33,8 +34,8 @@ namespace Application.Auth.WebUserCQ
       public async Task<WebUserDTO> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.WebUser.FindAsync(
-          w => w.UserId == request.UserId);
+        var result = await _context.WebUser.FindAsync<WebGroup>(
+          w => w.UserId == request.UserId, x => x.WebGroup);
 
         if (result == null)
           throw new ApiException("Not found",

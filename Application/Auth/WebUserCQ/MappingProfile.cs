@@ -12,6 +12,7 @@ namespace Application.Auth.WebUserCQ
       public MappingProfile()
       {
         CreateMap<WebUser, WebUserDTO>()
+          .ForMember(d => d.UserId, opt => opt.MapFrom(s => s.UserId.Trim()))
           .ForMember(d => d.NmGroup, opt => opt.MapFrom(s => s.WebGroup.NmGroup));
         CreateMap<Create.Command, WebUser>();
         CreateMap<Update.Command, WebUser>();
