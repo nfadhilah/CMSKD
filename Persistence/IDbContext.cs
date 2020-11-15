@@ -1,8 +1,8 @@
-﻿using System;
-using System.Data;
-using Persistence.Repository.Auth;
+﻿using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
 using Persistence.Repository.TU;
+using System;
+using System.Data;
 
 namespace Persistence
 {
@@ -16,5 +16,10 @@ namespace Persistence
     TahunRepository Tahun { get; }
     PegawaiRepository Pegawai { get; }
     SP2DRepository SP2D { get; }
+    SP2DDetRRepository Sp2DDetR { get; }
+    SP2DDetRTLRepository SP2DDetRTL { get; }
+    SP2DPjkRepository SP2DPjk { get; }
+    SP2DDetBRepository SP2DDetB { get; }
+    SP2DDetDRepository SP2DDetD { get; }
   }
 }

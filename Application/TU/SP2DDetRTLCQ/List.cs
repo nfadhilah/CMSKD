@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Auth.WebUserCQ;
-using Application.Common.DTOS;
+﻿using Application.Common.DTOS;
 using Application.Helpers;
-using Application.Interfaces;
 using AutoMapper;
-using Domain.Auth;
 using Domain.DM;
 using Domain.TU;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
-using Persistence.Repository.TU;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Application.TU.SP2DCQ
+namespace Application.TU.SP2DDetRTLCQ
 {
   public class List
   {
@@ -24,8 +20,7 @@ namespace Application.TU.SP2DCQ
     {
       public string UnitKey { get; set; }
       public string NoSP2D { get; set; }
-      public string KdStatus { get; set; }
-      public bool? IsValid { get; set; }
+      public string MtgKey { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, PaginationWrapper>
@@ -41,7 +36,7 @@ namespace Application.TU.SP2DCQ
 
       public async Task<PaginationWrapper> Handle(Query request, CancellationToken cancellationToken)
       {
-        var parameter = new List<Expression<Func<SP2D, bool>>>();
+        var parameter = new List<Expression<Func<SP2DDetRTL, bool>>>();
 
         if (!string.IsNullOrEmpty(request.UnitKey))
           parameter.Add(x => x.UnitKey == request.UnitKey);
@@ -49,24 +44,20 @@ namespace Application.TU.SP2DCQ
         if (!string.IsNullOrWhiteSpace(request.NoSP2D))
           parameter.Add(x => x.NoSP2D.Contains(request.NoSP2D));
 
-        if (!string.IsNullOrWhiteSpace(request.KdStatus))
-          parameter.Add(x => x.KdStatus == request.KdStatus);
-
-        if (request.IsValid.HasValue && request.IsValid.Value)
-          parameter.Add(x => x.TglValid != null);
+        if (!string.IsNullOrWhiteSpace(request.MtgKey))
+          parameter.Add(x => x.MtgKey == request.MtgKey);
 
         var predicate = PredicateBuilder.ComposeWithAnd(parameter);
 
-        var totalItems = await _context.SP2D.CountAsync(predicate);
+        var totalItems = await _context.SP2DDetRTL.CountAsync(predicate);
 
-        var result = await _context.SP2D.SetLimit(request.Limit, request.Offset)
-          .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.NoSP2D)
-          .FindAllAsync<DaftUnit, StatTrs, Bend, DaftPhk3>(predicate, x => x.DaftUnit, x => x.StatTrs, x => x.Bend,
-            x => x.DaftPhk3);
+        var result = await _context.SP2DDetRTL.SetLimit(request.Limit, request.Offset)
+          .SetOrderBy(OrderInfo.SortDirection.ASC, x => new { x.NoSP2D, x.MtgKey })
+          .FindAllAsync<JDana, MatangR>(predicate, x => x.JDana, x => x.MatangR);
 
         return new PaginationWrapper
         {
-          Data = _mapper.Map<IEnumerable<SP2DDTO>>(result),
+          Data = _mapper.Map<IEnumerable<SP2DDetRTLDTO>>(result),
           Pagination = new Pagination
           {
             CurrentPage = request.CurrentPage,

@@ -1,11 +1,11 @@
 ﻿using MicroOrm.Dapper.Repositories.Config;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
-using System;
-using System.Data;
-using System.Data.SqlClient;
 using Persistence.Repository.Auth;
 using Persistence.Repository.DM;
 using Persistence.Repository.TU;
+using System;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Persistence
 {
@@ -27,6 +27,11 @@ namespace Persistence
     public TahunRepository Tahun => new TahunRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
     public SP2DRepository SP2D => new SP2DRepository(Connection);
+    public SP2DDetRRepository Sp2DDetR => new SP2DDetRRepository(Connection);
+    public SP2DDetRTLRepository SP2DDetRTL => new SP2DDetRTLRepository(Connection);
+    public SP2DPjkRepository SP2DPjk => new SP2DPjkRepository(Connection);
+    public SP2DDetBRepository SP2DDetB => new SP2DDetBRepository(Connection);
+    public SP2DDetDRepository SP2DDetD => new SP2DDetDRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
 

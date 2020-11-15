@@ -13,5 +13,8 @@ namespace API.Controllers.TU
   {
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] List.Query query) => Ok(await Mediator.Send(query));
+
+    [HttpGet("{id}", Name = nameof(GetSP2DByNo))]
+    public async Task<IActionResult> GetSP2DByNo(string id) => Ok(await Mediator.Send(new Detail.Query {NoSP2D = id}));
   }
 }

@@ -13,6 +13,7 @@ namespace Application.TU.SP2DCQ
     public string NmUnit { get; set; }
     public string NoSP2D { get; set; }
     public string KdStatus { get; set; }
+    public string LblStatus { get; set; }
     public string NoSPM { get; set; }
     public string KeyBend { get; set; }
     public string IdxSKO { get; set; }

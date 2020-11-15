@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.DM;
+﻿using Domain.DM;
 using MicroOrm.Dapper.Repositories.SqlGenerator;
 using Persistence.Repository.Common;
+using System.Data;
 
 namespace Persistence.Repository.DM
 {
