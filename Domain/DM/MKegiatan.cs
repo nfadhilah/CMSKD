@@ -14,6 +14,6 @@ namespace Domain.DM
     public string NmKegUnit { get; set; }
     public string LevelKeg { get; set; }
     public string Type { get; set; }
-    public string Kd_KegInduk { get; set; }
+    public string KdKeg_Induk { get; set; }
   }
 }
