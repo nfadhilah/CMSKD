@@ -21,6 +21,7 @@ namespace Application.Auth.WebUserCQ
       public string NIP { get; set; }
       public string GroupId { get; set; }
       public string Pwd { get; set; }
+      public string DigitalIdFile { get; set; }
       public string DigitalIdPwd { get; set; }
       public string Nama { get; set; }
       public int? BlokId { get; set; }

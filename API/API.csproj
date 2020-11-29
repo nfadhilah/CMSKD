@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\" />
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
