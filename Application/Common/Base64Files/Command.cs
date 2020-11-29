@@ -2,10 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Common.Files
+namespace Application.Common.Base64Files
 {
   public class Command : IRequest<object>
   {
+    public string FileType { get; set; } = "data:image/png;base64,";
     public IFormFile File { get; set; }
   }
 

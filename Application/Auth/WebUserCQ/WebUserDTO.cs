@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Auth.WebUserCQ
+﻿namespace Application.Auth.WebUserCQ
 {
   public class WebUserDTO
   {
@@ -15,7 +9,8 @@ namespace Application.Auth.WebUserCQ
     public string NmGroup { get; set; }
     public string NIP { get; set; }
     public string Nama { get; set; }
-    public int BlokId { get; set; }
+    public string BlokId { get; set; }
+    public string SignImg { get; set; }
     public string Photo { get; set; }
   }
 }

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Common.DTOS;
+﻿using Application.Common.DTOS;
 using Application.Helpers;
-using Application.Interfaces;
 using AutoMapper;
 using Domain.Auth;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.WebUserCQ
 {
@@ -27,13 +24,11 @@ namespace Application.Auth.WebUserCQ
     {
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
-      private readonly IUserAccessor _userAccessor;
 
-      public Handler(IDbContext context, IMapper mapper, IUserAccessor userAccessor)
+      public Handler(IDbContext context, IMapper mapper)
       {
         _context = context;
         _mapper = mapper;
-        _userAccessor = userAccessor;
       }
 
       public async Task<PaginationWrapper> Handle(Query request, CancellationToken cancellationToken)

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.Auth;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.WebUserCQ
 {
@@ -33,6 +29,7 @@ namespace Application.Auth.WebUserCQ
       public int? StUpdate { get; set; }
       public int? StDelete { get; set; }
       public string Ket { get; set; }
+      public string SignImg { get; set; }
       public string Photo { get; set; }
 
       public DTO()
@@ -71,16 +68,13 @@ namespace Application.Auth.WebUserCQ
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
       private readonly IPasswordHasher _passwordHasher;
-      private readonly IUserAccessor _userAccessor;
 
       public Handler(
-        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher,
-        IUserAccessor userAccessor)
+        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher)
       {
         _context = context;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
-        _userAccessor = userAccessor;
       }
 
       public async Task<WebUserDTO> Handle(
@@ -90,7 +84,7 @@ namespace Application.Auth.WebUserCQ
           await _context.WebUser.FindByIdAsync(request.UserId);
 
         if (updated == null)
-          throw new ApiException("Not found", (int) HttpStatusCode.NotFound);
+          throw new ApiException("Not found", (int)HttpStatusCode.NotFound);
 
         _mapper.Map(request, updated);
 

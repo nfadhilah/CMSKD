@@ -1,15 +1,14 @@
-﻿using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
-using AutoMapper;
+﻿using Application.Interfaces;
 using AutoWrapper.Wrappers;
 using Domain.Auth;
 using Domain.DM;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.WebUserCQ
 {
@@ -35,15 +34,12 @@ namespace Application.Auth.WebUserCQ
     {
       private readonly IDbContext _context;
       private readonly IJwtGenerator _jwtGenerator;
-      private readonly IMapper _mapper;
       private readonly IPasswordHasher _passwordHasher;
 
-      public Handler(IDbContext context, IJwtGenerator jwtGenerator,
-        IMapper mapper, IPasswordHasher passwordHasher)
+      public Handler(IDbContext context, IJwtGenerator jwtGenerator, IPasswordHasher passwordHasher)
       {
         _context = context;
         _jwtGenerator = jwtGenerator;
-        _mapper = mapper;
         _passwordHasher = passwordHasher;
       }
 
@@ -55,20 +51,24 @@ namespace Application.Auth.WebUserCQ
 
         if (user == null)
           throw new ApiException("Login gagal. Harap cek username dan password anda.",
-            (int) HttpStatusCode.Unauthorized);
+            (int)HttpStatusCode.Unauthorized);
 
-        if (user.BlokId.HasValue && user.BlokId > 3)
+        int.TryParse(user.BlokId, out var blokId);
+
+        if (blokId > 3)
           throw new ApiException(
             "User diblokir. Hubungi admin untuk membuka blokir.");
 
         if (!_passwordHasher.Validate(user.Pwd.Trim(), request.Password))
         {
-          user.BlokId = ++user.BlokId;
+          ++blokId;
+
+          user.BlokId = blokId.ToString();
 
           await _context.WebUser.UpdateAsync(user);
 
           throw new ApiException("Login gagal. Harap cek username/password anda.",
-            (int) HttpStatusCode.Unauthorized);
+            (int)HttpStatusCode.Unauthorized);
         }
 
         var token = _jwtGenerator.CreateToken(user, request.AppId);

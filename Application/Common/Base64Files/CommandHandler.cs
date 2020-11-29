@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Common.Files
+namespace Application.Common.Base64Files
 {
   public class CommandHandler : IRequestHandler<Command, object>
   {
@@ -37,13 +37,37 @@ namespace Application.Common.Files
 
       var fileName = Guid.NewGuid() + Path.GetExtension(request.File.FileName);
 
-      var filePath = Path.Combine(BaseDir, fileName);
+      // var filePath = Path.Combine(baseDir, fileName);
 
-      await using var stream = new FileStream(filePath, FileMode.Create);
+      // await using (var writer = new FileStream(filePath, FileMode.Create))
+      // {
+      //   await request.File.CopyToAsync(writer, cancellationToken);
+      // }
 
-      await request.File.CopyToAsync(stream, cancellationToken);
+      // await using (var stream = new MemoryStream())
+      // {
+      //   var reader = new FileStream(filePath, FileMode.Open);
+      //
+      //   await reader.CopyToAsync(stream, cancellationToken);
+      //
+      //   return new
+      //   {
+      //     FileName = fileName,
+      //     Base64 = string.Concat(request.FileType, Convert.ToBase64String(stream.ToArray()))
+      //   };
+      // }
 
-      return new { FileName = fileName };
+      await using var stream = new MemoryStream();
+
+      var reader = request.File.OpenReadStream();
+
+      await reader.CopyToAsync(stream, cancellationToken);
+
+      return new
+      {
+        FileName = fileName,
+        Base64 = string.Concat(request.FileType, Convert.ToBase64String(stream.ToArray()))
+      };
     }
   }
 }

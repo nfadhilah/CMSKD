@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.Auth;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.WebUserCQ
 {
@@ -33,6 +29,7 @@ namespace Application.Auth.WebUserCQ
       public int? StUpdate { get; set; }
       public int? StDelete { get; set; }
       public string Ket { get; set; }
+      public string SignImg { get; set; }
       public string Photo { get; set; }
     }
 
