@@ -4,12 +4,11 @@ using Persistence.Repository.Auth;
 using Persistence.Repository.BUD;
 using Persistence.Repository.DM;
 using Persistence.Repository.MA;
+using Persistence.Repository.PM;
 using Persistence.Repository.TUBEND;
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using Domain.PM;
-using Persistence.Repository.PM;
 
 namespace Persistence
 {
@@ -122,6 +121,10 @@ namespace Persistence
     KecamatanRepository Kecamatan { get; }
     KelurahanRepository Kelurahan { get; }
     DiskusiPaketRepository DiskusiPaket { get; }
+    KontrakDetRRepository KontrakDetR { get; }
+    JTermOrLunRepository JTermOrLun { get; }
+    TagihanRepository Tagihan { get; }
+    TagihanDetRepository TagihanDet { get; }
   }
 
   public class DbContext : IDbContext
@@ -286,6 +289,10 @@ namespace Persistence
     public KecamatanRepository Kecamatan => new KecamatanRepository(Connection);
     public KelurahanRepository Kelurahan => new KelurahanRepository(Connection);
     public DiskusiPaketRepository DiskusiPaket => new DiskusiPaketRepository(Connection);
+    public KontrakDetRRepository KontrakDetR => new KontrakDetRRepository(Connection);
+    public JTermOrLunRepository JTermOrLun => new JTermOrLunRepository(Connection);
+    public TagihanRepository Tagihan => new TagihanRepository(Connection);
+    public TagihanDetRepository TagihanDet => new TagihanDetRepository(Connection);
 
     protected virtual void Dispose(bool disposing)
     {
