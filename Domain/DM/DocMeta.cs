@@ -11,7 +11,7 @@ namespace Domain.DM
   {
     [Key, Identity]
     public int Id { get; set; }
-    [LeftJoin("DOCMETA", "KDDOK", "KDDOK")]
+    [LeftJoin("DAFTDOK", "KDDOK", "KDDOK")]
 
     public string KdDok { get; set; }
     public string NoDok { get; set; }
