@@ -11,5 +11,13 @@ namespace API.Controllers.DM
 
     [HttpGet("{id}", Name = "GetDocMeta")]
     public async Task<IActionResult> Get(int id) => Ok(await Mediator.Send(new Detail.Query { Id = id }));
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] Create.Command command)
+    {
+      var result = await Mediator.Send(command);
+
+      return CreatedAtRoute("GetDocMeta", new { result.Id }, result);
+    }
   }
 }

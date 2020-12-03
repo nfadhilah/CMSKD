@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Files;
+using AutoWrapper.Filters;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Application.Common.Base64Files;
 
 namespace API.Controllers
 {
-  public class Base64FilesController : BaseController
+  public class FilesController : BaseController
   {
-    [HttpPost("getfile")]
-    public async Task<IActionResult> GetFile([FromBody] Query query) => Ok(await Mediator.Send(query));
+    [HttpGet]
+    [AutoWrapIgnore]
+    public async Task<IActionResult> Get([FromQuery] Query query) => File(await Mediator.Send(query), query.FileType);
 
-    [HttpPost("upload")]
+
+    [HttpPost]
     public async Task<IActionResult> Upload([FromForm] Command command) => Ok(await Mediator.Send(command));
   }
 }

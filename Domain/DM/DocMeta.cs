@@ -17,6 +17,7 @@ namespace Domain.DM
     public string NoDok { get; set; }
     public string FilePath { get; set; }
     public int? Status { get; set; }
+    [UpdatedAt]
     public DateTime? DateCreated { get; set; }
   }
 }

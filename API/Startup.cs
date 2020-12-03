@@ -1,3 +1,5 @@
+using Application.Auth.WebUserCQ;
+using Application.Common.DTOS;
 using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper;
@@ -18,17 +20,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Persistence;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
 using System.Text;
-using Application.Auth.WebUserCQ;
-using Application.Common.DTOS;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 
 namespace API
@@ -83,7 +81,7 @@ namespace API
       services.AddSwaggerGen(opt =>
       {
         opt.SwaggerDoc("v1",
-          new OpenApiInfo {Title = "SIPKD API", Version = "v1"});
+          new OpenApiInfo { Title = "SIPKD API", Version = "v1" });
 
         opt.CustomSchemaIds(x => x.FullName);
 
@@ -207,7 +205,7 @@ namespace API
       app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
       {
         IsDebug = env.IsDevelopment(),
-        IsApiOnly = false
+        IsApiOnly = false,
       });
 
       app.UseEndpoints(endpoints =>

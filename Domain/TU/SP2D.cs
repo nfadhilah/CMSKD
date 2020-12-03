@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Domain.DM;
+using MicroOrm.Dapper.Repositories.Attributes.Joins;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.DM;
-using MicroOrm.Dapper.Repositories.Attributes.Joins;
 
 namespace Domain.TU
 {
@@ -39,5 +35,7 @@ namespace Domain.TU
     public DateTime? TglSP2D { get; set; }
     public DateTime? TglSPM { get; set; }
     public string NobBantu { get; set; }
+    [LeftJoin("DOCMETA", "NOSP2D", "NODOK")]
+    public DocMeta DocMeta { get; set; }
   }
 }
