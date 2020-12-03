@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Auth.WebUserCQ;
-using Application.Common.DTOS;
+﻿using Application.Common.DTOS;
 using Application.Helpers;
-using Application.Interfaces;
 using AutoMapper;
-using Domain.Auth;
 using Domain.DM;
 using Domain.TU;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
-using Persistence.Repository.TU;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.TU.SP2DCQ
 {
@@ -61,8 +57,8 @@ namespace Application.TU.SP2DCQ
 
         var result = await _context.SP2D.SetLimit(request.Limit, request.Offset)
           .SetOrderBy(OrderInfo.SortDirection.ASC, x => x.NoSP2D)
-          .FindAllAsync<DaftUnit, StatTrs, Bend, DaftPhk3>(predicate, x => x.DaftUnit, x => x.StatTrs, x => x.Bend,
-            x => x.DaftPhk3);
+          .FindAllAsync<DaftUnit, StatTrs, Bend, DaftPhk3, DocMeta>(predicate, x => x.DaftUnit, x => x.StatTrs, x => x.Bend,
+            x => x.DaftPhk3, x => x.DocMeta);
 
         return new PaginationWrapper
         {

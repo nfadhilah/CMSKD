@@ -1,13 +1,11 @@
-﻿using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Auth.WebUserCQ;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
-using Domain.Auth;
 using Domain.DM;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.TU.SP2DCQ
 {
@@ -32,12 +30,12 @@ namespace Application.TU.SP2DCQ
       public async Task<SP2DDTO> Handle(
         Query request, CancellationToken cancellationToken)
       {
-        var result = await _context.SP2D.FindAsync<DaftUnit, StatTrs>(
-          x => x.NoSP2D == WebUtility.UrlDecode(request.NoSP2D), x => x.DaftUnit, x => x.StatTrs);
+        var result = await _context.SP2D.FindAsync<DaftUnit, StatTrs, DocMeta>(
+          x => x.NoSP2D == WebUtility.UrlDecode(request.NoSP2D), x => x.DaftUnit, x => x.StatTrs, x => x.DocMeta);
 
         if (result == null)
           throw new ApiException("Not found",
-            (int) HttpStatusCode.NotFound);
+            (int)HttpStatusCode.NotFound);
 
         return _mapper.Map<SP2DDTO>(result);
       }

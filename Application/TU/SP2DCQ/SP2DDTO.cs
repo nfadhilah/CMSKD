@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.TU.SP2DCQ
 {
-  public class SP2DDTO 
+  public class SP2DDTO
   {
     public string UnitKey { get; set; }
     public string KdUnit { get; set; }
@@ -29,5 +25,7 @@ namespace Application.TU.SP2DCQ
     public DateTime? TglSP2D { get; set; }
     public DateTime? TglSPM { get; set; }
     public string NobBantu { get; set; }
+    public string FilePath { get; set; }
+    public string DocStatus { get; set; }
   }
 }

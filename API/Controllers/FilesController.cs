@@ -9,10 +9,10 @@ namespace API.Controllers
   {
     [HttpGet]
     [AutoWrapIgnore]
-    public async Task<IActionResult> Get([FromQuery] Query query) => File(await Mediator.Send(query), query.FileType);
+    public async Task<IActionResult> Get([FromQuery] Download.Query query) => File(await Mediator.Send(query), query.FileType);
 
 
     [HttpPost]
-    public async Task<IActionResult> Upload([FromForm] Command command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Upload([FromForm] Upload.Command command) => Ok(await Mediator.Send(command));
   }
 }

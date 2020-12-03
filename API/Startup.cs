@@ -183,6 +183,8 @@ namespace API
 
       // app.UseHttpsRedirection();
 
+      Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzYxNjk4QDMxMzgyZTMzMmUzMGd2dnZ6bkhiandVakJVLzVPOGxVUkJud2huR3FybUYwQUJIWG43L0NVN1E9");
+
       app.UseDefaultFiles();
 
       app.UseStaticFiles();
