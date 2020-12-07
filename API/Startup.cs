@@ -168,6 +168,8 @@ namespace API
 
       services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
+      services.AddSingleton<IEncryptionHelper, EncryptionHelper>();
+
       services.Configure<FileSettings>(Configuration.GetSection(FileSettings.Section));
 
       // services.AddSingleton<IBendDocNumGenerator, BendDocNumGenerator>();

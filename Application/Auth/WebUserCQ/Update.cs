@@ -69,13 +69,15 @@ namespace Application.Auth.WebUserCQ
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
       private readonly IPasswordHasher _passwordHasher;
+      private readonly IEncryptionHelper _encryption;
 
       public Handler(
-        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher)
+        IDbContext context, IMapper mapper, IPasswordHasher passwordHasher, IEncryptionHelper encryption)
       {
         _context = context;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
+        _encryption = encryption;
       }
 
       public async Task<WebUserDTO> Handle(
@@ -92,7 +94,7 @@ namespace Application.Auth.WebUserCQ
         if (!string.IsNullOrWhiteSpace(request.Pwd))
         {
           updated.Pwd = _passwordHasher.Create(request.Pwd);
-          updated.DigitalIdPwd = _passwordHasher.Create(request.DigitalIdPwd);
+          updated.DigitalIdPwd = _encryption.Encrypt(request.DigitalIdPwd);
         }
 
         if (!await _context.WebUser.UpdateAsync(updated))

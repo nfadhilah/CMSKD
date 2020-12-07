@@ -54,12 +54,14 @@ namespace Application.Auth.WebUserCQ
       private readonly IDbContext _context;
       private readonly IMapper _mapper;
       private readonly IPasswordHasher _hasher;
+      private readonly IEncryptionHelper _encryption;
 
-      public Handler(IDbContext context, IMapper mapper, IPasswordHasher hasher)
+      public Handler(IDbContext context, IMapper mapper, IPasswordHasher hasher, IEncryptionHelper encryption)
       {
         _context = context;
         _mapper = mapper;
         _hasher = hasher;
+        _encryption = encryption;
       }
 
       public async Task<WebUserDTO> Handle(
@@ -73,7 +75,7 @@ namespace Application.Auth.WebUserCQ
         var added = _mapper.Map<WebUser>(request);
 
         added.Pwd = _hasher.Create(request.Pwd);
-        added.DigitalIdPwd = _hasher.Create(request.DigitalIdPwd);
+        added.DigitalIdPwd = _encryption.Encrypt(request.DigitalIdPwd);
 
         if (!await _context.WebUser.InsertAsync(added))
           throw new ApiException("Tambah data gagal");

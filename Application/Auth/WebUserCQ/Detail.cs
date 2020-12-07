@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.Auth;
 using MediatR;
 using Persistence;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Auth.WebUserCQ
 {
-    public class Detail
-    {
+  public class Detail
+  {
     public class Query : IRequest<WebUserDTO>
     {
       public string UserId { get; set; }
@@ -36,6 +32,7 @@ namespace Application.Auth.WebUserCQ
       {
         var result = await _context.WebUser.FindAsync<WebGroup>(
           w => w.UserId == request.UserId, x => x.WebGroup);
+
 
         if (result == null)
           throw new ApiException("Not found",
