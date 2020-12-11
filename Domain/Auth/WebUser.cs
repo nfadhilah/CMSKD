@@ -19,8 +19,8 @@ namespace Domain.Auth
     [InnerJoin("WEBGROUP", "GROUPID", "GROUPID")]
     public WebGroup WebGroup { get; set; }
     public string Pwd { get; set; }
-    public string DigitalIdFile { get; set; }
-    public string DigitalIdPwd { get; set; }
+    // public string DigitalIdFile { get; set; }
+    // public string DigitalIdPwd { get; set; }
     public string Nama { get; set; }
     public string BlokId { get; set; }
     public int? TranSecure { get; set; }
@@ -28,7 +28,7 @@ namespace Domain.Auth
     public int? StUpdate { get; set; }
     public int? StDelete { get; set; }
     public string Ket { get; set; }
-    public string SignImg { get; set; }
-    public string Photo { get; set; }
+    // public string SignImg { get; set; }
+    // public string Photo { get; set; }
   }
 }

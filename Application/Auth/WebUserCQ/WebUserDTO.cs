@@ -10,8 +10,5 @@
     public string NIP { get; set; }
     public string Nama { get; set; }
     public string BlokId { get; set; }
-    public string SignImg { get; set; }
-    public string DigitalIdFile { get; set; }
-    public string Photo { get; set; }
   }
 }

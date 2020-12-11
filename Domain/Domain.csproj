@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MicroOrm.Dapper.Repositories" Version="1.14.1" />
+    <PackageReference Include="MicroOrm.Dapper.Repositories" Version="1.15.0" />
   </ItemGroup>
 
 </Project>

@@ -26,14 +26,10 @@ namespace Persistence
     public WebOtorRepository WebOtor => new WebOtorRepository(Connection);
     public TahunRepository Tahun => new TahunRepository(Connection);
     public PegawaiRepository Pegawai => new PegawaiRepository(Connection);
-    public DaftDokRepository DaftDok => new DaftDokRepository(Connection);
-    public DocMetaRepository DocMeta => new DocMetaRepository(Connection);
-    public SP2DRepository SP2D => new SP2DRepository(Connection);
-    public SP2DDetRRepository Sp2DDetR => new SP2DDetRRepository(Connection);
-    public SP2DDetRTLRepository SP2DDetRTL => new SP2DDetRTLRepository(Connection);
-    public SP2DPjkRepository SP2DPjk => new SP2DPjkRepository(Connection);
-    public SP2DDetBRepository SP2DDetB => new SP2DDetBRepository(Connection);
-    public SP2DDetDRepository SP2DDetD => new SP2DDetDRepository(Connection);
+    public STSRepository STS => new STSRepository(Connection);
+    public RkmDetDRepository RkmDetD => new RkmDetDRepository(Connection);
+    public BKUSTSRepository BKUSTS => new BKUSTSRepository(Connection);
+    public BKUDRepository BKUD => new BKUDRepository(Connection);
     public WebGroupRepository WebGroup => new WebGroupRepository(Connection);
     public WebRoleRepository WebRole => new WebRoleRepository(Connection);
 

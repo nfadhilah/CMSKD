@@ -21,8 +21,6 @@ namespace Application.Auth.WebUserCQ
       public string NIP { get; set; }
       public string GroupId { get; set; }
       public string Pwd { get; set; }
-      public string DigitalIdFile { get; set; }
-      public string DigitalIdPwd { get; set; }
       public string Nama { get; set; }
       public int? BlokId { get; set; }
       public int? TranSecure { get; set; }
@@ -30,8 +28,6 @@ namespace Application.Auth.WebUserCQ
       public int? StUpdate { get; set; }
       public int? StDelete { get; set; }
       public string Ket { get; set; }
-      public string SignImg { get; set; }
-      public string Photo { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -44,7 +40,6 @@ namespace Application.Auth.WebUserCQ
         RuleFor(x => x.NIP).NotEmpty();
         RuleFor(x => x.GroupId).NotEmpty();
         RuleFor(x => x.Pwd).NotEmpty().MinimumLength(6);
-        RuleFor(x => x.DigitalIdPwd).NotEmpty().MinimumLength(6);
         RuleFor(x => x.Nama).NotEmpty();
       }
     }
@@ -75,7 +70,6 @@ namespace Application.Auth.WebUserCQ
         var added = _mapper.Map<WebUser>(request);
 
         added.Pwd = _hasher.Create(request.Pwd);
-        added.DigitalIdPwd = _encryption.Encrypt(request.DigitalIdPwd);
 
         if (!await _context.WebUser.InsertAsync(added))
           throw new ApiException("Tambah data gagal");

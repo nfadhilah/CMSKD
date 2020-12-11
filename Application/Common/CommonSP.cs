@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Application.Common.DTOS;
+﻿using Application.Common.DTOS;
 using Dapper;
 using FluentValidation;
 using MediatR;
 using Persistence;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Common
 {
@@ -40,8 +36,13 @@ namespace Application.Common
       {
         var parameters = new DynamicParameters();
 
-        foreach (var (key, value) in request.Parameters)
-          parameters.Add(key, value);
+
+        if (request.Parameters != null)
+        {
+          foreach (var (key, value) in request.Parameters)
+            parameters.Add(key, value);
+        }
+
 
         return await _context.Connection.QueryAsync(request.SpName,
           parameters, commandType: CommandType.StoredProcedure);
