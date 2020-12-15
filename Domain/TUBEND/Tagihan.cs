@@ -1,4 +1,5 @@
-﻿using MicroOrm.Dapper.Repositories.Attributes;
+﻿using Domain.DM;
+using MicroOrm.Dapper.Repositories.Attributes;
 using MicroOrm.Dapper.Repositories.Attributes.Joins;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -18,10 +19,13 @@ namespace Domain.TUBEND
     public long IdKontrak { get; set; }
     [InnerJoin("KONTRAK", "IDKONTRAK", "IDKONTRAK")]
     public Kontrak Kontrak { get; set; }
+    public DaftPhk3 DaftPhk3 { get; set; }
     public string UraianTagihan { get; set; }
     public DateTime? TglValid { get; set; }
     public string KdStatus { get; set; }
     public DateTime? DateCreate { get; set; }
     public DateTime? DateUpdate { get; set; }
+    [NotMapped]
+    public decimal? Jumlah { get; set; }
   }
 }

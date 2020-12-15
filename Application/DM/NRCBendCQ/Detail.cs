@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.DM;
 using MediatR;
 using Persistence;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.DM.NrcBendCQ
+namespace Application.DM.NRCBendCQ
 {
   public class Detail
   {

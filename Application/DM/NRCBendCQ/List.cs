@@ -1,18 +1,18 @@
-﻿using Application.CommonDTO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.CommonDTO;
 using Application.Helpers;
 using AutoMapper;
 using Domain.DM;
 using MediatR;
 using MicroOrm.Dapper.Repositories.SqlGenerator.Filters;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.DM.NrcBendCQ
+namespace Application.DM.NRCBendCQ
 {
   public class List
   {

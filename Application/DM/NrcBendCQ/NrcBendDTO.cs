@@ -1,4 +1,4 @@
-﻿namespace Application.DM.NrcBendCQ
+﻿namespace Application.DM.NRCBendCQ
 {
   public class NrcBendDTO
   {

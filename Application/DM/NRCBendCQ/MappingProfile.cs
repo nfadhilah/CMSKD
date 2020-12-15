@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.DM;
 
-namespace Application.DM.NrcBendCQ
+namespace Application.DM.NRCBendCQ
 {
   public class MappingProfile : Profile
   {

@@ -6,7 +6,7 @@ using AutoWrapper.Wrappers;
 using MediatR;
 using Persistence;
 
-namespace Application.DM.NrcBendCQ
+namespace Application.DM.NRCBendCQ
 {
   public class Delete
   {
