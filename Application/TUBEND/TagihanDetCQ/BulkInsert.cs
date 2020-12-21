@@ -23,6 +23,10 @@ namespace Application.TUBEND.TagihanDetCQ
     {
       public Validator()
       {
+        RuleForEach(d => d.TagihanBulk).ChildRules(c =>
+        {
+          c.RuleFor(x => x.IdTagihan).NotEmpty();
+        });
         RuleFor(d => d.TagihanBulk).NotEmpty();
       }
     }
@@ -43,12 +47,14 @@ namespace Application.TUBEND.TagihanDetCQ
       {
         var added = _mapper.Map<IEnumerable<TagihanDet>>(request.TagihanBulk).ToList();
 
+        var tagihanId = added.Select(x => x.IdTagihan).ToArray();
+
         if (await _context.TagihanDet.BulkInsertAsync(added) == 0)
           throw new ApiException("Problem saving changes");
 
         var result = await _context.TagihanDet
           .FindAllAsync<DaftRekening>(
-            x => added.Select(a => a.IdTagihanDet).Contains(x.IdTagihanDet),
+            x => tagihanId.Contains(x.IdTagihan),
             x => x.Rekening);
 
         return _mapper.Map<IEnumerable<TagihanDetDTO>>(result);
