@@ -56,7 +56,7 @@ namespace Application.TUBEND.TagihanDetCQ
           .FindAllAsync<DaftRekening>(
             x => tagihanId.Contains(x.IdTagihan),
             x => x.Rekening);
-
+         
         return _mapper.Map<IEnumerable<TagihanDetDTO>>(result);
       }
     }
