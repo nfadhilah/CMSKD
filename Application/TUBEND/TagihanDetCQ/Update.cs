@@ -7,6 +7,7 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,7 +85,7 @@ namespace Application.TUBEND.TagihanDetCQ
             x => x.IdTagihanDet == updated.IdTagihanDet,
             x => x.Rekening);
 
-        return _mapper.Map<TagihanDetDTO>(result);
+        return _mapper.Map<TagihanDetDTO>(result.First());
       }
     }
   }

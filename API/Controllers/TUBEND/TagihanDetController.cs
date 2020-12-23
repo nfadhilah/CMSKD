@@ -33,7 +33,7 @@ namespace API.Controllers.TUBEND
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(long id, Update.DTO dto)
     {
-      var command = dto.MapDTO(new Update.Command { IdTagihan = id });
+      var command = dto.MapDTO(new Update.Command { IdTagihanDet = id });
       return Ok(await Mediator.Send(command));
     }
 
