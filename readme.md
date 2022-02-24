@@ -14,8 +14,6 @@
 4.  Persistence: Akses Database. Berisi implementasi repository dan
     database context.
 
-5.  Infrastructure: Berisi implementasi dari Application.Interfaces.
-
 **MINIMUM REQUIREMENT**
 
 1.  ASP.NET CORE SDK VERSI 3.1
